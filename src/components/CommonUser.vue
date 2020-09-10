@@ -1,5 +1,5 @@
 <template>
-<div class="user">
+  <div class="user">
     <ul class="nav nav-pills">
       <li role="presentation" :class="type === 'all_devices'? 'active' : '' "><a href="/all_devices">所有上架设备</a></li>
       <li role="presentation" :class="type === 'apply_history'? 'active' : '' "><a href="/apply_history">查看申请历史</a></li>
@@ -26,7 +26,7 @@
       </div>
       <div v-if="type === 'apply_history'">
         <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
-         <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
+        <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
           <!--loan-info :equipment=item.equipment...></loan-info-->
           <loan-info equipment="123" start_time="0908" end_time="0910" :statement=test></loan-info>
           <div class="status_tag">
@@ -88,7 +88,7 @@
       </div>
       <div v-if="type === 'loan_apply' && role === 'provider'">
         <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
-         <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
+        <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
           <!--loan-info :equipment=item.equipment...></loan-info-->
           <loan-info equipment="123" start_time="0908" end_time="0910" :statement=test></loan-info>
           <div>
@@ -166,7 +166,8 @@ Vue.use(VueAxios, axios)
 export default class CommonUser extends Vue {
   type = this.$route.params.type || 'users'
   page = 1
-  role = 'student'
+  role = ''
+  userInfo={}
   deviceName = ''
   deviceInfo = ''
   infoLab = ''
@@ -186,6 +187,22 @@ export default class CommonUser extends Vue {
       }
     } catch (e) {
       console.log(e.response) // 在此处弹出提示框
+    }
+  }
+  async getInfo(){
+    try{
+      let response = await axios.get('apis/users/info')
+      this.role=response.data.user_type
+      this.userInfo['type']=response.data.user_type
+      this.userInfo['examining']=response.data.user_examining
+      this.userInfo['lab']=response.data.user_info_lab
+      this.userInfo['tel']=response.data.user_info_tel
+      this.userInfo['description']=response.data.user_info_description
+      this.userInfo['name']=response.data.user_name
+      this.userInfo['address']=response.data.user_info_address
+    }
+    catch (e){
+      console.log('getInfo:error')
     }
   }
 
@@ -214,6 +231,7 @@ export default class CommonUser extends Vue {
 
   mounted () {
     this.getAllDevices()
+    this.getInfo()
   }
 }
 

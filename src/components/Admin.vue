@@ -13,9 +13,9 @@
     <div class="list-group">
       <div v-if="type === 'users'">
         <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
-        <a v-for="(user,index) in user_list" :key="user.username" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
+        <a v-for="(user,index) in user_list" :key="user.username" v-show="index >= (page-1)*10 && index <= page*10" class="list-group-item">
           <!--user-info :username=item.username :email=item.email></user-info-->
-          <user-info :username=user.user_name :email=user.user_type></user-info>
+          <user-info :username=user.user_name :role=user.user_type></user-info>
           <div>
             <button type="button" class="btn btn-default">
               <i class="fas fa-trash-alt"></i>
@@ -146,6 +146,7 @@ export default class Admin extends Vue {
   provider_apply_list=[]
   res={}
   test= 'test bind'
+  userInfo={}
   async user_load () {
     try {
       this.res = await axios({
@@ -157,6 +158,23 @@ export default class Admin extends Vue {
       this.user_list = this.res.data
     } catch (e) {
       console.log(e.response.data)
+    }
+  }
+
+  async getInfo(){
+    try{
+      let response = await axios.get('apis/users/info')
+      this.role=response.data.user_type
+      this.userInfo['type']=response.data.user_type
+      this.userInfo['examining']=response.data.user_examining
+      this.userInfo['lab']=response.data.user_info_lab
+      this.userInfo['tel']=response.data.user_info_tel
+      this.userInfo['description']=response.data.user_info_description
+      this.userInfo['name']=response.data.user_name
+      this.userInfo['address']=response.data.user_info_address
+    }
+    catch (e){
+      console.log('getInfo:error')
     }
   }
 
@@ -188,6 +206,7 @@ export default class Admin extends Vue {
   mounted () {
     this.user_load()
     this.apply_user_load()
+    this.getInfo()
   }
 
   async apply_check_pass (username, pass) {
