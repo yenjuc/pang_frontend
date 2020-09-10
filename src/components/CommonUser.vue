@@ -7,7 +7,7 @@
       <li v-if="role === 'provider'" role="presentation" :class="type === 'manage_devices'? 'active' : '' "><a href="/manage_devices">管理设备</a></li>
       <li v-if="role === 'provider'" role="presentation" :class="type === 'loan_apply'? 'active' : '' "><a href="/loan_apply">审核租借申请</a></li>
       <li v-if="role === 'provider'" role="presentation" :class="type === 'loaned_history'? 'active' : '' "><a href="/loaned_history">已借出设备历史</a></li>
-      <li v-if="role === 'provider'" role="presentation" :class="type === 'add_device'? 'active' : '' "><a href="/add_device">上架设备</a></li>
+      <li v-if="role === 'provider'" role="presentation" :class="type === 'add_device'? 'active' : '' "><a href="/add_device">增加设备</a></li>
     </ul>
 
     <!--v-for item in list...-->
@@ -51,6 +51,13 @@
           <!--device-info :device_name...></device-info-->
           <device-info device_name="test device name" device_address="test device address" device_timeout="test timeout" :device_contact=test></device-info>
           <div>
+            <!-- v-show="(!)在架上"-->
+            <button type="button" class="btn btn-default">
+              <i class="fas fa-arrow-circle-up"></i>
+            </button>
+            <button type="button" class="btn btn-default">
+              <i class="fas fa-arrow-circle-down"></i>
+            </button>
             <button type="button" class="btn btn-default">
               <i class="fas fa-edit"></i>
             </button>
@@ -84,6 +91,18 @@
             <span class="label label-primary">Status</span>
           </div>
         </a>
+      </div>
+      <div class="adddevicepanel" v-if="type === 'add_device'">
+        <i class="fas fa-laptop-house" style="font-size: 100px; margin: 40px"></i>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fas fa-tablet-alt"></i></span>
+          <input type="text" class="form-control" placeholder="Name of the device" v-model="deviceName" required/>
+        </div>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fas fa-info"></i></span>
+          <input type="text" class="form-control" placeholder="Device information" v-model="deviceInfo" required/>
+        </div>
+        <button class="add_button">Add Device</button>
       </div>
     </div>
 
@@ -126,6 +145,8 @@ export default class CommonUser extends Vue {
   type = this.$route.params.type || 'users'
   page = 1
   role = 'provider'
+  deviceName = ''
+  deviceInfo = ''
   list = []
 }
 
@@ -144,5 +165,35 @@ export default class CommonUser extends Vue {
 .status_tag{
   padding: 5px 10px;
   text-align: left;
+}
+
+.adddevicepanel{
+  margin: 20px auto;
+  width: 60%
+}
+
+.input-group{
+  margin: 20px auto;
+  width: 75%;
+}
+
+.input-group-addon{
+  width: 45px;
+}
+
+.add_button{
+  border-radius: 4px;
+  border-color: transparent;
+  margin: 25px auto;
+  width: 75%;
+  height: 36px;
+  background: #0079D3;
+  color: white;
+  text-decoration: none;
+}
+
+.add_button:hover{
+  background: #0091FF;
+  cursor: pointer;
 }
 </style>
