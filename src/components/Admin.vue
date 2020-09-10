@@ -163,7 +163,7 @@ export default class Admin extends Vue {
 
   async getInfo(){
     try{
-      let response = await axios.get('apis/users/info')
+      let response = await axios.get('/apis/users/info')
       this.role=response.data.user_type
       this.userInfo['type']=response.data.user_type
       this.userInfo['examining']=response.data.user_examining

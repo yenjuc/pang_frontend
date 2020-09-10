@@ -228,7 +228,7 @@ export default class CommonUser extends Vue {
 
   async getInfo(){
     try{
-      let response = await axios.get('apis/users/info')
+      let response = await axios.get('/apis/users/info')
       this.role=response.data.user_type
       this.userInfo['type']=response.data.user_type
       this.userInfo['examining']=response.data.user_examining
@@ -249,7 +249,6 @@ export default class CommonUser extends Vue {
   }
 
   checkExaminingStatus(){
-    console.log(this.userInfo['examining'])
     if(this.userInfo['examining']==='Pass'){
       Modal.success({content:'您的申请已通过','onOk':()=>this.confirm()})
     }
@@ -263,7 +262,6 @@ export default class CommonUser extends Vue {
       await axios.post('/apis/users/confirm/apply')
     }
     catch (e){
-      console.log(e.response)
       console.log('confirm:error')
     }
   }
