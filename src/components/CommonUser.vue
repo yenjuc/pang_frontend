@@ -182,6 +182,18 @@ export default class CommonUser extends Vue {
   }
 
 
+  async delete_device(item) {
+    try {
+      let response = await axios.post(`/apis/equipment/delete/${item.id}`)
+      if (response.status === 200) {
+        // 弹框 表示删除成功 然后刷新
+      }
+    } catch (e) {
+      console.log(e.response) // 在此处弹出提示框
+    }
+  }
+
+
   async getAllDevices () {
     try {
       let response = await axios.get('/apis/equipment/search/student')
@@ -297,7 +309,6 @@ export default class CommonUser extends Vue {
   mounted () {
     this.getAllDevices()
     this.getInfo()
-    this.getProviderDevices()
     this.getMyLoanApplications()
   }
 }
