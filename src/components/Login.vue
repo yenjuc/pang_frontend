@@ -1,18 +1,19 @@
 <template>
   <div class="login-panel">
+    <i class="fas fa-dolly-flatbed" style="font-size: 100px; margin: 40px"></i>
     <div class="input-group">
       <span class="input-group-addon"><i class="fas fa-user-circle"></i></span>
-      <input type="text" class="form-control" placeholder="Username">
+      <input type="text" class="form-control" placeholder="Username" v-model="username">
     </div>
 
     <div class="input-group">
       <span class="input-group-addon"><i class="fas fa-unlock-alt"></i></span>
-      <input type="text" class="form-control" placeholder="Password">
+      <input type="password" class="form-control" placeholder="Password" v-model="password">
     </div>
 
-    <div class="btn-group" role="group" aria-label="...">
-      <button type="button" class="btn btn-default">Logon</button>
-      <button type="button" class="btn btn-default">Login</button>
+    <div style="display: flex; width: 50%; margin:30px auto 10px">
+      <router-link v-bind:to="'/logon'">Logon</router-link>
+      <button class="login-button">Login</button>
     </div>
 
   </div>
@@ -27,6 +28,8 @@ import VueAxios from 'vue-axios'
 Vue.use(VueAxios, axios)
 @Component
 export default class Login extends Vue {
+      username=''
+      password=''
 }
 </script>>
 
@@ -39,17 +42,46 @@ export default class Login extends Vue {
   padding: 10px;
   border-radius: 10px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-  width: 70%;
+  width: 40%;
 }
 
-.login-panel i{
+i{
   color: #2C3E50;
   font-size: 20px;
 }
 
+button{
+  border-radius: 4px;
+  border-color: transparent;
+  background-color: transparent;
+  margin: 25px auto;
+  width: 45%;
+  height: 36px;
+  text-decoration: underline;
+}
+
+a{
+  width: 45%;
+  margin: 25px auto;
+  line-height: 36px;
+  text-decoration: underline;
+}
+
+.login-button{
+  background: #0079D3;
+  color: white;
+  display: block;
+  text-decoration: none;
+}
+
+.login-button:hover{
+  background: #0091FF;
+  cursor: pointer;
+}
+
 .input-group{
-  margin: 10px auto;
-  width: 80%;
+  margin: 20px auto;
+  width: 75%;
 }
 
 .input-group-addon{
