@@ -14,7 +14,7 @@
     <!--v-for item in list...-->
     <div class="list-group">
       <div v-if="type === 'all_devices'">
-        <a v-for="(item,index) in devices_list" :key="index" v-show="index >= (page-1)*10 && index <= page*10" class="list-group-item">
+        <a v-for="(item,index) in devices_list" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
           <device-info :device_name=item.name :device_info=item.info :device_owner=item.contact[0] :device_address=item.contact[2] :device_contact=item.contact[3]></device-info>
           <div>
             <!-- v-if="可申请"-->
@@ -25,23 +25,13 @@
         </a>
       </div>
       <div v-if="type === 'apply_history'">
-        <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
-        <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
-          <!--loan-info :equipment=item.equipment...></loan-info-->
-          <loan-info equipment="123" start_time="0908" end_time="0910" :statement=test></loan-info>
-          <div class="status_tag">
-            <span class="label label-primary">Status</span>
-          </div>
+        <a v-for="(item,index) in myLoanAppls" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
+          <loan-info :appl="item"></loan-info>
         </a>
       </div>
       <div v-if="type === 'loaned_devices'">
-        <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
-        <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
-          <!--device-info :device_name...></device-info-->
-          <device-info device_name="test device name" device_address="test device address" device_timeout="test timeout" :device_contact=test></device-info>
-          <div class="status_tag">
-            <span class="label label-primary">Status</span>
-          </div>
+        <a v-for="(item,index) in myLoanApplsActive" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
+          <loan-info :appl="item" :timer='true'></loan-info>
         </a>
       </div>
       <div class="apply_panel" v-if="type === 'apply_provider' && role !== 'provider'">
@@ -65,7 +55,7 @@
         <button @click="applyProvider" class="add_button">Apply</button>
       </div>
       <div v-if="type === 'manage_devices' && role === 'provider'">
-        <a v-for="(item,index) in provider_devices_list" :key="index" v-show="index >= (page-1)*10 && index <= page*10" class="list-group-item">
+        <a v-for="(item,index) in provider_devices_list" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
           <device-info :device_name=item.name :device_info=item.info :device_status=item.status></device-info>
           <div>
             <!-- v-show="(!)在架上"-->
@@ -85,10 +75,9 @@
         </a>
       </div>
       <div v-if="type === 'loan_apply' && role === 'provider'">
-        <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
-        <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
+        <!-- v-for="(item,index) in lists" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item"-->
+        <a v-for="index of 30" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
           <!--loan-info :equipment=item.equipment...></loan-info-->
-          <loan-info equipment="123" start_time="0908" end_time="0910" :statement=test></loan-info>
           <div>
             <button type="button" class="btn btn-default">
               <i class="fas fa-check-circle"></i>
@@ -100,8 +89,8 @@
         </a>
       </div>
       <div v-if="type === 'loaned_history' && role === 'provider'">
-        <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
-        <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
+        <!-- v-for="(item,index) in lists" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item"-->
+        <a v-for="index of 30" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
           <!--device-info :device_name...></device-info-->
           <device-info device_name="test device name" device_address="test device address" device_timeout="test timeout" :device_contact=test></device-info>
           <div class="status_tag">
@@ -175,6 +164,8 @@ export default class CommonUser extends Vue {
   infoDescription = ''
   devices_list = []
   provider_devices_list = []
+  myLoanAppls = []
+  myLoanApplsActive = []
 
   querystring = require('querystring')
 
@@ -238,6 +229,21 @@ export default class CommonUser extends Vue {
   }
 
 
+  async getMyLoanApplications () {
+    try {
+      let response = await axios.get('/apis/loan/my')
+      if (response.status === 200) {
+        this.myLoanAppls = response.data.reverse()
+        this.myLoanApplsActive = this.myLoanAppls.filter(
+          (appl) => appl.status === 'approved' &&
+            appl.end_time * 1000 >= Date.now()
+        )
+      }
+    } catch (e) {
+      console.log(e.response)
+    }
+  }
+
   async addEquipment () {
     try {
       let response = await axios.post('/apis/provider/add', this.querystring.stringify({
@@ -256,6 +262,7 @@ export default class CommonUser extends Vue {
     this.getAllDevices()
     this.getInfo()
     this.getProviderDevices()
+    this.getMyLoanApplications()
   }
 }
 
