@@ -61,17 +61,12 @@ export default class Admin extends Vue {
   res={}
 
   async user_load(examining) {
-    try {
-      this.res = await instance({
-        url: '/admin/users/query',
+      this.res = await axios({
+        url: 'http://localhost:8000/admin/users/query',
         params: {
           examining: examining
         }
       })
-      console.log(this.res)
-    } catch (e) {
-      print('error')
-    }
   }
 
   mounted(){
