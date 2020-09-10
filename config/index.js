@@ -13,10 +13,11 @@ module.exports = {
     proxyTable: {
       '/apis':{
         target: 'http://127.0.0.1:8000/', //A服务器地址
-        changeOrigin: true,    //改变源路劲
+        changeOrigin: true,    //改变源路径
         pathRewrite: {
           '^/apis': '/'
-        }
+        },
+        logLevel: 'debug',
       }
     },
 

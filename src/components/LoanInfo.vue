@@ -2,9 +2,14 @@
   <div class="loan">
       <div class="info_block">
         <h4 class="list-group-item-heading">
-          <span>{{appl.equipment.name}}</span>
-          <span :class="'label label-' + (appl.status === 'pending' ? 'default' :
-            (appl.status === 'accepted' ? 'success' : 'danger'))">{{ appl.status }}</span>
+          <span>(#{{appl.id}}) {{appl.equipment.name}}</span>
+          <span v-if='timer'
+            :class="'label label-' + (countdown() < 0 ? 'warning' : 'success')">
+              距{{ countdown() < 0 ? '开始' : '归还' }} {{ Math.ceil(Math.abs(countdown()) / 86400000) }} 天
+          </span>
+          <span v-else
+            :class="'label label-' + (appl.status === 'pending' ? 'default' :
+            (appl.status === 'approved' ? 'success' : 'danger'))">{{ appl.status }}</span>
         </h4>
         <div style="display: inline-block">
           <div class="detailedinfo">
@@ -28,9 +33,21 @@ import {Component, Vue, Prop, Watch} from 'vue-property-decorator'
 @Component
 export default class LoanInfo extends Vue {
   @Prop({type: Object}) appl
+  @Prop({type: Boolean}) timer
 
   formatTime (timestamp) {
     return (new Date(timestamp * 1000)).toLocaleString('zh-CN');
+  }
+
+  countdown () {
+    const now = Date.now()
+    if (this.appl.start_time * 1000 > now) {
+      // Not yet started
+      return -(this.appl.start_time * 1000 - now);
+    } else {
+      // Active
+      return Math.max(0, this.appl.end_time * 1000 - now);
+    }
   }
 }
 </script>
