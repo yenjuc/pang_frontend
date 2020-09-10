@@ -30,10 +30,7 @@
         <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
          <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
           <!--loan-info :equipment=item.equipment...></loan-info-->
-          <loan-info equipment="123" start_time="0908" end_time="0910" :statement=test></loan-info>
-          <div class="status_tag">
-            <span class="label label-primary">Status</span>
-          </div>
+          <loan-info :appl="{start_time: 1234, end_time: 99999, status: 'accepted', equipment: {name: 999, id: 234}, statement: 'qwqwqwqwq', response: 'quq'}"></loan-info>
         </a>
       </div>
       <div v-if="type === 'loaned_devices'">
@@ -92,7 +89,6 @@
         <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
          <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
           <!--loan-info :equipment=item.equipment...></loan-info-->
-          <loan-info equipment="123" start_time="0908" end_time="0910" :statement=test></loan-info>
           <div>
             <button type="button" class="btn btn-default">
               <i class="fas fa-check-circle"></i>
