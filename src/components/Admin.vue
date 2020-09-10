@@ -13,14 +13,14 @@
     <div class="list-group">
       <div class="userlist" v-if="type === 'users'">
         <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
-        <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
+        <a v-for="(user,index) in user_list" :key="user.username" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
           <!--user-info :username=item.username :email=item.email></user-info-->
-          <user-info username="test name" email="test email"></user-info>
+          <user-info :username=user.user_name :email=user.user_type></user-info>
           <div>
             <button type="button" class="btn btn-default">
               <i class="fas fa-edit"></i>
             </button>
-            <button type="button" class="btn btn-default">
+            <button type="button" @click="user_delete(user.user_name)" class="btn btn-default">
               <i class="fas fa-trash-alt"></i>
             </button>
           </div>
@@ -137,6 +137,7 @@ export default class Admin extends Vue {
   type = this.$route.params.type || 'users'
   page = 1
   list = []
+  user_list=[]
   res={}
   test= 'test bind'
   async user_load(examining) {
@@ -148,6 +149,7 @@ export default class Admin extends Vue {
           examining: examining
         }
       })
+      this.user_list=this.res.data
     }
     catch(e){
       console.log(e.response.data)
@@ -157,7 +159,13 @@ export default class Admin extends Vue {
   querystring = require('querystring')
 
   async user_delete (username) {
-    await axios.post(`http://localhost:8000/admin/users/${username}/delete`, this.querystring({'username': username}))
+    try {
+      await axios.post(`/apis/admin/users/${username}/delete`, this.querystring.stringify({'username': username}))
+      this.user_load('false')
+    }
+    catch (e){
+      console.log(e.response.data)
+    }
   }
   mounted () {
     this.user_load('false')
