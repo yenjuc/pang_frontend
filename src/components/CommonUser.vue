@@ -62,7 +62,7 @@
           <span class="input-group-addon"><i class="fas fa-info"></i></span>
           <input type="text" class="form-control" placeholder="Description" v-model="infoDescription" required/>
         </div>
-        <button class="add_button">Apply</button>
+        <button @click="applyProvider" class="add_button">Apply</button>
       </div>
       <div v-if="type === 'manage_devices' && role === 'provider'">
         <a v-for="(item,index) in provider_devices_list" :key="index" v-show="index >= (page-1)*10 && index <= page*10" class="list-group-item">
@@ -155,6 +155,7 @@ import VueAxios from 'vue-axios'
 import UserInfo from './UserInfo'
 import DeviceInfo from './DeviceInfo'
 import LoanInfo from './LoanInfo'
+import * as querystring from "querystring";
 
 Vue.use(VueAxios, axios)
 @Component({
@@ -208,6 +209,22 @@ export default class CommonUser extends Vue {
     }
   }
 
+
+  async applyProvider(){
+    try{
+      let querystring=require('querystring')
+      await axios.post('/apis/users/apply_provider',querystring.stringify({'info_lab':this.infoLab,'info_address':this.infoAddress,
+      'info_tel':this.infoTel,'info_description':this.infoDescription}))
+       this.infoLab=''
+       this.infoTel=''
+       this.infoDescription=''
+       this.infoAddress=''
+      // TODO:此处应弹出成功的提示框
+    }
+    catch (e){
+      console.log('applyProvider:error')
+    }
+  }
 
   async getProviderDevices () {
     try {
