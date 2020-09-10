@@ -1,5 +1,5 @@
 <template>
-  <div class="loan" style="display: flex">
+  <div class="loan">
       <div class="info_block">
         <h4 class="list-group-item-heading">设备id：{{equipment}}</h4>
         <div style="display: inline-block">
@@ -13,15 +13,6 @@
           </div>
         </div>
       </div>
-      <button type="button" class="btn btn-default">
-        <i class="fas fa-check-circle"></i>
-      </button>
-      <button type="button" class="btn btn-default">
-        <i class="fas fa-times-circle"></i>
-      </button>
-      <button type="button" class="btn btn-default">
-        <i class="fas fa-trash-alt"></i>
-      </button>
   </div>
 </template>
 

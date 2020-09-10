@@ -1,5 +1,5 @@
 <template>
-  <div class="devices" style="display: flex">
+  <div class="device">
       <div class="info_block">
         <h4 class="list-group-item-heading">{{device_name}}</h4>
         <div style="display: inline-block">
@@ -17,12 +17,6 @@
           </div>
         </div>
       </div>
-      <button type="button" class="btn btn-default">
-        <i class="fas fa-edit"></i>
-      </button>
-      <button type="button" class="btn btn-default">
-        <i class="fas fa-trash-alt"></i>
-      </button>
   </div>
 </template>
 

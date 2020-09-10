@@ -1,5 +1,5 @@
 <template>
-  <div class="user" style="display: flex">
+  <div class="user">
       <div class="info_block">
         <h4 class="list-group-item-heading">{{username}}</h4>
         <div class="detailedinfo">
@@ -7,7 +7,7 @@
           <span class="list-group-item-text">{{email}}</span>
         </div>
       </div>
-      <!--div class="dropdown open">
+		<!--div class="dropdown open">
           <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
           设定用户类型
           <span class="caret"></span>
@@ -17,12 +17,6 @@
             <li><a href="#">设备提供者</a></li>
           </ul>
         </div-->
-      <button type="button" class="btn btn-default">
-        <i class="fas fa-edit"></i>
-      </button>
-      <button type="button" class="btn btn-default">
-        <i class="fas fa-trash-alt"></i>
-      </button>
   </div>
 </template>
 
