@@ -3,6 +3,7 @@
       <div class="info_block">
         <h4 class="list-group-item-heading">{{device_name}}</h4>
         <div style="display: inline-block">
+          <template v-if='device_contact != undefined'>
           <div class="detailedinfo">
             <i class="fas fa-user-circle"></i>
             <span class="list-group-item-text">{{device_contact[0]}}</span>
@@ -15,6 +16,7 @@
             <i class="fas fa-address-book"></i>
             <span class="list-group-item-text">{{device_contact[3]}}</span>
           </div>
+          </template>
           <span v-for='(occ, idx) in device_occs' :key='idx'>
             <br>
             <div class="detailedinfo" style='margin-top: -10px'>
