@@ -1,6 +1,6 @@
 <template>
-  <div class="loan">
-      <div class="info_block">
+  <div class="loan" style="display: flex">
+    <div class="info_block">
         <h4 class="list-group-item-heading">
           <span>(#{{appl.id}}) {{appl.equipment.name}}</span>
           <span v-if='timer'
@@ -24,6 +24,21 @@
       </div>
       <div class="status_tag">
       </div>
+      <div v-if="need_examine">
+        <button type="button" class="btn btn-default">
+          <i class="fas fa-check-circle"></i>
+        </button>
+      </div>
+      <div v-if="need_examine">
+        <button type="button" class="btn btn-default">
+          <i class="fas fa-times-circle" style="font-size: 40px"></i>
+        </button>
+      </div>
+      <div v-if="deletable">
+        <button type="button" class="btn btn-default">
+          <i class="fas fa-trash-alt"></i>
+        </button>
+      </div>
   </div>
 </template>
 
@@ -34,6 +49,10 @@ import {Component, Vue, Prop, Watch} from 'vue-property-decorator'
 export default class LoanInfo extends Vue {
   @Prop({type: Object}) appl
   @Prop({type: Boolean}) timer
+
+  // TODO: check whether the buttons are shown properly
+  @Prop({type: Boolean, default: false}) deletable
+  @Prop({type: Boolean, default: false}) need_examine
 
   formatTime (timestamp) {
     return (new Date(timestamp * 1000)).toLocaleString('zh-CN');
@@ -57,6 +76,7 @@ export default class LoanInfo extends Vue {
 .btn-default{
   margin: 0 5px;
   width: 42px;
+  height: 100%;
 }
 
 h5 {

@@ -7,8 +7,18 @@
           <span class="list-group-item-text">{{role}}</span>
         </div>
       </div>
-      <div>
-        <button v-if="deletable" type="button" class="btn btn-default">
+      <div v-if="need_examine" >
+        <button type="button" class="btn btn-default">
+          <i class="fas fa-check-circle"></i>
+        </button>
+      </div>
+      <div v-if="need_examine">
+        <button type="button" class="btn btn-default">
+          <i class="fas fa-times-circle"></i>
+        </button>
+      </div>
+      <div v-if="deletable">
+        <button type="button" class="btn btn-default">
           <i class="fas fa-trash-alt"></i>
         </button>
       </div>
@@ -26,8 +36,13 @@ Vue.use(VueAxios, axios)
 export default class UserInfo extends Vue {
   @Prop({type: String}) username
   @Prop({type: String}) role
-  @Prop({type: Boolean}) deletable
+
+  @Prop({type: Boolean, default: true}) deletable
+  @Prop({type: Boolean, default: false}) need_examine
 }
+
+// TODO: 将Admin中apply_check_pass移入userinfo组件中，并且完善false逻辑
+
 </script>
 
 <style scoped>

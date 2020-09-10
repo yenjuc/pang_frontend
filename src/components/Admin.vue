@@ -9,58 +9,30 @@
       <li role="presentation" :class="type === 'statistics'? 'active' : '' "><a href="/admin/statistics">平台数据一览</a></li>
     </ul>
 
-    <!--v-for item in list...-->
     <div class="list-group">
       <div v-if="type === 'users'">
-        <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
-        <a v-for="(user,index) in user_list" :key="user.username" v-show="index >= (page-1)*10 && index <= page*10" class="list-group-item">
-          <!--user-info :username=item.username :email=item.email></user-info-->
-          <user-info :username=user.user_name :role=user.user_type></user-info>
-          <div>
-            <button type="button" class="btn btn-default">
-              <i class="fas fa-trash-alt"></i>
-            </button>
-          </div>
+        <a v-for="(user,index) in user_list" :key="user.username" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
+          <user-info :username=user.user_name :role=user.user_type :deletable="true" :need_examine="false"></user-info>
         </a>
       </div>
       <div v-if="type === 'devices'">
-        <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
-        <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
+        <!-- v-for="(item,index) in lists" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item"-->
+        <a v-for="index of 30" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
           <!--device-info :device_name...></device-info-->
-          <device-info device_name="test device name" device_address="test device address" device_timeout="test timeout" :device_contact=test></device-info>
-          <div>
-            <button type="button" class="btn btn-default">
-              <i class="fas fa-edit"></i>
-            </button>
-            <button type="button" class="btn btn-default">
-              <i class="fas fa-trash-alt"></i>
-            </button>
-          </div>
+          <device-info device_name="test device name" device_address="test device address" device_owner="test timeout" :device_contact=test 
+          :editable="true" :deletable="true"></device-info>
         </a>
       </div>
       <div v-if="type === 'loan_apply'">
-        <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
-         <a v-for="index of 30" :key="index" v-show="index >= (page-1)*10 && index <= page*10" class="list-group-item">
+        <!-- v-for="(item,index) in lists" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item"-->
+         <a v-for="index of 30" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
           <!--loan-info :equipment=item.equipment...></loan-info-->
-          <loan-info equipment="123" start_time="0908" end_time="0910" :statement=test></loan-info>
-          <div>
-            <button type="button" class="btn btn-default">
-              <i class="fas fa-check-circle"></i>
-            </button>
-            <button type="button" class="btn btn-default">
-              <i class="fas fa-times-circle"></i>
-            </button>
-            <button type="button" class="btn btn-default">
-              <i class="fas fa-trash-alt"></i>
-            </button>
-          </div>
+          <loan-info equipment="123" start_time="0908" end_time="0910" :statement=test :need_examine="true" :deletable="true"></loan-info>
         </a>
       </div>
       <div v-if="type === 'provider_apply'">
-        <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
-        <a v-for="(item,index) in provider_apply_list" :key="item.user_name" v-show="index >= (page-1)*10 && index <= page*10" class="list-group-item">
-          <!--user-info :username=item.username :email=item.email></user-info-->
-          <user-info :username="item.user_name" :email="item.user_type"></user-info>
+        <a v-for="(item,index) in provider_apply_list" :key="item.user_name" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
+          <user-info :username="item.user_name" :role="item.user_type" :need_examine="true"></user-info>
           <div>
             <ol>
               <li>实验室信息：{{item.user_info_lab}}</li>
@@ -69,7 +41,8 @@
               <li>申请理由：{{item.user_info_description}}</li>
             </ol>
           </div>
-          <div>
+          <!--将下面功能移植到user-info组件中-->
+          <!--div>
             <button type="button" @click="apply_check_pass(item.user_name,'true')" class="btn btn-default">
               <i class="fas fa-check-circle"></i>
             </button>
@@ -79,25 +52,15 @@
             <button type="button" class="btn btn-default">
               <i class="fas fa-trash-alt"></i>
             </button>
-          </div>
+          </div-->
         </a>
       </div>
       <div v-if="type === 'device_apply'">
-        <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
-        <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
+        <!-- v-for="(item,index) in lists" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item"-->
+        <a v-for="index of 30" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
           <!--device-info :device_name=item.equipment...></device-info-->
-          <device-info device_name="test device name" device_address="test device address" device_timeout="test timeout" :device_contact=test></device-info>
-          <div>
-            <button type="button" class="btn btn-default">
-              <i class="fas fa-check-circle"></i>
-            </button>
-            <button type="button" class="btn btn-default">
-              <i class="fas fa-times-circle"></i>
-            </button>
-            <button type="button" class="btn btn-default">
-              <i class="fas fa-trash-alt"></i>
-            </button>
-          </div>
+          <device-info device_name="test device name" device_address="test device address" device_timeout="test timeout" :device_contact=test 
+          :need_examine="true" :deletable="true"></device-info>
         </a>
       </div>
     </div>
@@ -161,7 +124,7 @@ export default class Admin extends Vue {
     }
   }
 
-  async getInfo(){
+  async getInfo () {
     try{
       let response = await axios.get('/apis/users/info')
       this.role=response.data.user_type
@@ -210,6 +173,7 @@ export default class Admin extends Vue {
     this.getInfo()
   }
 
+  // TODO: 将apply_check_pass移入userinfo组件中
   async apply_check_pass (username, pass) {
     if (pass === 'true') {
       try {
