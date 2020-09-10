@@ -15,7 +15,7 @@
     <div class="list-group">
       <div v-if="type === 'all_devices'">
         <a v-for="(item,index) in devices_list" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
-          <device-info :device_name=item.name :device_info=item.info :device_owner=item.contact[0] :device_address=item.contact[2] :device_contact=item.contact[3]></device-info>
+          <device-info :device_name=item.name :device_info=item.info :device_contact=item.contact :device_occs=item.occupancies></device-info>
           <div>
             <!-- v-if="可申请"-->
             <button type="button" class="btn btn-default">
