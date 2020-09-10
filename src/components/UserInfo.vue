@@ -7,31 +7,20 @@
           <span class="list-group-item-text">{{email}}</span>
         </div>
       </div>
-		<!--div class="dropdown open">
-          <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-          设定用户类型
-          <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-            <li><a href="#">普通用户</a></li>
-            <li><a href="#">设备提供者</a></li>
-          </ul>
-        </div-->
   </div>
 </template>
 
 <script>
+/* eslint-disable no-unused-vars */
 import {Component, Vue, Prop, Watch} from 'vue-property-decorator'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
 Vue.use(VueAxios, axios)
 @Component
-export default class UserInfo extends Vue{
-  // props= ['username', 'email']
-  @Prop({type:String})username
-  @Prop({type:String})email
-
+export default class UserInfo extends Vue {
+  @Prop({type: String}) username
+  @Prop({type: String}) email
 }
 </script>
 

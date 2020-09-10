@@ -32,4 +32,14 @@ body{
   background-color: #DDDDDD;
 }
 
+.info_block{
+  width: 90%;
+  padding: 10px;
+  text-align: left;
+}
+
+.detailedinfo{
+  display: inline-block;
+  padding: 10px;
+}
 </style>

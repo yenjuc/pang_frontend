@@ -121,6 +121,7 @@
 </template>
 
 <script>
+/* eslint-disable camelcase */
 // eslint-disable-next-line no-unused-vars
 import {Component, Vue, Prop, Watch} from 'vue-property-decorator'
 import axios from 'axios'
@@ -129,9 +130,8 @@ import UserInfo from './UserInfo'
 import DeviceInfo from './DeviceInfo'
 import LoanInfo from './LoanInfo'
 
-
 Vue.use(VueAxios, axios)
-@Component({components: {UserInfo,DeviceInfo,LoanInfo}})
+@Component({components: {UserInfo, DeviceInfo, LoanInfo}})
 
 export default class Admin extends Vue {
   type = this.$route.params.type || 'users'
@@ -139,24 +139,23 @@ export default class Admin extends Vue {
   list = []
   res={}
   test= 'test bind'
-  async user_load(examining) {
-      this.res = await axios({
-        url: 'http://localhost:8000/admin/users/query',
-        params: {
-          examining: examining
-        }
-      })
+  async user_load (examining) {
+    this.res = await axios({
+      url: 'http://localhost:8000/admin/users/query',
+      params: {
+        examining: examining
+      }
+    })
   }
+
   querystring = require('querystring')
 
-  async user_delete(username){
-    await axios.post(`http://localhost:8000/admin/users/${username}/delete`, this.querystring({'username':username}))
+  async user_delete (username) {
+    await axios.post(`http://localhost:8000/admin/users/${username}/delete`, this.querystring({'username': username}))
   }
-
-
-  mounted(){
-  this.user_load('false')
-}
+  mounted () {
+    this.user_load('false')
+  }
 }
 </script>>
 
