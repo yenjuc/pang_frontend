@@ -20,13 +20,16 @@
 </template>
 
 <script>
-export default {
-  data () {
-    return {
-      username: '',
-      password: ''
-    }
-  }
+// eslint-disable-next-line no-unused-vars
+import {Component, Vue, Prop, Watch} from 'vue-property-decorator'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+
+Vue.use(VueAxios, axios)
+@Component
+export default class Login extends Vue {
+  username=''
+  password=''
 }
 </script>>
 
