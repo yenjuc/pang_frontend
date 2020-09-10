@@ -13,9 +13,9 @@
     <div class="list-group">
       <div v-if="type === 'users'">
         <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
-        <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
+        <a v-for="(user,index) in user_list" :key="user.username" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
           <!--user-info :username=item.username :email=item.email></user-info-->
-          <user-info username="test name" role="test"></user-info>
+          <user-info :username=user.user_name :email=user.user_type></user-info>
           <div>
             <button type="button" class="btn btn-default">
               <i class="fas fa-trash-alt"></i>
@@ -40,7 +40,7 @@
       </div>
       <div v-if="type === 'loan_apply'">
         <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
-         <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
+         <a v-for="index of 30" :key="index" v-show="index >= (page-1)*10 && index <= page*10" class="list-group-item">
           <!--loan-info :equipment=item.equipment...></loan-info-->
           <loan-info equipment="123" start_time="0908" end_time="0910" :statement=test></loan-info>
           <div>
@@ -58,11 +58,19 @@
       </div>
       <div v-if="type === 'provider_apply'">
         <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
-        <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
+        <a v-for="(item,index) in provider_apply_list" :key="item.user_name" v-show="index >= (page-1)*10 && index <= page*10" class="list-group-item">
           <!--user-info :username=item.username :email=item.email></user-info-->
-          <user-info username="test name" role="test role"></user-info>
+          <user-info :username="item.user_name" :email="item.user_type"></user-info>
           <div>
-            <button type="button" class="btn btn-default">
+            <ol>
+              <li>实验室信息：{{item.user_info_lab}}</li>
+              <li>联系电话：{{item.user_info_tel}}</li>
+              <li>地址：{{item.user_info_address}}</li>
+              <li>申请理由：{{item.user_info_description}}</li>
+            </ol>
+          </div>
+          <div>
+            <button type="button" @click="apply_check_pass(item.user_name,'true')" class="btn btn-default">
               <i class="fas fa-check-circle"></i>
             </button>
             <button type="button" class="btn btn-default">
@@ -134,25 +142,82 @@ export default class Admin extends Vue {
   type = this.$route.params.type || 'users'
   page = 1
   list = []
+  user_list=[]
+  provider_apply_list=[]
   res={}
   test= 'test bind'
-  async user_load (examining) {
-    this.res = await axios({
-      url: 'http://localhost:8000/admin/users/query',
-      params: {
-        examining: examining
-      }
-    })
+  async user_load() {
+    try
+    {
+      this.res = await axios({
+        url: '/apis/admin/users/query',
+        params: {
+          examining: 'false'
+        }
+      })
+      this.user_list=this.res.data}
+    catch(e){
+      console.log(e.response.data)
+    }
+  }
+
+  async apply_user_load(){
+    try{
+      this.res = await axios({
+        url: '/apis/admin/users/query',
+        params: {
+          examining: 'true'
+        }
+      })
+      this.provider_apply_list=this.res.data
+    }
+  catch (e){
+    console.log(e.response.data)
+  }
   }
 
   querystring = require('querystring')
 
   async user_delete (username) {
-    await axios.post(`http://localhost:8000/admin/users/${username}/delete`, this.querystring({'username': username}))
+    try {
+      await axios.post(`/apis/admin/users/${username}/delete`, this.querystring.stringify({'username': username}))
+      await this.user_load()
+    }
+    catch (e){
+      console.log(e.response.data)
+    }
   }
+
   mounted () {
-    this.user_load('false')
+    this.user_load()
+    this.apply_user_load()
   }
+
+  async apply_check_pass(username,pass){
+
+    if(pass==='true'){
+      try{
+        await axios.post('/apis/admin/users/check/apply',this.querystring.stringify({username:username,pass:pass}))
+        await this.apply_user_load()
+      }
+      catch (e){
+        console.log('error')
+      }
+    }
+
+  }
+
+  async user_self_info(){
+    let res=axios.get('/apis/users/info')
+  }
+
+
+
+
+  mounted(){
+  this.user_load()
+    this.apply_user_load()
+}
 }
 </script>>
 
@@ -164,5 +229,9 @@ export default class Admin extends Vue {
   border-radius: 10px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
   width: 75%;
+}
+
+li{
+  list-style-type: none;
 }
 </style>
