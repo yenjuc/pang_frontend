@@ -50,7 +50,7 @@ export default class LoanInfo extends Vue {
   @Prop({type: Object}) appl
   @Prop({type: Boolean}) timer
 
-  // TODO: check whether the buttons are shown properly
+  // TODO: check whether the buttons are shown properly (have not tested)
   @Prop({type: Boolean, default: false}) deletable
   @Prop({type: Boolean, default: false}) need_examine
 

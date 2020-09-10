@@ -43,6 +43,8 @@ export default class UserInfo extends Vue {
 
 // TODO: 将Admin中apply_check_pass移入userinfo组件中，并且完善false逻辑
 
+// TODO: 将Admin中user_delete移入userinfo组件中（不清楚装饰器是否需要this.username，应该只要复制黏贴或加上this就可以了）
+
 </script>
 
 <style scoped>
