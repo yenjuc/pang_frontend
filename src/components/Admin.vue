@@ -16,6 +16,14 @@
         <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
           <!--user-info :username=item.username :email=item.email></user-info-->
           <user-info username="test name" email="test email"></user-info>
+          <div>
+            <button type="button" class="btn btn-default">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button type="button" class="btn btn-default">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
         </a>
       </div>
       <div class="devicelist" v-if="type === 'devices'">
@@ -23,12 +31,68 @@
         <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
           <!--device-info :device_name...></device-info-->
           <device-info device_name="test device name" device_address="test device address" device_timeout="test timeout" :device_contact=test></device-info>
+          <div>
+            <button type="button" class="btn btn-default">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button type="button" class="btn btn-default">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
         </a>
       </div>
       <div class="loanlist" v-if="type === 'loan_apply'">
+        <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
          <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
-          <!--device-info :device_name...></device-info-->
+          <!--loan-info :equipment=item.equipment...></loan-info-->
           <loan-info equipment="123" start_time="0908" end_time="0910" :statement=test></loan-info>
+          <div>
+            <button type="button" class="btn btn-default">
+              <i class="fas fa-check-circle"></i>
+            </button>
+            <button type="button" class="btn btn-default">
+              <i class="fas fa-times-circle"></i>
+            </button>
+            <button type="button" class="btn btn-default">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        </a>
+      </div>
+      <div class="providerapplylist" v-if="type === 'provider_apply'">
+        <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
+        <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
+          <!--user-info :username=item.username :email=item.email></user-info-->
+          <user-info username="test name" email="test email"></user-info>
+          <div>
+            <button type="button" class="btn btn-default">
+              <i class="fas fa-check-circle"></i>
+            </button>
+            <button type="button" class="btn btn-default">
+              <i class="fas fa-times-circle"></i>
+            </button>
+            <button type="button" class="btn btn-default">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        </a>
+      </div>
+      <div class="deviceapplylist" v-if="type === 'device_apply'">
+        <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
+        <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
+          <!--device-info :device_name=item.equipment...></device-info-->
+          <device-info device_name="test device name" device_address="test device address" device_timeout="test timeout" :device_contact=test></device-info>
+          <div>
+            <button type="button" class="btn btn-default">
+              <i class="fas fa-check-circle"></i>
+            </button>
+            <button type="button" class="btn btn-default">
+              <i class="fas fa-times-circle"></i>
+            </button>
+            <button type="button" class="btn btn-default">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
         </a>
       </div>
     </div>
