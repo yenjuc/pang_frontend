@@ -160,8 +160,8 @@ export default class Admin extends Vue {
     }
   }
 
-  async apply_user_load(){
-    try{
+  async apply_user_load () {
+    try {
       this.res = await axios({
         url: '/apis/admin/users/query',
         params: {
