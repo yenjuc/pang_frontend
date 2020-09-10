@@ -6,7 +6,7 @@
       <li role="presentation" :class="type === 'loaned_devices'? 'active' : '' "><a href="/loaned_devices">查看已借设备</a></li>
       <li v-if="role !== 'provider'" role="presentation" :class="type === 'apply_provider'? 'active' : '' "><a href="/apply_provider">申请成为设备提供者</a></li>
       <li v-if="role === 'provider'" role="presentation" :class="type === 'manage_devices'? 'active' : '' "><a href="/manage_devices">管理自己的设备</a></li>
-      <li v-if="role === 'provider'" role="presentation" :class="type === 'loan_apply'? 'active' : '' "><a href="/loan_apply">审核租借申请</a></li>
+      <li v-if="role === 'provider'" role="presentation" :class="type === 'manage_loan_apply'? 'active' : '' "><a href="/manage_loan_apply">审核租借申请</a></li>
       <li v-if="role === 'provider'" role="presentation" :class="type === 'loaned_history'? 'active' : '' "><a href="/loaned_history">已借出设备历史</a></li>
       <li v-if="role === 'provider'" role="presentation" :class="type === 'add_device'? 'active' : '' "><a href="/add_device">增加设备</a></li>
     </ul>
@@ -15,7 +15,8 @@
     <div class="list-group">
       <div v-if="type === 'all_devices'">
         <a v-for="(item,index) in devices_list" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
-          <device-info :device_name=item.name :device_info=item.info :device_contact=item.contact :device_occs=item.occupancies></device-info>
+          <device-info :device_name=item.name :device_info=item.info :device_contact=item.contact :device_occs=item.occupancies
+          :open_apply="true"></device-info>
           <div>
             <!-- v-if="可申请"-->
             <template v-if='expandLoanApplForm != index'>
@@ -70,36 +71,15 @@
       </div>
       <div v-if="type === 'manage_devices' && role === 'provider'">
         <a v-for="(item,index) in provider_devices_list" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
-          <device-info :device_name=item.name :device_info=item.info :device_status=item.status></device-info>
-          <div>
-            <!-- v-show="(!)在架上"-->
-            <button v-on:click="on_shelf(item)" type="button" class="btn btn-default">
-              <i class="fas fa-arrow-circle-up"></i>
-            </button>
-            <button v-on:click="down_shelf(item)" type="button" class="btn btn-default">
-              <i class="fas fa-arrow-circle-down"></i>
-            </button>
-            <button v-on:click="update_device(item)" type="button" class="btn btn-default">
-              <i class="fas fa-edit"></i>
-            </button>
-            <button v-on:click="delete_device(item)" type="button" class="btn btn-default">
-              <i class="fas fa-trash-alt"></i>
-            </button>
-          </div>
+          <device-info :device_name=item.name :device_info=item.info :device_status=item.status
+          :editable="true" :deletable="true" :shelf_op="true"></device-info>
         </a>
       </div>
-      <div v-if="type === 'loan_apply' && role === 'provider'">
+      <div v-if="type === 'manage_loan_apply' && role === 'provider'">
         <!-- v-for="(item,index) in lists" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item"-->
         <a v-for="index of 30" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
           <!--loan-info :equipment=item.equipment...></loan-info-->
-          <div>
-            <button type="button" class="btn btn-default">
-              <i class="fas fa-check-circle"></i>
-            </button>
-            <button type="button" class="btn btn-default">
-              <i class="fas fa-times-circle"></i>
-            </button>
-          </div>
+          <!-- 完善时记得添加属性： :need_examine="true"-->
         </a>
       </div>
       <div v-if="type === 'loaned_history' && role === 'provider'">
@@ -158,8 +138,8 @@ import VueAxios from 'vue-axios'
 import UserInfo from './UserInfo'
 import DeviceInfo from './DeviceInfo'
 import LoanInfo from './LoanInfo'
-import * as querystring from "querystring";
 import {Modal} from "ant-design-vue";
+import * as querystring from "querystring";
 
 Vue.use(VueAxios, axios)
 @Component({
@@ -167,7 +147,7 @@ Vue.use(VueAxios, axios)
 })
 
 export default class CommonUser extends Vue {
-  type = this.$route.params.type || 'users'
+  type = this.$route.params.type || 'all_devices'
   page = 1
   role = ''
   userInfo={}
@@ -189,6 +169,7 @@ export default class CommonUser extends Vue {
 
   querystring = require('querystring')
 
+  // TODO: 将下架、删除等移植到DeviceInfo中
   async down_shelf(item) {
     try {
       let response = await axios.post(`/apis/provider/undercarriage/${item.id}`)
@@ -211,7 +192,6 @@ export default class CommonUser extends Vue {
       console.log(e.response) // 在此处弹出提示框
     }
   }
-
 
   async getAllDevices () {
     try {
@@ -330,9 +310,12 @@ export default class CommonUser extends Vue {
   mounted () {
     this.getAllDevices()
     this.getInfo()
+    this.getProviderDevices()
     this.getMyLoanApplications()
   }
 }
+
+  // TODO: html部分：查询框（使用filter，参考the net ninja vue #36），以及完善manage_loan_apply, loan_history
 
 </script>
 
