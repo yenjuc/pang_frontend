@@ -46,7 +46,7 @@
           </div>
         </a>
       </div>
-      <div class="apply_panel" v-if="type === 'apply_provider'">
+      <div class="apply_panel" v-if="type === 'apply_provider' && role !== 'provider'">
         <i class="fas fa-user-circle" style="font-size: 100px; margin: 40px"></i>
         <div class="input-group">
           <span class="input-group-addon"><i class="fas fa-flask"></i></span>
@@ -66,7 +66,7 @@
         </div>
         <button class="add_button">Apply</button>
       </div>
-      <div v-if="type === 'manage_devices'">
+      <div v-if="type === 'manage_devices' && role === 'provider'">
         <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
         <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
           <!--device-info :device_name...></device-info-->
@@ -88,7 +88,7 @@
           </div>
         </a>
       </div>
-      <div v-if="type === 'loan_apply'">
+      <div v-if="type === 'loan_apply' && role === 'provider'">
         <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
          <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
           <!--loan-info :equipment=item.equipment...></loan-info-->
@@ -103,7 +103,7 @@
           </div>
         </a>
       </div>
-      <div v-if="type === 'loaned_history'">
+      <div v-if="type === 'loaned_history' && role === 'provider'">
         <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
         <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
           <!--device-info :device_name...></device-info-->
@@ -113,7 +113,7 @@
           </div>
         </a>
       </div>
-      <div class="apply_panel" v-if="type === 'add_device'">
+      <div class="apply_panel" v-if="type === 'add_device' && role === 'provider'">
         <i class="fas fa-laptop-house" style="font-size: 100px; margin: 40px"></i>
         <div class="input-group">
           <span class="input-group-addon"><i class="fas fa-tablet-alt"></i></span>
@@ -168,7 +168,7 @@ Vue.use(VueAxios, axios)
 export default class CommonUser extends Vue {
   type = this.$route.params.type || 'users'
   page = 1
-  role = 'provider'
+  role = 'student'
   deviceName = ''
   deviceInfo = ''
   infoLab = ''
