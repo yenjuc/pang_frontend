@@ -120,6 +120,7 @@ export default class DeviceInfo extends Vue {
   editInfo = ""
 
   loanReason = ""
+  // TODO: 确认input data的类型、是否有成功绑定到loanEndTime上
   loanEndTime = ""
 
   @Prop({type: Number}) device_id     // TODO: 确认是否需要留这个props
