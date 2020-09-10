@@ -69,16 +69,16 @@
           <device-info :device_name=item.name :device_info=item.info :device_status=item.status></device-info>
           <div>
             <!-- v-show="(!)在架上"-->
-            <button type="button" class="btn btn-default">
+            <button v-on:click="on_shelf()" type="button" class="btn btn-default">
               <i class="fas fa-arrow-circle-up"></i>
             </button>
-            <button type="button" class="btn btn-default">
+            <button v-on:click="down_shelf()" type="button" class="btn btn-default">
               <i class="fas fa-arrow-circle-down"></i>
             </button>
-            <button type="button" class="btn btn-default">
+            <button v-on:click="update_device()" type="button" class="btn btn-default">
               <i class="fas fa-edit"></i>
             </button>
-            <button type="button" class="btn btn-default">
+            <button v-on:click="delete_device()" type="button" class="btn btn-default">
               <i class="fas fa-trash-alt"></i>
             </button>
           </div>
@@ -203,6 +203,9 @@ export default class CommonUser extends Vue {
       this.userInfo['name']=response.data.user_name
       this.userInfo['address']=response.data.user_info_address
       this.userInfo['reject']=response.data.user_info_reject
+      if (this.role === 'provider') {
+        await this.getProviderDevices()
+      }
     }
     catch (e){
       console.log('getInfo:error')
@@ -255,7 +258,6 @@ export default class CommonUser extends Vue {
   mounted () {
     this.getAllDevices()
     this.getInfo()
-    this.getProviderDevices()
   }
 }
 
