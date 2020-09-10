@@ -59,16 +59,16 @@
           <device-info :device_name=item.name :device_info=item.info :device_status=item.status></device-info>
           <div>
             <!-- v-show="(!)在架上"-->
-            <button v-on:click="on_shelf()" type="button" class="btn btn-default">
+            <button v-on:click="on_shelf(item)" type="button" class="btn btn-default">
               <i class="fas fa-arrow-circle-up"></i>
             </button>
-            <button v-on:click="down_shelf()" type="button" class="btn btn-default">
+            <button v-on:click="down_shelf(item)" type="button" class="btn btn-default">
               <i class="fas fa-arrow-circle-down"></i>
             </button>
-            <button v-on:click="update_device()" type="button" class="btn btn-default">
+            <button v-on:click="update_device(item)" type="button" class="btn btn-default">
               <i class="fas fa-edit"></i>
             </button>
-            <button v-on:click="delete_device()" type="button" class="btn btn-default">
+            <button v-on:click="delete_device(item)" type="button" class="btn btn-default">
               <i class="fas fa-trash-alt"></i>
             </button>
           </div>
@@ -168,6 +168,18 @@ export default class CommonUser extends Vue {
   myLoanApplsActive = []
 
   querystring = require('querystring')
+
+  async down_shelf(item) {
+    try {
+      let response = await axios.post(`/apis/provider/undercarriage/${item.id}`)
+      if (response.status === 200) {
+        // 弹框 表示下架成功 然后刷新
+      }
+    } catch (e) {
+      console.log(e.response) // 在此处弹出提示框
+    }
+  }
+
 
   async getAllDevices () {
     try {
