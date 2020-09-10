@@ -15,11 +15,8 @@
         <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
         <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
           <!--user-info :username=item.username :email=item.email></user-info-->
-          <user-info username="test name" email="test email"></user-info>
+          <user-info username="test name" role="test"></user-info>
           <div>
-            <button type="button" class="btn btn-default">
-              <i class="fas fa-edit"></i>
-            </button>
             <button type="button" class="btn btn-default">
               <i class="fas fa-trash-alt"></i>
             </button>
@@ -63,7 +60,7 @@
         <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
         <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
           <!--user-info :username=item.username :email=item.email></user-info-->
-          <user-info username="test name" email="test email"></user-info>
+          <user-info username="test name" role="test role"></user-info>
           <div>
             <button type="button" class="btn btn-default">
               <i class="fas fa-check-circle"></i>

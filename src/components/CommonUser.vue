@@ -1,11 +1,11 @@
 <template>
 <div class="user">
     <ul class="nav nav-pills">
-      <li role="presentation" :class="type === 'all_devices'? 'active' : '' "><a href="/all_devices">所有设备</a></li>
-      <li role="presentation" :class="type === 'apply_history'? 'active' : '' "><a href="/apply_history">申请历史</a></li>
+      <li role="presentation" :class="type === 'all_devices'? 'active' : '' "><a href="/all_devices">所有上架设备</a></li>
+      <li role="presentation" :class="type === 'apply_history'? 'active' : '' "><a href="/apply_history">查看申请历史</a></li>
       <li role="presentation" :class="type === 'loaned_devices'? 'active' : '' "><a href="/loaned_devices">查看已借设备</a></li>
       <li v-if="role !== 'provider'" role="presentation" :class="type === 'apply_provider'? 'active' : '' "><a href="/apply_provider">申请成为设备提供者</a></li>
-      <li v-if="role === 'provider'" role="presentation" :class="type === 'manage_devices'? 'active' : '' "><a href="/manage_devices">管理设备</a></li>
+      <li v-if="role === 'provider'" role="presentation" :class="type === 'manage_devices'? 'active' : '' "><a href="/manage_devices">管理自己的设备</a></li>
       <li v-if="role === 'provider'" role="presentation" :class="type === 'loan_apply'? 'active' : '' "><a href="/loan_apply">审核租借申请</a></li>
       <li v-if="role === 'provider'" role="presentation" :class="type === 'loaned_history'? 'active' : '' "><a href="/loaned_history">已借出设备历史</a></li>
       <li v-if="role === 'provider'" role="presentation" :class="type === 'add_device'? 'active' : '' "><a href="/add_device">增加设备</a></li>
@@ -165,7 +165,7 @@ Vue.use(VueAxios, axios)
 export default class CommonUser extends Vue {
   type = this.$route.params.type || 'users'
   page = 1
-  role = 'student'
+  role = 'provider'
   deviceName = ''
   deviceInfo = ''
   infoLab = ''

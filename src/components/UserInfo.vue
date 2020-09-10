@@ -3,8 +3,8 @@
       <div class="info_block">
         <h4 class="list-group-item-heading">{{username}}</h4>
         <div class="detailedinfo">
-          <i class="fas fa-envelope"></i>
-          <span class="list-group-item-text">{{email}}</span>
+          <i class="fas fa-user-circle"></i>
+          <span class="list-group-item-text">{{role}}</span>
         </div>
       </div>
   </div>
@@ -20,7 +20,7 @@ Vue.use(VueAxios, axios)
 @Component
 export default class UserInfo extends Vue {
   @Prop({type: String}) username
-  @Prop({type: String}) email
+  @Prop({type: String}) role
 }
 </script>
 
