@@ -25,10 +25,19 @@
 </template>
 
 <script>
-export default {
-  props: ['username', 'email']
+import {Component, Vue, Prop, Watch} from 'vue-property-decorator'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+
+Vue.use(VueAxios, axios)
+@Component
+export default class UserInfo extends Vue{
+  // props= ['username', 'email']
+  @Prop({type:String})username
+  @Prop({type:String})email
+
 }
-</script>>
+</script>
 
 <style scoped>
 

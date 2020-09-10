@@ -44,18 +44,39 @@
 </template>
 
 <script>
+// eslint-disable-next-line no-unused-vars
+import {Component, Vue, Prop, Watch} from 'vue-property-decorator'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
 import UserInfo from './UserInfo'
-export default {
-  data () {
-    return {
-      type: this.$route.params.type || 'users',
-      page: 1,
-      list: []
+import instance from '../axios_baseurl'
+
+Vue.use(VueAxios, axios)
+@Component({components: {UserInfo}})
+
+export default class Admin extends Vue {
+  type = this.$route.params.type || 'users'
+  page = 1
+  list = []
+  res={}
+
+  async user_load(examining) {
+    try {
+      this.res = await instance({
+        url: '/admin/users/query',
+        params: {
+          examining: examining
+        }
+      })
+      console.log(this.res)
+    } catch (e) {
+      print('error')
     }
-  },
-  components: {
-    'user-info': UserInfo
   }
+
+  mounted(){
+  this.user_load('false')
+}
 }
 </script>>
 
