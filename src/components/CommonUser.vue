@@ -15,9 +15,9 @@
     <div class="list-group">
       <div v-if="type === 'all_devices'">
         <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
-        <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
+        <a v-for="(item,index) in devices_list" :key="index" v-show="index >= (page-1)*10 && index <= page*10" class="list-group-item">
           <!--device-info :device_name...></device-info-->
-          <device-info device_name="test device name" device_address="test device address" device_timeout="test timeout" :device_contact=test></device-info>
+          <device-info :device_name=item.name :device_info=item.info :device_owner=item.contact[0] :device_address=item.contact[2] :device_contact=item.contact[3]></device-info>
           <div>
             <!-- v-if="可申请"-->
             <button type="button" class="btn btn-default">
@@ -123,7 +123,7 @@
           <span class="input-group-addon"><i class="fas fa-info"></i></span>
           <input type="text" class="form-control" placeholder="Device Information" v-model="deviceInfo" required/>
         </div>
-        <button class="add_button">Add Device</button>
+        <button class="add_button" v-on:click="addEquipment()">Add Device</button>
       </div>
     </div>
 
@@ -160,7 +160,9 @@ import DeviceInfo from './DeviceInfo'
 import LoanInfo from './LoanInfo'
 
 Vue.use(VueAxios, axios)
-@Component({components: {UserInfo, DeviceInfo, LoanInfo}})
+@Component({
+  components: {UserInfo, DeviceInfo, LoanInfo}
+})
 
 export default class CommonUser extends Vue {
   type = this.$route.params.type || 'users'
@@ -172,7 +174,42 @@ export default class CommonUser extends Vue {
   infoAddress = ''
   infoTel = ''
   infoDescription = ''
-  list = []
+  devices_list = []
+
+
+  querystring = require('querystring')
+
+  async getAllDevices() {
+    try {
+      let response = await axios.get('/apis/equipment/search/student')
+      if (response.status === 200) {
+        this.devices_list = response.data.equipments
+      }
+    } catch (e) {
+      console.log(e.response) // 在此处弹出提示框
+    }
+  }
+
+
+  async addEquipment() {
+    try {
+      let response = await axios.post('/apis/provider/add', this.querystring.stringify({
+        name : this.deviceName,
+        info : this.deviceInfo
+      }))
+      if (response.status === 200) {
+        // 在此处弹出提示 添加成功
+
+      }
+    } catch (e) {
+      console.log(e.response.data.error) // 在此处弹出提示框
+    }
+  }
+
+  mounted() {
+    this.getAllDevices()
+  }
+
 }
 
 </script>

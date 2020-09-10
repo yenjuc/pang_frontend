@@ -35,7 +35,7 @@ export default class Logon extends Vue {
 
   async logon () {
     try {
-      let response = await axios.post('/users/logon', this.querystring.stringify({
+      let response = await axios.post('/apis/users/logon', this.querystring.stringify({
         username: this.username,
         password: this.password,
         email: this.email
