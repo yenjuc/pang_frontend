@@ -11,22 +11,22 @@
 
     <!--v-for item in list...-->
     <div class="list-group">
-      <div class="userlist" v-if="type === 'users'">
+      <div v-if="type === 'users'">
         <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
-        <a v-for="(user,index) in user_list" :key="user.username" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
+        <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
           <!--user-info :username=item.username :email=item.email></user-info-->
-          <user-info :username=user.user_name :email=user.user_type></user-info>
+          <user-info username="test name" email="test email"></user-info>
           <div>
             <button type="button" class="btn btn-default">
               <i class="fas fa-edit"></i>
             </button>
-            <button type="button" @click="user_delete(user.user_name)" class="btn btn-default">
+            <button type="button" class="btn btn-default">
               <i class="fas fa-trash-alt"></i>
             </button>
           </div>
         </a>
       </div>
-      <div class="devicelist" v-if="type === 'devices'">
+      <div v-if="type === 'devices'">
         <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
         <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
           <!--device-info :device_name...></device-info-->
@@ -41,7 +41,7 @@
           </div>
         </a>
       </div>
-      <div class="loanlist" v-if="type === 'loan_apply'">
+      <div v-if="type === 'loan_apply'">
         <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
          <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
           <!--loan-info :equipment=item.equipment...></loan-info-->
@@ -59,7 +59,7 @@
           </div>
         </a>
       </div>
-      <div class="providerapplylist" v-if="type === 'provider_apply'">
+      <div v-if="type === 'provider_apply'">
         <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
         <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
           <!--user-info :username=item.username :email=item.email></user-info-->
@@ -77,7 +77,7 @@
           </div>
         </a>
       </div>
-      <div class="deviceapplylist" v-if="type === 'device_apply'">
+      <div v-if="type === 'device_apply'">
         <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
         <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
           <!--device-info :device_name=item.equipment...></device-info-->
@@ -97,7 +97,7 @@
       </div>
     </div>
 
-    <nav aria-label="Page navigation">
+    <nav aria-label="Page navigation" v-if="type !== 'statistics'">
       <ul class="pagination">
         <li :class="page - 1 > 0 ? '':'disabled'">
           <a href="#" aria-label="Previous">
@@ -137,49 +137,25 @@ export default class Admin extends Vue {
   type = this.$route.params.type || 'users'
   page = 1
   list = []
-  user_list=[]
   res={}
   test= 'test bind'
-  async user_load(examining) {
-    try
-    {
-      this.res = await axios({
-        url: '/apis/admin/users/query',
-        params: {
-          examining: examining
-        }
-      })
-      this.user_list=this.res.data
-    }
-    catch(e){
-      console.log(e.response.data)
-    }
+  async user_load (examining) {
+    this.res = await axios({
+      url: 'http://localhost:8000/admin/users/query',
+      params: {
+        examining: examining
+      }
+    })
   }
 
   querystring = require('querystring')
 
   async user_delete (username) {
-    try {
-      await axios.post(`/apis/admin/users/${username}/delete`, this.querystring.stringify({'username': username}))
-      this.user_load('false')
-    }
-    catch (e){
-      console.log(e.response.data)
-    }
+    await axios.post(`http://localhost:8000/admin/users/${username}/delete`, this.querystring({'username': username}))
   }
   mounted () {
     this.user_load('false')
   }
-
-  async user_self_info(){
-    let res=axios.get('/users/info')
-  }
-
-
-
-  mounted(){
-  this.user_load('false')
-}
 }
 </script>>
 

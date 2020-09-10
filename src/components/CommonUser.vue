@@ -4,6 +4,7 @@
       <li role="presentation" :class="type === 'all_devices'? 'active' : '' "><a href="/all_devices">所有设备</a></li>
       <li role="presentation" :class="type === 'apply_history'? 'active' : '' "><a href="/apply_history">申请历史</a></li>
       <li role="presentation" :class="type === 'loaned_devices'? 'active' : '' "><a href="/loaned_devices">查看已借设备</a></li>
+      <li v-if="role !== 'provider'" role="presentation" :class="type === 'apply_provider'? 'active' : '' "><a href="/apply_provider">申请成为设备提供者</a></li>
       <li v-if="role === 'provider'" role="presentation" :class="type === 'manage_devices'? 'active' : '' "><a href="/manage_devices">管理设备</a></li>
       <li v-if="role === 'provider'" role="presentation" :class="type === 'loan_apply'? 'active' : '' "><a href="/loan_apply">审核租借申请</a></li>
       <li v-if="role === 'provider'" role="presentation" :class="type === 'loaned_history'? 'active' : '' "><a href="/loaned_history">已借出设备历史</a></li>
@@ -12,7 +13,7 @@
 
     <!--v-for item in list...-->
     <div class="list-group">
-      <div class="devicelist" v-if="type === 'all_devices'">
+      <div v-if="type === 'all_devices'">
         <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
         <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
           <!--device-info :device_name...></device-info-->
@@ -25,7 +26,7 @@
           </div>
         </a>
       </div>
-      <div class="loanlist" v-if="type === 'apply_history'">
+      <div v-if="type === 'apply_history'">
         <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
          <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
           <!--loan-info :equipment=item.equipment...></loan-info-->
@@ -35,7 +36,7 @@
           </div>
         </a>
       </div>
-      <div class="devicelist" v-if="type === 'loaned_devices'">
+      <div v-if="type === 'loaned_devices'">
         <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
         <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
           <!--device-info :device_name...></device-info-->
@@ -45,7 +46,27 @@
           </div>
         </a>
       </div>
-      <div class="devicelist" v-if="type === 'manage_devices'">
+      <div class="apply_panel" v-if="type === 'apply_provider'">
+        <i class="fas fa-user-circle" style="font-size: 100px; margin: 40px"></i>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fas fa-flask"></i></span>
+          <input type="text" class="form-control" placeholder="Name of Your Lab" v-model="infoLab" required/>
+        </div>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fas fa-map-marked-alt"></i></span>
+          <input type="text" class="form-control" placeholder="Contact Address" v-model="infoAddress" required/>
+        </div>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fas fa-phone-square-alt"></i></span>
+          <input type="text" class="form-control" placeholder="Contact Number" v-model="infoTel" required/>
+        </div>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fas fa-info"></i></span>
+          <input type="text" class="form-control" placeholder="Description" v-model="infoDescription" required/>
+        </div>
+        <button class="add_button">Apply</button>
+      </div>
+      <div v-if="type === 'manage_devices'">
         <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
         <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
           <!--device-info :device_name...></device-info-->
@@ -67,7 +88,7 @@
           </div>
         </a>
       </div>
-      <div class="loanlist" v-if="type === 'loan_apply'">
+      <div v-if="type === 'loan_apply'">
         <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
          <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
           <!--loan-info :equipment=item.equipment...></loan-info-->
@@ -82,7 +103,7 @@
           </div>
         </a>
       </div>
-      <div class="devicelist" v-if="type === 'loaned_history'">
+      <div v-if="type === 'loaned_history'">
         <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
         <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
           <!--device-info :device_name...></device-info-->
@@ -92,21 +113,21 @@
           </div>
         </a>
       </div>
-      <div class="adddevicepanel" v-if="type === 'add_device'">
+      <div class="apply_panel" v-if="type === 'add_device'">
         <i class="fas fa-laptop-house" style="font-size: 100px; margin: 40px"></i>
         <div class="input-group">
           <span class="input-group-addon"><i class="fas fa-tablet-alt"></i></span>
-          <input type="text" class="form-control" placeholder="Name of the device" v-model="deviceName" required/>
+          <input type="text" class="form-control" placeholder="Name of the Device" v-model="deviceName" required/>
         </div>
         <div class="input-group">
           <span class="input-group-addon"><i class="fas fa-info"></i></span>
-          <input type="text" class="form-control" placeholder="Device information" v-model="deviceInfo" required/>
+          <input type="text" class="form-control" placeholder="Device Information" v-model="deviceInfo" required/>
         </div>
         <button class="add_button">Add Device</button>
       </div>
     </div>
 
-    <nav aria-label="Page navigation" v-if="type !== 'add_device'">
+    <nav aria-label="Page navigation" v-if="type !== 'add_device' && type !== 'apply_provider'">
       <ul class="pagination">
         <li :class="page - 1 > 0 ? '':'disabled'">
           <a href="#" aria-label="Previous">
@@ -144,9 +165,13 @@ Vue.use(VueAxios, axios)
 export default class CommonUser extends Vue {
   type = this.$route.params.type || 'users'
   page = 1
-  role = 'provider'
+  role = 'student'
   deviceName = ''
   deviceInfo = ''
+  infoLab = ''
+  infoAddress = ''
+  infoTel = ''
+  infoDescription = ''
   list = []
 }
 
@@ -167,7 +192,7 @@ export default class CommonUser extends Vue {
   text-align: left;
 }
 
-.adddevicepanel{
+.apply_panel{
   margin: 20px auto;
   width: 60%
 }
