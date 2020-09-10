@@ -18,6 +18,10 @@ export default new Router({
       component: Admin
     },
     {
+      path: '/admin/:type',
+      component: Admin
+    },
+    {
       path: '*',
       redirect: '/login'
     }
