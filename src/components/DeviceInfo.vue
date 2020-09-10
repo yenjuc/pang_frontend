@@ -12,7 +12,7 @@
             <span class="list-group-item-text">{{device_address}}</span>
           </div>
           <div class="detailedinfo">
-            <i class="fas fa-address-book"></i>
+            <i class="fas fa-user-circle"></i>
             <span class="list-group-item-text">{{device_owner}}</span>
           </div>
           <div class="detailedinfo">

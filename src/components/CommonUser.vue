@@ -151,6 +151,7 @@
 </template>
 
 <script>
+/* eslint-disable camelcase */
 /* eslint-disable no-unused-vars */
 import {Component, Vue, Prop, Watch} from 'vue-property-decorator'
 import axios from 'axios'
@@ -176,10 +177,9 @@ export default class CommonUser extends Vue {
   infoDescription = ''
   devices_list = []
 
-
   querystring = require('querystring')
 
-  async getAllDevices() {
+  async getAllDevices () {
     try {
       let response = await axios.get('/apis/equipment/search/student')
       if (response.status === 200) {
@@ -190,12 +190,11 @@ export default class CommonUser extends Vue {
     }
   }
 
-
-  async addEquipment() {
+  async addEquipment () {
     try {
       let response = await axios.post('/apis/provider/add', this.querystring.stringify({
-        name : this.deviceName,
-        info : this.deviceInfo
+        name: this.deviceName,
+        info: this.deviceInfo
       }))
       if (response.status === 200) {
         // 在此处弹出提示 添加成功
@@ -206,10 +205,9 @@ export default class CommonUser extends Vue {
     }
   }
 
-  mounted() {
+  mounted () {
     this.getAllDevices()
   }
-
 }
 
 </script>
