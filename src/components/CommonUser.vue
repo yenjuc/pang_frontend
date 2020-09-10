@@ -200,6 +200,7 @@ export default class CommonUser extends Vue {
       this.userInfo['description']=response.data.user_info_description
       this.userInfo['name']=response.data.user_name
       this.userInfo['address']=response.data.user_info_address
+      this.userInfo['reject']=response.data.user_info_reject
     }
     catch (e){
       console.log('getInfo:error')
