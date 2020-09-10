@@ -8,30 +8,43 @@
 
     <div class="input-group">
       <span class="input-group-addon"><i class="fas fa-unlock-alt"></i></span>
-      <input type="password" class="form-control" placeholder="Password" v-model="password">
+        <input type="password" class="form-control" placeholder="Password" v-model="password">
     </div>
 
     <div style="display: flex; width: 50%; margin:30px auto 10px">
       <router-link v-bind:to="'/logon'">Logon</router-link>
-      <button class="login-button">Login</button>
+      <button class="login-button" v-on:click="login()">Login</button>
     </div>
 
   </div>
 </template>
 
 <script>
-// eslint-disable-next-line no-unused-vars
-import {Component, Vue, Prop, Watch} from 'vue-property-decorator'
 import axios from 'axios'
-import VueAxios from 'vue-axios'
+import {Component, Vue} from 'vue-property-decorator'
 
-Vue.use(VueAxios, axios)
 @Component
 export default class Login extends Vue {
-  username=''
-  password=''
+  username = ''
+  password = ''
+
+  querystring = require('querystring')
+
+  async login () {
+    try {
+      let response = await axios.post('http://localhost:8000/users/login', this.querystring.stringify({
+        username: this.username,
+        password: this.password
+      }))
+      if (response.status === 200) {
+        await this.$router.push('/admin')
+      }
+    } catch (e) {
+      console.log(e.response)
+    }
+  }
 }
-</script>>
+</script>
 
 <style scoped>
 .login-panel{

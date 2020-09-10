@@ -16,22 +16,39 @@
       <input type="password" class="form-control" placeholder="Password" v-model="password">
     </div>
 
-    <button class="logon-button">Logon</button>
+    <button class="logon-button" v-on:click="logon()">Logon</button>
 
   </div>
 </template>
 
 <script>
-export default {
-  data () {
-    return {
-      username: '',
-      email: '',
-      password: ''
+import axios from 'axios'
+import {Component, Vue} from 'vue-property-decorator'
+
+@Component
+export default class Logon extends Vue {
+  username = 'pwf18'
+  password = '123456'
+  email = 'diana_pwf@163.com'
+
+  querystring = require('querystring')
+
+  async logon () {
+    try {
+      let response = await axios.post('http://localhost:8000/users/logon', this.querystring.stringify({
+        username: this.username,
+        password: this.password,
+        email: this.email
+      }))
+      if (response.status === 200) {
+        await this.$router.push('/login') // 在此处弹出提示 注册成功
+      }
+    } catch (e) {
+      console.log(e.response.data.error) // 在此处弹出提示框
     }
   }
 }
-</script>>
+</script>
 
 <style scoped>
 .logon-panel{
