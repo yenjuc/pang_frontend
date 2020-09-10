@@ -184,6 +184,8 @@ export default class Admin extends Vue {
 
   // TODO: html中展示逻辑完善（devices, loan_apply, device_apply），多余或不足的props可以再添加。完成statistics
 
+  // TODO: 修改device-info props
+
   // TODO: 将apply_check_pass移入userinfo组件中
   async apply_check_pass (username, pass) {
     if (pass === 'true') {
