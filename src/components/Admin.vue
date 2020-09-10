@@ -77,12 +77,12 @@ export default class Admin extends Vue {
   res={}
   test= 'test bind'
   async user_load(examining) {
-    this.res = await axios({
-      url: '/admin/users/query',
-      params: {
-        examining: examining
-      }
-    })
+      this.res = await axios({
+        url: 'http://localhost:8000/admin/users/query',
+        params: {
+          examining: examining
+        }
+      })
   }
 
   mounted(){
