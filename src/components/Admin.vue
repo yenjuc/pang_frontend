@@ -14,8 +14,15 @@
       <div class="userslist" v-if="type === 'users'">
         <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
         <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
-          <!--user-info username=item.username email=item.email></username-->
+          <!--user-info :username=item.username :email=item.email></user-info-->
           <user-info username="test name" email="test email"></user-info>
+        </a>
+      </div>
+      <div class="deviceslist" v-if="type === 'devices'">
+        <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
+        <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
+          <!--device-info :device_name...></device-info-->
+          <device-info device_name="test device name" device_address="test device address" device_timeout="test timeout" :device_contact=test></device-info>
         </a>
       </div>
     </div>
@@ -45,16 +52,20 @@
 
 <script>
 import UserInfo from './UserInfo'
+import DeviceInfo from './DeviceInfo'
+
 export default {
   data () {
     return {
       type: this.$route.params.type || 'users',
       page: 1,
+      test: 'test bind',
       list: []
     }
   },
   components: {
-    'user-info': UserInfo
+    'user-info': UserInfo,
+    'device-info': DeviceInfo
   }
 }
 </script>>

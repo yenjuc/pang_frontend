@@ -1,9 +1,11 @@
 <template>
-  <!--v-for item in list...-->
   <div class="user" style="display: flex">
       <div class="info_block">
         <h4 class="list-group-item-heading">{{username}}</h4>
-        <p class="list-group-item-text">{{email}}</p>
+        <div class="detailedinfo">
+          <i class="fas fa-envelope"></i>
+          <span class="list-group-item-text">{{email}}</span>
+        </div>
       </div>
       <!--div class="dropdown open">
           <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -32,14 +34,9 @@ export default {
 
 <style scoped>
 
-.info_block{
-  width: 90%;
-  padding: 10px;
-  text-align: left;
-}
-
 .btn-default{
   margin: 0 5px;
   width: 42px;
 }
+
 </style>
