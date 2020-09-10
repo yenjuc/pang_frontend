@@ -32,12 +32,13 @@ export default class Login extends Vue {
 
   async login () {
     try {
-      let response = await axios.post('http://localhost:8000/users/login', this.querystring.stringify({
+      let response = await axios.post('/apis/users/login', this.querystring.stringify({
         username: this.username,
         password: this.password
       }))
       if (response.status === 200) {
         await this.$router.push('/admin')
+        console.log(response.data)
       }
     } catch (e) {
       console.log(e.response)

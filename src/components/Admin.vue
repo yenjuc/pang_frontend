@@ -139,13 +139,19 @@ export default class Admin extends Vue {
   list = []
   res={}
   test= 'test bind'
-  async user_load (examining) {
-    this.res = await axios({
-      url: 'http://localhost:8000/admin/users/query',
-      params: {
-        examining: examining
-      }
-    })
+  async user_load(examining) {
+    try
+    {
+      this.res = await axios({
+        url: '/apis/admin/users/query',
+        params: {
+          examining: examining
+        }
+      })
+    }
+    catch(e){
+      console.log(e.response.data)
+    }
   }
 
   querystring = require('querystring')
@@ -156,6 +162,16 @@ export default class Admin extends Vue {
   mounted () {
     this.user_load('false')
   }
+
+  async user_self_info(){
+    let res=axios.get('/users/info')
+  }
+
+
+
+  mounted(){
+  this.user_load('false')
+}
 }
 </script>>
 
