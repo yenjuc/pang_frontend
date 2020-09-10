@@ -3,7 +3,7 @@
     <ul class="nav nav-pills">
       <li role="presentation" :class="type === 'users'? 'active' : '' "><a href="/admin/users">管理用户</a></li>
       <li role="presentation" :class="type === 'devices'? 'active' : '' "><a href="/admin/devices">管理设备</a></li>
-      <li role="presentation" :class="type === 'rent_apply'? 'active' : '' "><a href="/admin/rent_apply">管理租借申请</a></li>
+      <li role="presentation" :class="type === 'loan_apply'? 'active' : '' "><a href="/admin/loan_apply">管理租借申请</a></li>
       <li role="presentation" :class="type === 'provider_apply'? 'active' : '' "><a href="/admin/provider_apply">管理提供者申请</a></li>
       <li role="presentation" :class="type === 'device_apply'? 'active' : '' "><a href="/admin/device_apply">管理设备上架</a></li>
       <li role="presentation" :class="type === 'statistics'? 'active' : '' "><a href="/admin/statistics">平台数据一览</a></li>
@@ -11,18 +11,24 @@
 
     <!--v-for item in list...-->
     <div class="list-group">
-      <div class="userslist" v-if="type === 'users'">
+      <div class="userlist" v-if="type === 'users'">
         <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
         <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
           <!--user-info :username=item.username :email=item.email></user-info-->
           <user-info username="test name" email="test email"></user-info>
         </a>
       </div>
-      <div class="deviceslist" v-if="type === 'devices'">
+      <div class="devicelist" v-if="type === 'devices'">
         <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
         <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
           <!--device-info :device_name...></device-info-->
           <device-info device_name="test device name" device_address="test device address" device_timeout="test timeout" :device_contact=test></device-info>
+        </a>
+      </div>
+      <div class="loanlist" v-if="type === 'loan_apply'">
+         <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
+          <!--device-info :device_name...></device-info-->
+          <loan-info equipment="123" start_time="0908" end_time="0910" :statement=test></loan-info>
         </a>
       </div>
     </div>
@@ -53,6 +59,7 @@
 <script>
 import UserInfo from './UserInfo'
 import DeviceInfo from './DeviceInfo'
+import LoanInfo from './LoanInfo'
 
 export default {
   data () {
@@ -65,7 +72,8 @@ export default {
   },
   components: {
     'user-info': UserInfo,
-    'device-info': DeviceInfo
+    'device-info': DeviceInfo,
+    'loan-info': LoanInfo
   }
 }
 </script>>
