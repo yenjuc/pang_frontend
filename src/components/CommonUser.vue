@@ -145,6 +145,7 @@ import UserInfo from './UserInfo'
 import DeviceInfo from './DeviceInfo'
 import LoanInfo from './LoanInfo'
 import * as querystring from "querystring";
+import {Modal} from "ant-design-vue";
 
 Vue.use(VueAxios, axios)
 @Component({
@@ -206,6 +207,7 @@ export default class CommonUser extends Vue {
       this.userInfo['name']=response.data.user_name
       this.userInfo['address']=response.data.user_info_address
       this.userInfo['reject']=response.data.user_info_reject
+      this.checkExaminingStatus()
       if (this.role === 'provider') {
         await this.getProviderDevices()
       }
@@ -215,6 +217,25 @@ export default class CommonUser extends Vue {
     }
   }
 
+  checkExaminingStatus(){
+    console.log(this.userInfo['examining'])
+    if(this.userInfo['examining']==='Pass'){
+      Modal.success({content:'您的申请已通过','onOk':()=>this.confirm()})
+    }
+    if(this.userInfo['examining']==='Reject'){
+      Modal.error({content:`您的申请被拒绝${this.userInfo['reject']}`,'onOk':()=>this.confirm()})
+    }
+  }
+
+  async confirm(){
+    try{
+      await axios.post('/apis/users/confirm/apply')
+    }
+    catch (e){
+      console.log(e.response)
+      console.log('confirm:error')
+    }
+  }
 
   async applyProvider(){
     try{
