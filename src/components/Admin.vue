@@ -146,17 +146,16 @@ export default class Admin extends Vue {
   provider_apply_list=[]
   res={}
   test= 'test bind'
-  async user_load() {
-    try
-    {
+  async user_load () {
+    try {
       this.res = await axios({
         url: '/apis/admin/users/query',
         params: {
           examining: 'false'
         }
       })
-      this.user_list=this.res.data}
-    catch(e){
+      this.user_list = this.res.data
+    } catch (e) {
       console.log(e.response.data)
     }
   }
@@ -169,11 +168,10 @@ export default class Admin extends Vue {
           examining: 'true'
         }
       })
-      this.provider_apply_list=this.res.data
+      this.provider_apply_list = this.res.data
+    } catch (e) {
+      console.log(e.response.data)
     }
-  catch (e){
-    console.log(e.response.data)
-  }
   }
 
   querystring = require('querystring')
@@ -182,8 +180,7 @@ export default class Admin extends Vue {
     try {
       await axios.post(`/apis/admin/users/${username}/delete`, this.querystring.stringify({'username': username}))
       await this.user_load()
-    }
-    catch (e){
+    } catch (e) {
       console.log(e.response.data)
     }
   }
@@ -193,31 +190,21 @@ export default class Admin extends Vue {
     this.apply_user_load()
   }
 
-  async apply_check_pass(username,pass){
-
-    if(pass==='true'){
-      try{
-        await axios.post('/apis/admin/users/check/apply',this.querystring.stringify({username:username,pass:pass}))
+  async apply_check_pass (username, pass) {
+    if (pass === 'true') {
+      try {
+        await axios.post('/apis/admin/users/check/apply', this.querystring.stringify({username: username, pass: pass}))
         await this.apply_user_load()
-      }
-      catch (e){
+      } catch (e) {
         console.log('error')
       }
     }
-
   }
 
-  async user_self_info(){
-    let res=axios.get('/apis/users/info')
+  async user_self_info () {
+    // eslint-disable-next-line no-unused-vars
+    let res = axios.get('/apis/users/info')
   }
-
-
-
-
-  mounted(){
-  this.user_load()
-    this.apply_user_load()
-}
 }
 </script>>
 
