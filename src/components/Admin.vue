@@ -63,6 +63,14 @@
           :need_examine="true" :deletable="true"></device-info>
         </a>
       </div>
+      <div v-if="type === 'statistics'">
+        <!--
+          设备提供商/用户数
+          可用设备/上架设备/所有设备
+          用户租借申请量
+          ...
+          -->
+      </div>
     </div>
 
     <nav aria-label="Page navigation" v-if="type !== 'statistics'">
@@ -158,6 +166,7 @@ export default class Admin extends Vue {
 
   querystring = require('querystring')
 
+  // TODO: 将user_delete移入userinfo组件中（userinfo组件中有记录username，应该只要复制黏贴就可以了）
   async user_delete (username) {
     try {
       await axios.post(`/apis/admin/users/${username}/delete`, this.querystring.stringify({'username': username}))
@@ -172,6 +181,8 @@ export default class Admin extends Vue {
     this.apply_user_load()
     this.getInfo()
   }
+
+  // TODO: html中展示逻辑完善（devices, loan_apply, device_apply），多余或不足的props可以再添加。完成statistics
 
   // TODO: 将apply_check_pass移入userinfo组件中
   async apply_check_pass (username, pass) {
