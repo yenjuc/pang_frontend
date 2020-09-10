@@ -14,9 +14,7 @@
     <!--v-for item in list...-->
     <div class="list-group">
       <div v-if="type === 'all_devices'">
-        <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
         <a v-for="(item,index) in devices_list" :key="index" v-show="index >= (page-1)*10 && index <= page*10" class="list-group-item">
-          <!--device-info :device_name...></device-info-->
           <device-info :device_name=item.name :device_info=item.info :device_owner=item.contact[0] :device_address=item.contact[2] :device_contact=item.contact[3]></device-info>
           <div>
             <!-- v-if="可申请"-->
@@ -184,11 +182,20 @@ export default class CommonUser extends Vue {
       let response = await axios.get('/apis/equipment/search/student')
       if (response.status === 200) {
         this.devices_list = response.data.equipments
+        console.log(this.devices_list)
       }
     } catch (e) {
       console.log(e.response) // 在此处弹出提示框
     }
   }
+
+
+  async getProviderDevices () {
+    await this.getAllDevices()
+    // 筛选出用户的所有设备
+    // this.devices_list.filter(contact)
+  }
+
 
   async addEquipment () {
     try {
