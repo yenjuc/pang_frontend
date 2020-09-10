@@ -65,10 +65,8 @@
         <button class="add_button">Apply</button>
       </div>
       <div v-if="type === 'manage_devices' && role === 'provider'">
-        <!-- v-for="(item,index) in lists" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item"-->
-        <a v-for="index of 30" :key="index" v-show="index > (page-1)*10 && index <= page*10" class="list-group-item">
-          <!--device-info :device_name...></device-info-->
-          <device-info device_name="test device name" device_address="test device address" device_timeout="test timeout" :device_contact=test></device-info>
+        <a v-for="(item,index) in provider_devices_list" :key="index" v-show="index >= (page-1)*10 && index <= page*10" class="list-group-item">
+          <device-info :device_name=item.name :device_info=item.info :device_status=item.status></device-info>
           <div>
             <!-- v-show="(!)在架上"-->
             <button type="button" class="btn btn-default">
@@ -175,6 +173,7 @@ export default class CommonUser extends Vue {
   infoTel = ''
   infoDescription = ''
   devices_list = []
+  provider_devices_list = []
 
   querystring = require('querystring')
 
@@ -183,12 +182,14 @@ export default class CommonUser extends Vue {
       let response = await axios.get('/apis/equipment/search/student')
       if (response.status === 200) {
         this.devices_list = response.data.equipments
-        console.log(this.devices_list)
+        // console.log(this.devices_list)
       }
     } catch (e) {
       console.log(e.response) // 在此处弹出提示框
     }
   }
+
+
   async getInfo(){
     try{
       let response = await axios.get('apis/users/info')
@@ -209,9 +210,14 @@ export default class CommonUser extends Vue {
 
 
   async getProviderDevices () {
-    await this.getAllDevices()
-    // 筛选出用户的所有设备
-    // this.devices_list.filter(contact)
+    try {
+      let response = await axios.get('/apis/equipment/search/provider')
+      if (response.status === 200) {
+        this.provider_devices_list = response.data.equipments
+      }
+    } catch (e) {
+      console.log(e.response) // 在此处弹出提示框
+    }
   }
 
 
@@ -222,17 +228,17 @@ export default class CommonUser extends Vue {
         info: this.deviceInfo
       }))
       if (response.status === 200) {
-        // 在此处弹出提示 添加成功
-
+        // 在此处弹出提示 添加成功 并刷新页面
       }
     } catch (e) {
-      console.log(e.response.data.error) // 在此处弹出提示框
+      console.log(e.response) // 在此处弹出提示框
     }
   }
 
   mounted () {
     this.getAllDevices()
     this.getInfo()
+    this.getProviderDevices()
   }
 }
 

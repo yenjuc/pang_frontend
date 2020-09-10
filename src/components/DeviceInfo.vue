@@ -19,6 +19,10 @@
             <i class="fas fa-address-book"></i>
             <span class="list-group-item-text">{{device_contact}}</span>
           </div>
+          <div class="detailedinfo">
+            <i class="fas fa-address-book"></i>
+            <span class="list-group-item-text">{{device_status}}</span>
+          </div>
         </div>
       </div>
   </div>
@@ -26,7 +30,7 @@
 
 <script>
 export default {
-  props: ['device_name', 'device_address', 'device_info', 'device_owner', 'device_contact']
+  props: ['device_name', 'device_address', 'device_info', 'device_owner', 'device_contact', 'device_status']
 }
 </script>>
 
