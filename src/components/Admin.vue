@@ -147,6 +147,12 @@ export default class Admin extends Vue {
         }
       })
   }
+  querystring = require('querystring')
+
+  async user_delete(username){
+    await axios.post(`http://localhost:8000/admin/users/${username}/delete`, this.querystring({'username':username}))
+  }
+
 
   mounted(){
   this.user_load('false')
