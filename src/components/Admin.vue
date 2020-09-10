@@ -62,7 +62,6 @@ import {Component, Vue, Prop, Watch} from 'vue-property-decorator'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import UserInfo from './UserInfo'
-import instance from '../axios_baseurl'
 import DeviceInfo from './DeviceInfo'
 import LoanInfo from './LoanInfo'
 
