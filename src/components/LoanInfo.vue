@@ -19,8 +19,10 @@
         </div>
         <h5>申请理由</h5>
         <p>{{appl.statement}}</p>
-        <h5>审核留言</h5>
-        <p>{{appl.response}}</p>
+        <template v-if="appl.status !== 'pending'">
+          <h5>审核留言</h5>
+          <p>{{appl.response}}</p>
+        </template>
       </div>
       <div class="status_tag">
       </div>

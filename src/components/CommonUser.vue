@@ -15,28 +15,8 @@
     <div class="list-group">
       <div v-if="type === 'all_devices'">
         <a v-for="(item,index) in devices_list" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
-          <device-info :device_name=item.name :device_info=item.info :device_contact=item.contact :device_occs=item.occupancies
-                       :open_apply="true"></device-info>
-          <div>
-            <!-- v-if="可申请"-->
-            <template v-if='expandLoanApplForm != index'>
-              <button type="button" class="btn btn-default" @click='expandLoanApplForm = index'>
-                <i class="fas fa-paper-plane"></i>
-              </button>
-            </template>
-            <template v-else>
-              <h5>租借申请表</h5>
-              <input class='form-control' type='text' placeholder='开始时刻' style='margin-bottom: 6px'
-                v-model='loanApplFormStartTime'>
-              <input class='form-control' type='text' placeholder='结束时刻' style='margin-bottom: 6px'
-                v-model='loanApplFormEndTime'>
-              <textarea rows='7' class='form-control' placeholder='申请理由…' style='margin-bottom: 6px'
-                v-model='loanApplFormStatement'></textarea>
-              <button type="button" class="btn btn-primary" @click='submitLoanApplForm'>
-                <i class="fas fa-paper-plane"></i> 提交
-              </button>
-            </template>
-          </div>
+          <device-info :device_id=item.id :device_name=item.name :device_info=item.info :device_contact=item.contact :device_occs=item.occupancies
+          :open_apply="true"></device-info>
         </a>
       </div>
       <div v-if="type === 'apply_history'">
@@ -162,11 +142,6 @@ export default class CommonUser extends Vue {
   myLoanAppls = []
   myLoanApplsActive = []
 
-  expandLoanApplForm = -1
-  loanApplFormStartTime = ''
-  loanApplFormEndTime = ''
-  loanApplFormStatement = ''
-
   querystring = require('querystring')
 
   async getAllDevices () {
@@ -220,10 +195,6 @@ export default class CommonUser extends Vue {
     catch (e){
       console.log('confirm:error')
     }
-  }
-
-  async submitLoanApplForm() {
-    window.alert('TODO\n' + this.loanApplFormStartTime + '\n' + this.loanApplFormEndTime + '\n' + this.loanApplFormStatement)
   }
 
   async applyProvider(){
