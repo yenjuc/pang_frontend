@@ -16,11 +16,9 @@
         </a>
       </div>
       <div v-if="type === 'devices'">
-        <!-- v-for="(item,index) in lists" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item"-->
-        <a v-for="index of 30" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
-          <!--device-info :device_name...></device-info-->
-          <device-info device_name="test device name" device_address="test device address" device_owner="test timeout" :device_contact=test
-          :editable="true" :deletable="true"></device-info>
+        <a v-for="(item,index) in device_list" :key="item.id" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
+          <device-info :device_id=item.id :device_name=item.name :device_info=item.info :device_contact=item.contact :device_occs=item.occupancies
+           :device_status=item.status :editable="true" :deletable="true"></device-info>
         </a>
       </div>
       <div v-if="type === 'loan_apply'">
@@ -113,6 +111,7 @@ export default class Admin extends Vue {
   page = 1
   list = []
   user_list=[]
+  device_list=[]
   provider_apply_list=[]
   res={}
   test= 'test bind'
@@ -128,6 +127,15 @@ export default class Admin extends Vue {
       this.user_list = this.res.data
     } catch (e) {
       console.log(e.response.data)
+    }
+  }
+
+  async device_load() {
+    try {
+      let response = await axios.get('/apis/equipment/search/admin')
+      this.device_list = response.data.equipments
+    } catch (e) {
+      console.log(e.response) // 弹框提醒
     }
   }
 
@@ -168,6 +176,7 @@ export default class Admin extends Vue {
     this.user_load()
     this.apply_user_load()
     this.getInfo()
+    this.device_load()
   }
 
   // TODO: html中展示逻辑完善（devices, loan_apply, device_apply），多余或不足的props可以再添加。完成statistics
