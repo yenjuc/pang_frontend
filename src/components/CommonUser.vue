@@ -169,8 +169,6 @@ export default class CommonUser extends Vue {
 
   querystring = require('querystring')
 
-  // TODO: 将下架、删除等移植到DeviceInfo中
-
   async getAllDevices () {
     try {
       let response = await axios.get('/apis/equipment/search/student')

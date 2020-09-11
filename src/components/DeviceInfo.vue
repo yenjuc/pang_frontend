@@ -79,7 +79,7 @@
         <span class="input-group-addon"><i class="fas fa-info"></i></span>
         <input type="text" class="form-control" placeholder="Edit Device Info" v-model="editInfo">
         <span class="input-group-btn">
-          <button class="btn btn-default" type="button" v-on:click="showEdit != showEdit">
+          <button class="btn btn-default" type="button" v-on:click="update_device()">
             <i class="fas fa-check-square"></i>
           </button>
         </span>
@@ -128,6 +128,7 @@ export default class DeviceInfo extends Vue {
   @Prop({type: Array})  device_contact
   @Prop({type: Array})  device_occs
   @Prop({type: String}) device_info
+  @Prop({type: String}) device_status
 
   @Prop({type: Boolean, default: false}) deletable
   @Prop({type: Boolean, default: false}) editable
@@ -176,15 +177,31 @@ export default class DeviceInfo extends Vue {
   }
 
 
-  // TODO: 函数属性（get (?)）判断是否为可租借设备（即当前没有租借出去）
+  querystring = require('querystring')
+  async update_device() {
+    try {
+      let response = await axios.post(`/apis/provider/update/${this.device_id}`, this.querystring.stringify({
+        name: this.editName,
+        info: this.editInfo,
+      }))
+      if (response.status === 200) {
+        // 在此处弹出提示 修改成功
+      }
+    } catch (e) {
+      console.log(e.response) // 在此处弹出提示框
+    }
+  }
+
+
+  // TODO: 函数属性（get (?)）判断是否为可租借设备（即当前没有租借出去）   --- 考虑直接从设备status获取
 
   // TODO: 点击修改提交发送修改设备申请（内容：this.editName, this.editInfo）
 
   // TODO: (optional) 点击修改打开修改列表时，利用"通过设备id获取详细信息"接口（传入this.device_id）取得修改前的值载入editName和editInfo中
 
+
   // TODO: 点击申请按钮发送租借申请（内容：this.loanReason, this.loanEndTime）
 
-  // TODO: 上架(on_shelf)与下架(down_shelf)逻辑
 }
 </script>
 
