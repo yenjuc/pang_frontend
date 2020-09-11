@@ -36,13 +36,13 @@
           <i class="fas fa-paper-plane"></i>
         </button>
       </div>
-      <div v-if="need_examine">
+      <div v-if="need_examine" @click="device_check_pass('true')">
         <button type="button" class="btn btn-default">
           <i class="fas fa-check-circle"></i>
         </button>
       </div>
       <div v-if="need_examine">
-        <button type="button" class="btn btn-default">
+        <button type="button" @click="device_check_pass('false')" class="btn btn-default">
           <i class="fas fa-times-circle"></i>
         </button>
       </div>
@@ -166,6 +166,27 @@ export default class DeviceInfo extends Vue {
     }
   }
 
+  querystring=require('querystring')
+
+  async device_check_pass (pass) {
+    if (pass === 'true') {
+      try {
+        await axios.post(`/apis/admin/equipment/check/apply/${this.device_id}`, this.querystring.stringify({pass: pass}))
+        this.$emit('apply_equipment_load')
+      } catch (e) {
+        console.log('device_check_pass:error')
+      }
+    }
+    else if (pass === 'false' )
+    {
+      try{
+        await axios.post(`/apis/admin/equipment/check/apply/${this.device_id}`, this.querystring.stringify({pass: pass,reason:'no reason'}))
+        this.$emit('apply_equipment_load')
+      }catch (e){
+        console.log('device_check_pass:error')
+      }
+    }
+  }
 
   async down_shelf() {
     try {

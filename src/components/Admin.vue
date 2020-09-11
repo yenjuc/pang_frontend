@@ -57,10 +57,10 @@
       </div>
       <div v-if="type === 'device_apply'">
         <!-- v-for="(item,index) in lists" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item"-->
-        <a v-for="index of 30" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
+        <a v-for="(item,index) in device_apply_list"  :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
           <!--device-info :device_name=item.equipment...></device-info-->
-          <device-info device_name="test device name" device_address="test device address" device_timeout="test timeout" :device_contact=test
-          :need_examine="true" :deletable="true"></device-info>
+          <device-info @apply_equipment_load="getExaminingDevices" :device_name=item.name :device_contact=item.contact :device_id="item.id" :device_info="item.info"
+          :need_examine="true" :deletable="false"></device-info>
         </a>
       </div>
       <div v-if="type === 'statistics'">
@@ -114,6 +114,8 @@ export default class Admin extends Vue {
   list = []
   user_list=[]
   provider_apply_list=[]
+  device_apply_list=[]
+  role=''
   res={}
   test= 'test bind'
   userInfo={}
@@ -143,11 +145,13 @@ export default class Admin extends Vue {
       this.userInfo['name']=response.data.user_name
       this.userInfo['address']=response.data.user_info_address
       this.userInfo['reject']=response.data.user_info_reject
+      this.getExaminingDevices()
     }
     catch (e){
       console.log('getInfo:error')
     }
   }
+
 
   async apply_user_load () {
     try {
@@ -163,6 +167,21 @@ export default class Admin extends Vue {
     }
   }
 
+  async getExaminingDevices () {
+    try {
+      let response = await axios.get(`/apis/equipment/search/${this.role}`)
+      if (response.status === 200) {
+        let device_list=response.data.equipments
+        for(let device of device_list){
+          if(device.status==='wait_on_shelf'){
+            this.device_apply_list.push(device)
+          }
+        }
+      }
+    } catch (e) {
+      console.log(e.response) // 在此处弹出提示框
+    }
+  }
 
   mounted () {
     this.user_load()
