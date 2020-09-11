@@ -1,6 +1,11 @@
 <template>
   <div class="logon-panel">
     <i class="fas fa-dolly-flatbed" style="font-size: 100px; margin: 40px"></i>
+
+    <div class="alert alert-danger" role="alert" v-if="errorMessage">
+      {{ errorMessage }}
+    </div>
+
     <div class="input-group">
       <span class="input-group-addon"><i class="fas fa-user-circle"></i></span>
       <input type="text" class="form-control" placeholder="Username" v-model="username">
@@ -16,7 +21,8 @@
       <input type="password" class="form-control" placeholder="Password" v-model="password">
     </div>
 
-    <button class="logon-button" v-on:click="logon()">Logon</button>
+    <button v-if='!loading' class="logon-button" v-on:click="logon()">Logon</button>
+    <p v-else>loading</p>
 
   </div>
 </template>
@@ -31,9 +37,13 @@ export default class Logon extends Vue {
   password = '123456'
   email = 'diana_pwf@163.com'
 
+  loading = false
+  errorMessage = ''
+
   querystring = require('querystring')
 
   async logon () {
+    this.loading = true
     try {
       let response = await axios.post('/apis/users/logon', this.querystring.stringify({
         username: this.username,
@@ -41,11 +51,13 @@ export default class Logon extends Vue {
         email: this.email
       }))
       if (response.status === 200) {
-        await this.$router.push('/login') // 在此处弹出提示 注册成功
+        await this.$router.push({path: '/login', query: {require_verif: this.email}})
+        // 在此处弹出提示 注册成功
       }
     } catch (e) {
-      console.log(e.response.data.error) // 在此处弹出提示框
+      this.errorMessage = e.response.data.error;
     }
+    this.loading = false
   }
 }
 </script>
