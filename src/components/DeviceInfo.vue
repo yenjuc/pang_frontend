@@ -86,20 +86,31 @@
       </div>
     </div>
 
-    <div class="pop_panel" id="apply_panel" v-if="showApply">
-      <div class="input-group">
-        <span class="input-group-addon"><i class="fas fa-info"></i></span>
-        <input type="text" class="form-control" placeholder="Reasons" v-model="loanReason">
+    <div class="pop_panel" id="apply_panel" style='display: contents' v-if="showApply">
+      <h5>租借申请表</h5>
+      <div>
+        <input class='form-control' type='date' placeholder='起始日期'
+          style='margin-bottom: 6px; width: 45%; display: inline'
+          v-model='loanStartDate'>
+        <input class='form-control' type='time' placeholder='时间'
+          style='margin-bottom: 6px; width: 45%; display: inline'
+          v-model='loanStartTime'>
       </div>
-      <div class="input-group">
-        <span class="input-group-addon"><i class="far fa-calendar-alt"></i></span>
-        <input type="date" class="form-control" v-model="loanEndTime">
-        <span class="input-group-btn">
-          <button class="btn btn-default" type="button" v-on:click="showApply != showApply">
-            <i class="fas fa-check-square"></i>
-          </button>
-        </span>
+      <div>
+        <input class='form-control' type='date' placeholder='结束日期'
+          style='margin-bottom: 6px; width: 45%; display: inline'
+          v-model='loanEndDate'>
+        <input class='form-control' type='time' placeholder='时间'
+          style='margin-bottom: 6px; width: 45%; display: inline'
+          v-model='loanEndTime'>
       </div>
+      <textarea rows='7' class='form-control' placeholder='申请理由…'
+        style='margin-bottom: 6px; width: 90%; margin: 0 5%'
+        v-model='loanStatement'></textarea>
+      <br>
+      <button type="button" class="btn btn-primary" @click='submitLoanApplForm'>
+        <i class="fas fa-paper-plane"></i> 提交
+      </button>
     </div>
 </div>
 </template>
@@ -108,6 +119,7 @@
 import {Component, Vue, Prop, Watch} from 'vue-property-decorator'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import * as querystring from "querystring";
 
 Vue.use(VueAxios, axios)
 @Component
@@ -119,9 +131,11 @@ export default class DeviceInfo extends Vue {
   editName = ""
   editInfo = ""
 
-  loanReason = ""
-  // TODO: 确认input data的类型、是否有成功绑定到loanEndTime上
-  loanEndTime = ""
+  loanStartDate = ''
+  loanStartTime = '00:00:00'
+  loanEndDate = ''
+  loanEndTime = '00:00:00'
+  loanStatement = ''
 
   @Prop({type: Number}) device_id     // TODO: 确认是否需要留这个props
   @Prop({type: String}) device_name
@@ -145,7 +159,30 @@ export default class DeviceInfo extends Vue {
 
   // TODO: (optional) 点击修改打开修改列表时，利用"通过设备id获取详细信息"接口（传入this.device_id）取得修改前的值载入editName和editInfo中
 
-  // TODO: 点击申请按钮发送租借申请（内容：this.loanReason, this.loanEndTime）
+  async submitLoanApplForm() {
+    const startDate = new Date(this.loanStartDate + ' ' + this.loanStartTime)
+    const endDate = new Date(this.loanEndDate + ' ' + this.loanEndTime)
+    if (!isFinite(startDate) || !isFinite(endDate)) {
+      alert('无效日期');
+      return;
+    }
+    if (startDate >= endDate) {
+      alert('起始日期需要早于结束日期');
+      return;
+    }
+    const response = await axios.post(
+      '/apis/loan/create', querystring.stringify({
+        equipment: this.device_id,
+        start_time: Math.ceil(startDate.getTime() / 1000),
+        end_time: Math.floor(endDate.getTime() / 1000),
+        statement: this.loanStatement,
+      })
+    );
+    if (response.status === 200) {
+      // await this.$router.push('/apply_history');
+      window.location = '/apply_history';
+    }
+  }
 
   // TODO: 上架(on_shelf)与下架(down_shelf)逻辑
 }
