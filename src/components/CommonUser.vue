@@ -56,10 +56,8 @@
         </a>
       </div>
       <div v-if="type === 'manage_loan_apply' && role === 'provider'">
-        <!-- v-for="(item,index) in lists" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item"-->
-        <a v-for="index of 30" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
-          <!--loan-info :equipment=item.equipment...></loan-info-->
-          <!-- 完善时记得添加属性： :need_examine="true"-->
+        <a v-for="(item,index) in myEquipmentsLoanApplications" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
+          <loan-info :appl='item' :need_examine='item.status === "pending"'></loan-info>
         </a>
       </div>
       <div v-if="type === 'loaned_history' && role === 'provider'">
@@ -141,6 +139,7 @@ export default class CommonUser extends Vue {
   provider_devices_list = []
   myLoanAppls = []
   myLoanApplsActive = []
+  myEquipmentsLoanApplications = []
 
   querystring = require('querystring')
 
@@ -240,6 +239,17 @@ export default class CommonUser extends Vue {
     }
   }
 
+  async getMyEquipmentsLoanApplications () {
+    try {
+      let response = await axios.get('/apis/loan/my_equipments')
+      if (response.status === 200) {
+        this.myEquipmentsLoanApplications = response.data
+      }
+    } catch (e) {
+      console.log(e.response)
+    }
+  }
+
   async addEquipment () {
     try {
       let response = await axios.post('/apis/provider/add', this.querystring.stringify({
@@ -258,10 +268,11 @@ export default class CommonUser extends Vue {
     this.getAllDevices()
     this.getInfo()
     this.getMyLoanApplications()
+    this.getMyEquipmentsLoanApplications()
   }
 }
 
-  // TODO: html部分：查询框（使用filter，参考the net ninja vue #36），以及完善manage_loan_apply, loan_history
+  // TODO: html部分：查询框（使用filter，参考the net ninja vue #36）
 
 </script>
 

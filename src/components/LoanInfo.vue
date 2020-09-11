@@ -1,4 +1,5 @@
 <template>
+<div>
   <div class="loan" style="display: flex">
     <div class="info_block">
         <h4 class="list-group-item-heading">
@@ -24,16 +25,9 @@
           <p>{{appl.response}}</p>
         </template>
       </div>
-      <div class="status_tag">
-      </div>
       <div v-if="need_examine">
-        <button type="button" class="btn btn-default">
-          <i class="fas fa-check-circle"></i>
-        </button>
-      </div>
-      <div v-if="need_examine">
-        <button type="button" class="btn btn-default">
-          <i class="fas fa-times-circle" style="font-size: 40px"></i>
+        <button type="button" class="btn btn-default" @click='showExamine = !showExamine'>
+          <i class="fas fa-pencil-alt"></i>
         </button>
       </div>
       <div v-if="deletable">
@@ -42,10 +36,27 @@
         </button>
       </div>
   </div>
+  <div v-if='showExamine' style='display: contents; width: 100%'>
+    <label><input type='radio' name='approve' v-model='reviewApprove' :value='true'> Approve</label>
+    <label><input type='radio' name='approve' v-model='reviewApprove' :value='false'> Reject</label>
+    <textarea rows='7' class='form-control' placeholder='审核留言…'
+      style='margin-bottom: 6px; width: 90%; margin: 0 5%'
+      v-model='reviewResponse'></textarea>
+    <br>
+    <button type="button" class="btn btn-primary" @click='submitReview'>
+      <i class="fas fa-paper-plane"></i> 提交
+    </button>
+  </div>
+</div>
 </template>
 
 <script>
 import {Component, Vue, Prop, Watch} from 'vue-property-decorator'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+import * as querystring from "querystring";
+
+Vue.use(VueAxios, axios);
 
 @Component
 export default class LoanInfo extends Vue {
@@ -55,6 +66,10 @@ export default class LoanInfo extends Vue {
   // TODO: check whether the buttons are shown properly (have not tested)
   @Prop({type: Boolean, default: false}) deletable
   @Prop({type: Boolean, default: false}) need_examine
+
+  showExamine = false
+  reviewApprove = true
+  reviewResponse = ''
 
   formatTime (timestamp) {
     return (new Date(timestamp * 1000)).toLocaleString('zh-CN');
@@ -70,6 +85,24 @@ export default class LoanInfo extends Vue {
       return Math.max(0, this.appl.end_time * 1000 - now);
     }
   }
+
+  async submitReview () {
+    try {
+      const response = await axios.post(
+        `/apis/loan/${this.appl.id}/review`, querystring.stringify({
+          accept: (this.reviewApprove ? 1 : 0),
+          response: this.reviewResponse,
+        })
+      );
+      if (response.status === 200) {
+        this.showExamine = false
+        this.appl.status = (this.reviewApprove ? 'approved' : 'rejected');
+        this.appl.response = this.reviewResponse;
+      }
+    } catch (e) {
+      alert(JSON.stringify(e.response.data));
+    }
+  }
 }
 </script>
 
@@ -83,6 +116,10 @@ export default class LoanInfo extends Vue {
 
 h5 {
   margin: 18px 0 6px 0;
+}
+
+label {
+  margin: 0 2em;
 }
 
 </style>
