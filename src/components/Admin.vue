@@ -12,14 +12,14 @@
     <div class="list-group">
       <div v-if="type === 'users'">
         <a v-for="(user,index) in user_list" :key="user.username" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
-          <user-info :username=user.user_name :role=user.user_type :deletable="true" :need_examine="false"></user-info>
+          <user-info @user_load="user_load" :username=user.user_name :role=user.user_type :deletable="true" :need_examine="false"></user-info>
         </a>
       </div>
       <div v-if="type === 'devices'">
         <!-- v-for="(item,index) in lists" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item"-->
         <a v-for="index of 30" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
           <!--device-info :device_name...></device-info-->
-          <device-info device_name="test device name" device_address="test device address" device_owner="test timeout" :device_contact=test 
+          <device-info device_name="test device name" device_address="test device address" device_owner="test timeout" :device_contact=test
           :editable="true" :deletable="true"></device-info>
         </a>
       </div>
@@ -32,7 +32,7 @@
       </div>
       <div v-if="type === 'provider_apply'">
         <a v-for="(item,index) in provider_apply_list" :key="item.user_name" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
-          <user-info :username="item.user_name" :role="item.user_type" :need_examine="true"></user-info>
+          <user-info @apply_user_load="apply_user_load" :deletable="false" :username="item.user_name" :role="item.user_type" :need_examine="true"></user-info>
           <div>
             <ol>
               <li>实验室信息：{{item.user_info_lab}}</li>
@@ -59,7 +59,7 @@
         <!-- v-for="(item,index) in lists" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item"-->
         <a v-for="index of 30" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
           <!--device-info :device_name=item.equipment...></device-info-->
-          <device-info device_name="test device name" device_address="test device address" device_timeout="test timeout" :device_contact=test 
+          <device-info device_name="test device name" device_address="test device address" device_timeout="test timeout" :device_contact=test
           :need_examine="true" :deletable="true"></device-info>
         </a>
       </div>
@@ -92,7 +92,6 @@
         </li>
       </ul>
     </nav>
-
   </div>
 </template>
 
@@ -164,17 +163,6 @@ export default class Admin extends Vue {
     }
   }
 
-  querystring = require('querystring')
-
-  // TODO: 将user_delete移入userinfo组件中（userinfo组件中有记录username，应该只要复制黏贴就可以了）
-  async user_delete (username) {
-    try {
-      await axios.post(`/apis/admin/users/${username}/delete`, this.querystring.stringify({'username': username}))
-      await this.user_load()
-    } catch (e) {
-      console.log(e.response.data)
-    }
-  }
 
   mounted () {
     this.user_load()
@@ -186,17 +174,6 @@ export default class Admin extends Vue {
 
   // TODO: 修改device-info props
 
-  // TODO: 将apply_check_pass移入userinfo组件中
-  async apply_check_pass (username, pass) {
-    if (pass === 'true') {
-      try {
-        await axios.post('/apis/admin/users/check/apply', this.querystring.stringify({username: username, pass: pass}))
-        await this.apply_user_load()
-      } catch (e) {
-        console.log('error')
-      }
-    }
-  }
 
   async user_self_info () {
     // eslint-disable-next-line no-unused-vars

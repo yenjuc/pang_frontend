@@ -64,7 +64,7 @@
         </button>
       </div>
       <div v-if="deletable">
-        <button type="button" class="btn btn-default">
+        <button v-on:click="delete_device()" type="button" class="btn btn-default">
           <i class="fas fa-trash-alt"></i>
         </button>
       </div>
@@ -137,7 +137,7 @@ export default class DeviceInfo extends Vue {
   loanEndTime = '00:00:00'
   loanStatement = ''
 
-  @Prop({type: Number}) device_id     // TODO: 确认是否需要留这个props
+  @Prop({type: Number}) device_id
   @Prop({type: String}) device_name
   @Prop({type: Array})  device_contact
   @Prop({type: Array})  device_occs
@@ -152,6 +152,43 @@ export default class DeviceInfo extends Vue {
   formatTime (timestamp) {
     return (new Date(timestamp * 1000)).toLocaleString('zh-CN');
   }
+
+
+  async on_shelf() {
+    try {
+      let response = await axios.post(`/apis/provider/on-shelf-apply/${this.device_id}`)
+      if (response.status === 200) {
+        // 弹框 表示发送上架审核申请成功 然后刷新
+      }
+    } catch (e) {
+      console.log(e.response) // 在此处弹出提示框
+    }
+  }
+
+
+  async down_shelf() {
+    try {
+      let response = await axios.post(`/apis/provider/undercarriage/${this.device_id}`)
+      if (response.status === 200) {
+        // 弹框 表示下架成功 然后刷新
+      }
+    } catch (e) {
+      console.log(e.response) // 在此处弹出提示框
+    }
+  }
+
+
+  async delete_device() {
+    try {
+      let response = await axios.post(`/apis/equipment/delete/${this.device_id}`)
+      if (response.status === 200) {
+        // 弹框 表示删除成功 然后刷新
+      }
+    } catch (e) {
+      console.log(e.response) // 在此处弹出提示框
+    }
+  }
+
 
   // TODO: 函数属性（get (?)）判断是否为可租借设备（即当前没有租借出去）
 

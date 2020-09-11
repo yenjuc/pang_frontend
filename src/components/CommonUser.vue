@@ -51,7 +51,7 @@
       </div>
       <div v-if="type === 'manage_devices' && role === 'provider'">
         <a v-for="(item,index) in provider_devices_list" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
-          <device-info :device_name=item.name :device_info=item.info :device_status=item.status
+          <device-info :device_id=item.id :device_name=item.name :device_info=item.info :device_status=item.status
           :editable="true" :deletable="true" :shelf_op="true"></device-info>
         </a>
       </div>
@@ -145,28 +145,6 @@ export default class CommonUser extends Vue {
   querystring = require('querystring')
 
   // TODO: 将下架、删除等移植到DeviceInfo中
-  async down_shelf(item) {
-    try {
-      let response = await axios.post(`/apis/provider/undercarriage/${item.id}`)
-      if (response.status === 200) {
-        // 弹框 表示下架成功 然后刷新
-      }
-    } catch (e) {
-      console.log(e.response) // 在此处弹出提示框
-    }
-  }
-
-
-  async delete_device(item) {
-    try {
-      let response = await axios.post(`/apis/equipment/delete/${item.id}`)
-      if (response.status === 200) {
-        // 弹框 表示删除成功 然后刷新
-      }
-    } catch (e) {
-      console.log(e.response) // 在此处弹出提示框
-    }
-  }
 
   async getAllDevices () {
     try {
@@ -230,7 +208,7 @@ export default class CommonUser extends Vue {
        this.infoTel=''
        this.infoDescription=''
        this.infoAddress=''
-      // TODO:此处应弹出成功的提示框
+      this.$message.success('申请成功！等待管理员审核中')
     }
     catch (e){
       console.log('applyProvider:error')
@@ -281,7 +259,6 @@ export default class CommonUser extends Vue {
   mounted () {
     this.getAllDevices()
     this.getInfo()
-    this.getProviderDevices()
     this.getMyLoanApplications()
   }
 }
