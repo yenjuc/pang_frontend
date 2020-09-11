@@ -259,7 +259,7 @@ export default class CommonUser extends Vue {
        this.infoTel=''
        this.infoDescription=''
        this.infoAddress=''
-      // TODO:此处应弹出成功的提示框
+      this.$message.success('申请成功！等待管理员审核中')
     }
     catch (e){
       console.log('applyProvider:error')
@@ -310,7 +310,6 @@ export default class CommonUser extends Vue {
   mounted () {
     this.getAllDevices()
     this.getInfo()
-    this.getProviderDevices()
     this.getMyLoanApplications()
   }
 }
