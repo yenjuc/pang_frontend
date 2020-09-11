@@ -47,12 +47,12 @@
         </button>
       </div>
       <!-- v-if="shelf_op && device_status === '...'" 判断是否可以上架（未上架）或下架（正在架上）属性值不是很清楚，明天询问-->
-      <div v-if="shelf_op">
+      <div v-if="shelf_op && device_status === 'exist'">
         <button v-on:click="on_shelf()" type="button" class="btn btn-default">
           <i class="fas fa-arrow-circle-up"></i>
         </button>
       </div>
-      <div v-if="shelf_op">
+      <div v-if="shelf_op && device_status === 'on_shelf'">
         <button v-on:click="down_shelf()" type="button" class="btn btn-default">
           <i class="fas fa-arrow-circle-down"></i>
         </button>
@@ -160,6 +160,7 @@ export default class DeviceInfo extends Vue {
       let response = await axios.post(`/apis/provider/on-shelf-apply/${this.device_id}`)
       if (response.status === 200) {
         // 弹框 表示发送上架审核申请成功 然后刷新
+        window.location = window.location
       }
     } catch (e) {
       console.log(e.response) // 在此处弹出提示框
@@ -173,6 +174,7 @@ export default class DeviceInfo extends Vue {
       try {
         await axios.post(`/apis/admin/equipment/check/apply/${this.device_id}`, this.querystring.stringify({pass: pass}))
         this.$emit('apply_equipment_load')
+        window.location = window.location
       } catch (e) {
         console.log('device_check_pass:error')
       }
@@ -182,6 +184,7 @@ export default class DeviceInfo extends Vue {
       try{
         await axios.post(`/apis/admin/equipment/check/apply/${this.device_id}`, this.querystring.stringify({pass: pass,reason:'no reason'}))
         this.$emit('apply_equipment_load')
+        window.location = window.location
       }catch (e){
         console.log('device_check_pass:error')
       }
@@ -193,6 +196,7 @@ export default class DeviceInfo extends Vue {
       let response = await axios.post(`/apis/provider/undercarriage/${this.device_id}`)
       if (response.status === 200) {
         // 弹框 表示下架成功 然后刷新
+        window.location = window.location
       }
     } catch (e) {
       console.log(e.response) // 在此处弹出提示框
@@ -205,6 +209,7 @@ export default class DeviceInfo extends Vue {
       let response = await axios.post(`/apis/equipment/delete/${this.device_id}`)
       if (response.status === 200) {
         // 弹框 表示删除成功 然后刷新
+        window.location = window.location
       }
     } catch (e) {
       console.log(e.response) // 在此处弹出提示框
@@ -221,6 +226,7 @@ export default class DeviceInfo extends Vue {
       }))
       if (response.status === 200) {
         // 在此处弹出提示 修改成功
+        window.location = window.location
       }
     } catch (e) {
       console.log(e.response) // 在此处弹出提示框

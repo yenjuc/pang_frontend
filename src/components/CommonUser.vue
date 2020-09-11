@@ -257,7 +257,9 @@ export default class CommonUser extends Vue {
         info: this.deviceInfo
       }))
       if (response.status === 200) {
-        // 在此处弹出提示 添加成功 并刷新页面
+        this.$message.success('添加成功！')
+        this.deviceName = ''
+        this.deviceInfo = ''
       }
     } catch (e) {
       console.log(e.response) // 在此处弹出提示框
