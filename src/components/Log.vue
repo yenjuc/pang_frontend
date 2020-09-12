@@ -4,7 +4,7 @@
         <h4 class="list-group-item-heading">{{detail}}</h4>
         <div class="detailedinfo">
           <p>
-            <i class="fas fa-user-circle"></i>
+            <i class="fab fa-buffer"></i>
             <span class="list-group-item-text">操作类型：{{type}}</span>
           </p>
           <p>
