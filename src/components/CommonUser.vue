@@ -165,8 +165,8 @@ export default class CommonUser extends Vue {
   myLoanAppls = []
   myLoanApplsActive = []
   myEquipmentsLoanApplications = []
-  mailsList=[]
-
+  mailsList = []
+  
   searchMode = 'DeviceName'
   searchKey = ''
 
@@ -239,10 +239,10 @@ export default class CommonUser extends Vue {
 
   checkExaminingStatus(){
     if(this.userInfo['examining']==='Pass'){
-      Modal.success({content:'您的申请已通过','onOk':()=>this.confirm()})
+      Modal.success({content:'您申请成为设备提供者的请求已经通过','onOk':()=>this.confirm()})
     }
     if(this.userInfo['examining']==='Reject'){
-      Modal.error({content:`您的申请被拒绝：原因为“${this.userInfo['reject']}”`,'onOk':()=>this.confirm()})
+      Modal.error({content:`您申请成为设备提供者的请求被拒绝：原因为“${this.userInfo['reject']}”`,'onOk':()=>this.confirm()})
     }
   }
 
@@ -335,7 +335,7 @@ export default class CommonUser extends Vue {
     }
   }
 
-  mounted () {
+  mounted () {  
     this.getInfo()
     this.getAllDevices()
     this.getMyLoanApplications()

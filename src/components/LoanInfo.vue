@@ -99,7 +99,6 @@ export default class LoanInfo extends Vue {
           accept: (this.reviewApprove ? 1 : 0),
           response: this.reviewResponse,
         })
-
       );
       if (response.status === 200) {
         this.showExamine = false

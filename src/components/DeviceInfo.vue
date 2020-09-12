@@ -40,8 +40,8 @@
           <i class="fas fa-check-circle"></i>
         </button>
       </div>
-      <div v-if="need_examine">
-        <button type="button" @click="device_check_pass('false')" class="btn btn-default">
+      <div v-if="need_examine" @click="showExamine = !showExamine">
+        <button type="button" class="btn btn-default">
           <i class="fas fa-times-circle"></i>
         </button>
       </div>
@@ -110,6 +110,16 @@
         <i class="fas fa-paper-plane"></i> 提交
       </button>
     </div>
+
+    <div v-if="showExamine" style='display: contents; width: 100%'>
+    <textarea rows='7' class='form-control' placeholder='拒绝原因…'
+      style='margin-bottom: 6px; width: 90%; margin: 20px 5% 0'
+      v-model='reviewResponse'></textarea>
+    <br>
+    <button type="button" class="btn btn-primary" @click="device_check_pass('false')">
+      <i class="fas fa-paper-plane"></i> 提交
+    </button>
+  </div>
 </div>
 </template>
 
@@ -125,9 +135,12 @@ export default class DeviceInfo extends Vue {
 
   showEdit = false
   showApply = false
+  showExamine = false
 
-  editName = ""
-  editInfo = ""
+  reviewResponse = ''
+
+  editName = ''
+  editInfo = ''
 
   loanStartDate = ''
   loanStartTime = '00:00:00'
@@ -135,8 +148,6 @@ export default class DeviceInfo extends Vue {
   loanEndTime = '00:00:00'
   loanStatement = ''
 
-  // TODO:将infoReject绑定在输入框中
-  infoReject = ''
   @Prop({type: Number}) device_id
   @Prop({type: String}) device_name
   @Prop({type: Array})  device_contact
@@ -186,7 +197,7 @@ export default class DeviceInfo extends Vue {
       try{
         await axios.post(`/apis/admin/equipment/check/apply/${this.device_id}`, this.querystring.stringify({pass: pass,reason:'no reason'}))
         await axios.post('/apis/mails/add',this.querystring.stringify({receiver:this.device_contact[0],detail:`您的设备${this.device_name}上架申请被拒绝，
-        拒绝理由为${this.infoReject}`, type:'EquipmentOnShelf',relatedID:this.device_id}))
+        拒绝理由为${this.reviewResponse}`, type:'EquipmentOnShelf',relatedID:this.device_id}))
         this.$emit('apply_equipment_load')
         window.location = window.location
       }catch (e){
