@@ -225,7 +225,7 @@ export default class Admin extends Vue {
       if (response.status === 200) {
         let device_list=response.data.equipments
         for(let device of device_list){
-          if(device.status==='wait_on_shelf'){
+          if(device.status === 'wait_on_shelf' && device.examining_status === 'Examining'){
             this.device_apply_list.push(device)
           }
         }
