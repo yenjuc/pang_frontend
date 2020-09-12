@@ -12,12 +12,33 @@
 
     <div class="list-group">
       <div v-if="type === 'users'">
-        <a v-for="(user,index) in user_list" :key="user.username" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
+        <div class="searchBar">
+         <form>
+          <select name="searchMode" style="margin: 0 10px" v-model="searchUserMode">
+            <option value="All">All Users</option>
+            <option value="student">Students</option>
+            <option value="provider">Providers</option>
+            <option value="admin">Admins</option>
+          </select>
+          <input type="text" placeholder="Search User(s) by Username..." v-model="searchKey"/>
+        </form>
+        </div>
+        <a v-for="(user,index) in searchUsers" :key="user.username" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
           <user-info @user_load="user_load" :username=user.user_name :role=user.user_type :deletable="true" :need_examine="false"></user-info>
         </a>
       </div>
       <div v-if="type === 'devices'">
-        <a v-for="(item,index) in device_list" :key="item.id" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
+        <div class="searchBar">
+         <form>
+          <select name="searchMode" style="margin: 0 10px" v-model="searchDeviceMode">
+            <option value="DeviceName">Device Name</option>
+            <option value="DeviceInfo">Device Info</option>
+            <option value="DeviceOwner">Device Owner</option>
+          </select>
+          <input type="text" placeholder="Search..." v-model="searchKey"/>
+        </form>
+        </div>
+        <a v-for="(item,index) in searchAllDevicesResult" :key="item.id" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
           <device-info :device_id=item.id :device_name=item.name :device_info=item.info :device_contact=item.contact :device_occs=item.occupancies
            :device_status=item.status :editable="true" :deletable="true"></device-info>
         </a>
@@ -40,18 +61,6 @@
               <li>申请理由：{{item.user_info_description}}</li>
             </ol>
           </div>
-          <!--将下面功能移植到user-info组件中-->
-          <!--div>
-            <button type="button" @click="apply_check_pass(item.user_name,'true')" class="btn btn-default">
-              <i class="fas fa-check-circle"></i>
-            </button>
-            <button type="button" class="btn btn-default">
-              <i class="fas fa-times-circle"></i>
-            </button>
-            <button type="button" class="btn btn-default">
-              <i class="fas fa-trash-alt"></i>
-            </button>
-          </div-->
         </a>
       </div>
       <div v-if="type === 'device_apply'">
@@ -127,6 +136,38 @@ export default class Admin extends Vue {
   test= 'test bind'
   userInfo={}
 
+  searchUserMode = 'All'
+  searchDeviceMode = 'DeviceName'
+  searchKey = ''
+
+  get searchUsers(){
+    if (this.searchUserMode === 'All'){
+      return this.user_list.filter((user) => {
+        return user.user_name.match(this.searchKey)
+      })
+    } else {
+      return this.user_list.filter((user) => {
+        return user.user_name.match(this.searchKey) && user.user_type === this.searchUserMode
+      })
+    }
+  }
+
+  get searchAllDevicesResult(){
+    if (this.searchDeviceMode === 'DeviceName'){
+      return this.device_list.filter((device) => {
+        return device.name.match(this.searchKey)
+      })
+    } else if (this.searchDeviceMode === 'DeviceInfo'){
+      return this.device_list.filter((device) => {
+        return device.info.match(this.searchKey)
+      })
+    } else {
+      return this.device_list.filter((device) => {
+        return device.contact[0].match(this.searchKey)
+      })
+    }
+  }
+
   async user_load () {
     try {
       this.res = await axios({
@@ -168,6 +209,7 @@ export default class Admin extends Vue {
       this.$message.error(JSON.stringify(e.response.data.error))
     }
   }
+
 
   async apply_user_load () {
     try {
@@ -216,11 +258,6 @@ export default class Admin extends Vue {
     this.systemlog_load()
   }
 
-  // TODO: html中展示逻辑完善（devices, loan_apply, device_apply），多余或不足的props可以再添加。完成statistics
-
-  // TODO: 修改device-info props
-
-
   async user_self_info () {
     // eslint-disable-next-line no-unused-vars
     let res = axios.get('/apis/users/info')
@@ -240,5 +277,26 @@ export default class Admin extends Vue {
 
 li{
   list-style-type: none;
+}
+
+.searchBar{
+  margin: 16px;
+}
+
+.searchBar select{
+  background-color:rgba(255, 255, 255, 0.5);
+  border-style: none;
+  border-radius: 4px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+}
+
+.searchBar input{
+  width: 60%;
+  height: 22px;
+  text-align: center;
+  background-color:rgba(255, 255, 255, 0.5);
+  border-style: none;
+  border-radius: 4px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
 }
 </style>
