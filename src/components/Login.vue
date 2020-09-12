@@ -47,7 +47,7 @@ export default class Login extends Vue {
         if (response.data.role === 'admin') {
           await this.$router.push('/admin')
         } else {
-          await this.$router.push('/provider')
+          await this.$router.push('/')
         }
       }
     } catch (e) {
