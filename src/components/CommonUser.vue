@@ -17,14 +17,15 @@
       <div v-if="type === 'all_devices'">
         <div class="searchBar">
          <form>
-          <select name="searchMode" style="height: 100%; margin: 0 10px" v-model="searchMode">
+          <select name="searchMode" style="margin: 0 10px" v-model="searchMode">
             <option value="DeviceName">Device Name</option>
             <option value="DeviceInfo">Device Info</option>
+            <option value="DeviceOwner">Device Owner</option>
           </select>
           <input type="text" placeholder="Search..." v-model="searchKey"/>
         </form>
         </div>
-        <a v-for="(item,index) in searchResult" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
+        <a v-for="(item,index) in searchAllDevicesResult" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
           <device-info :device_id=item.id :device_name=item.name :device_info=item.info :device_contact=item.contact :device_occs=item.occupancies
           :open_apply="true"></device-info>
         </a>
@@ -60,7 +61,16 @@
         <button @click="applyProvider" class="add_button">Apply</button>
       </div>
       <div v-if="type === 'manage_devices' && role === 'provider'">
-        <a v-for="(item,index) in provider_devices_list" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
+        <div class="searchBar">
+         <form>
+          <select name="searchMode" style="margin: 0 10px" v-model="searchMode">
+            <option value="DeviceName">Device Name</option>
+            <option value="DeviceInfo">Device Info</option>
+          </select>
+          <input type="text" placeholder="Search..." v-model="searchKey"/>
+        </form>
+        </div>
+        <a v-for="(item,index) in searchMyDevicesResult" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
           <device-info :device_id=item.id :device_name=item.name :device_info=item.info :device_status=item.status
           :editable="true" :deletable="true" :shelf_op="true"></device-info>
         </a>
@@ -91,6 +101,11 @@
           <input type="text" class="form-control" placeholder="Device Information" v-model="deviceInfo" required/>
         </div>
         <button class="add_button" v-on:click="addEquipment()">Add Device</button>
+      </div>
+      <div v-if="type === 'mailbox'">
+        <a v-for="index of 30" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
+          <mail sender="hey" detail="wow" send_time="19951230"></mail>
+        </a>
       </div>
     </div>
 
@@ -126,12 +141,13 @@ import VueAxios from 'vue-axios'
 import UserInfo from './UserInfo'
 import DeviceInfo from './DeviceInfo'
 import LoanInfo from './LoanInfo'
+import Mail from './Mail'
 import {Modal} from "ant-design-vue";
 import * as querystring from "querystring";
 
 Vue.use(VueAxios, axios)
 @Component({
-  components: {UserInfo, DeviceInfo, LoanInfo}
+  components: {UserInfo, DeviceInfo, LoanInfo, Mail}
 })
 
 export default class CommonUser extends Vue {
@@ -156,17 +172,35 @@ export default class CommonUser extends Vue {
 
   querystring = require('querystring')
 
-  get searchResult(){
+  get searchAllDevicesResult(){
     if (this.searchMode === 'DeviceName'){
       return this.devices_list.filter((device) => {
         return device.name.match(this.searchKey)
       })
-    } else{
+    } else if (this.searchMode === 'DeviceInfo'){
       return this.devices_list.filter((device) => {
+        return device.info.match(this.searchKey)
+      })
+    } else {
+      return this.devices_list.filter((device) => {
+        console.log(device)
+        return device.contact[0].match(this.searchKey)
+      })
+    }
+  }
+
+  get searchMyDevicesResult(){
+    if (this.searchMode === 'DeviceName'){
+      return this.provider_devices_list.filter((device) => {
+        return device.name.match(this.searchKey)
+      })
+    } else {
+      return this.provider_devices_list.filter((device) => {
         return device.info.match(this.searchKey)
       })
     }
   }
+
 
 
   async getAllDevices () {
@@ -195,6 +229,8 @@ export default class CommonUser extends Vue {
       if (this.role === 'provider') {
         await this.getProviderDevices()
         await this.getMyEquipmentsLoanApplications()
+      } else if (this.role === 'admin'){
+        await this.$router.push('/admin')
       }
     }
     catch (e){
@@ -310,8 +346,25 @@ export default class CommonUser extends Vue {
   width: 75%;
 }
 
-.search_bar input{
-  width: 80%
+.searchBar{
+  margin: 16px;
+}
+
+.searchBar select{
+  background-color:rgba(255, 255, 255, 0.5);
+  border-style: none;
+  border-radius: 4px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+}
+
+.searchBar input{
+  width: 60%;
+  height: 22px;
+  text-align: center;
+  background-color:rgba(255, 255, 255, 0.5);
+  border-style: none;
+  border-radius: 4px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
 }
 
 .status_tag{
