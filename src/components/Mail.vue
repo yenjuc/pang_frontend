@@ -13,7 +13,7 @@
           </p>
         </div>
       </div>
-      
+
       <div v-if="!read" >
         <button type="button" class="btn btn-default">
           <i class="fas fa-check-circle"></i>
@@ -39,8 +39,9 @@ export default class Mail extends Vue {
   @Prop({type: String}) sender
   @Prop({type: String}) send_time
   @Prop({type: String}) detail
-  @Prop({type: Boolean}) read
-
+  @Prop({type: Boolean}) status
+  @Prop({type:String})type
+  @Prop({type:Number})relatedID
   // TODO: 点击确认后改为已读
   // TODO: 点击删除后删除站内信
 }

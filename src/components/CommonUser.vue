@@ -102,8 +102,8 @@
         <button class="add_button" v-on:click="addEquipment()">Add Device</button>
       </div>
       <div v-if="type === 'mailbox'">
-        <a v-for="index of 30" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
-          <mail sender="hey" detail="wow" send_time="19951230"></mail>
+        <a v-for="(item,index) in mailsList" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
+          <mail :sender="item.sender" :detail="item.detail" :send_time="item.time" :status="item.status" :type="item.type" :related-i-d="item.relatedID"></mail>
         </a>
       </div>
     </div>
@@ -165,7 +165,8 @@ export default class CommonUser extends Vue {
   myLoanAppls = []
   myLoanApplsActive = []
   myEquipmentsLoanApplications = []
-  
+  mailsList=[]
+
   searchMode = 'DeviceName'
   searchKey = ''
 
@@ -254,6 +255,16 @@ export default class CommonUser extends Vue {
     }
   }
 
+  async getMails(){
+    try{
+      let response=await axios.get('/apis/mails/search')
+      this.mailsList = response.data
+    }
+    catch (e){
+      this.$message.error(JSON.stringify(e.response.data))
+    }
+  }
+
   async applyProvider(){
     try{
       let querystring=require('querystring')
@@ -324,10 +335,11 @@ export default class CommonUser extends Vue {
     }
   }
 
-  mounted () {  
+  mounted () {
     this.getInfo()
     this.getAllDevices()
     this.getMyLoanApplications()
+    this.getMails()
   }
 }
   // TODO: redirect

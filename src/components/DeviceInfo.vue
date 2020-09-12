@@ -135,6 +135,8 @@ export default class DeviceInfo extends Vue {
   loanEndTime = '00:00:00'
   loanStatement = ''
 
+  // TODO:将infoReject绑定在输入框中
+  infoReject = ''
   @Prop({type: Number}) device_id
   @Prop({type: String}) device_name
   @Prop({type: Array})  device_contact
@@ -171,6 +173,8 @@ export default class DeviceInfo extends Vue {
     if (pass === 'true') {
       try {
         await axios.post(`/apis/admin/equipment/check/apply/${this.device_id}`, this.querystring.stringify({pass: pass}))
+        await axios.post('/apis/mails/add',this.querystring.stringify({receiver:this.device_contact[0],detail:`您的设备${this.device_name}上架申请已被通过`,
+        type:'EquipmentOnShelf',relatedID:this.device_id}))
         this.$emit('apply_equipment_load')
         window.location = window.location
       } catch (e) {
@@ -181,6 +185,8 @@ export default class DeviceInfo extends Vue {
     {
       try{
         await axios.post(`/apis/admin/equipment/check/apply/${this.device_id}`, this.querystring.stringify({pass: pass,reason:'no reason'}))
+        await axios.post('/apis/mails/add',this.querystring.stringify({receiver:this.device_contact[0],detail:`您的设备${this.device_name}上架申请被拒绝，
+        拒绝理由为${this.infoReject}`, type:'EquipmentOnShelf',relatedID:this.device_id}))
         this.$emit('apply_equipment_load')
         window.location = window.location
       }catch (e){
