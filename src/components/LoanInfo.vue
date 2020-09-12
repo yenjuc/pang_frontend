@@ -10,7 +10,8 @@
           </span>
           <span v-else
             :class="'label label-' + (appl.status === 'pending' ? 'default' :
-            (appl.status === 'approved' ? 'success' : 'danger'))">{{ appl.status }}</span>
+            (appl.status === 'approved' ? 'success' :
+             appl.status === 'prefinish' ? 'warning' : 'danger'))">{{ appl.status }}</span>
         </h4>
         <div style="display: inline-block">
           <div class="detailedinfo">
@@ -35,9 +36,9 @@
           <i class="fas fa-trash-alt"></i>
         </button>
       </div>
-      <div v-if="need_return">
+      <div v-if="need_return && !returned">
         <button type="button" class="btn btn-default" v-on:click="return_device()">
-          <i class="fas fa-pencil-alt"></i>
+          <i class="fas fa-reply"></i>
         </button>
       </div>
     </div>
@@ -72,6 +73,7 @@ export default class LoanInfo extends Vue {
   @Prop({type: Boolean, default: false}) deletable
   @Prop({type: Boolean, default: false}) need_examine
   @Prop({type: Boolean, default: false}) need_return
+  returned = false  // 归还之后的临时标记
 
   showExamine = false
   reviewApprove = true
@@ -106,7 +108,7 @@ export default class LoanInfo extends Vue {
         this.appl.response = this.reviewResponse;
       }
     } catch (e) {
-      alert(JSON.stringify(JSON.stringify(e.response.data.error)));
+      this.$message.error(e.response.data.error);
     }
   }
 
@@ -115,10 +117,11 @@ export default class LoanInfo extends Vue {
       const response = await axios.post(
           `/apis/loan/prefinish/${this.appl.id}`);
       if (response.status === 200) {
-
+        this.returned = true;
+        this.$message.success('已成功标记为归还');
       }
     } catch (e) {
-      alert(JSON.stringify(JSON.stringify(e.response.data.error)));
+      this.$message.error(e.response.data.error);
     }
   }
 
