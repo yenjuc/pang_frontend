@@ -36,7 +36,7 @@
       </div>
       <div v-if="type === 'loaned_devices'">
         <a v-for="(item,index) in myLoanApplsActive" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
-          <loan-info :appl="item" :timer='true' :username="userInfo['name']"></loan-info>
+          <loan-info :need_return="true" :appl="item" :timer='true' :username="userInfo['name']"></loan-info>
         </a>
       </div>
       <div class="apply_panel" v-if="type === 'apply_provider' && role !== 'provider'">

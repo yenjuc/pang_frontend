@@ -38,16 +38,15 @@ export default class Log extends Vue {
   @Prop({type: Number}) operate_time
   @Prop({type: String}) detail
 
-  readit(){
+  readit() {
     this.unread = ''
   }
-}
 
-  formatTime (timestamp) {
+  formatTime(timestamp) {
     return (new Date(timestamp * 1000)).toLocaleString('zh-CN');
   }
 
-
+}
 
 </script>
 
