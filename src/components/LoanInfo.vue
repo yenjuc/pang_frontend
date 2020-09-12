@@ -35,7 +35,12 @@
           <i class="fas fa-trash-alt"></i>
         </button>
       </div>
-  </div>
+    <div v-if="need_return">
+      <button type="button" class="btn btn-default" v-on:click="return_device()">
+        <i class="fas fa-pencil-alt"></i>
+      </button>
+    </div>
+    </div>
   <div v-if='showExamine' style='display: contents; width: 100%'>
     <label><input type='radio' name='approve' v-model='reviewApprove' :value='true'> Approve</label>
     <label><input type='radio' name='approve' v-model='reviewApprove' :value='false'> Reject</label>
@@ -66,6 +71,7 @@ export default class LoanInfo extends Vue {
   // TODO: check whether the buttons are shown properly (have not tested)
   @Prop({type: Boolean, default: false}) deletable
   @Prop({type: Boolean, default: false}) need_examine
+  @Prop({type: Boolean, default: true}) need_return
 
   showExamine = false
   reviewApprove = true
@@ -103,6 +109,19 @@ export default class LoanInfo extends Vue {
       alert(JSON.stringify(JSON.stringify(e.response.data.error)));
     }
   }
+
+  async return_device() {
+    try {
+      const response = await axios.post(
+          `/apis/loan/prefinish/${this.appl.id}`);
+      if (response.status === 200) {
+
+      }
+    } catch (e) {
+      alert(JSON.stringify(JSON.stringify(e.response.data.error)));
+    }
+  }
+
 }
 </script>
 

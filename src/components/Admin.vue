@@ -71,9 +71,8 @@
           -->
       </div>
       <div v-if="type === 'system_log'">
-        <a v-for="index of 30" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
-          <!--log :detail=" " to bind-->
-          <log detail="test detail" type="testtype" operator="testoperator" operate_time="qjiqji"></log>
+        <a v-for="(item, index) in system_log_list" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
+          <log :detail=item.detail :type=item.type :operator=item.operator :operate_time=item.time></log>
         </a>
       </div>
     </div>
@@ -122,10 +121,12 @@ export default class Admin extends Vue {
   device_list=[]
   provider_apply_list=[]
   device_apply_list=[]
+  system_log_list=[]
   role=''
   res={}
   test= 'test bind'
   userInfo={}
+
   async user_load () {
     try {
       this.res = await axios({
@@ -161,13 +162,12 @@ export default class Admin extends Vue {
       this.userInfo['name']=response.data.user_name
       this.userInfo['address']=response.data.user_info_address
       this.userInfo['reject']=response.data.user_info_reject
-      this.getExaminingDevices()
+      await this.getExaminingDevices()
     }
     catch (e){
       this.$message.error(JSON.stringify(e.response.data.error))
     }
   }
-
 
   async apply_user_load () {
     try {
@@ -199,11 +199,21 @@ export default class Admin extends Vue {
     }
   }
 
+  async systemlog_load () {
+    try {
+      this.res = await axios.get('/apis/logs/search')
+      this.system_log_list = this.res.data
+    } catch (e) {
+      this.$message.error(JSON.stringify(e.response.data.error))
+    }
+  }
+
   mounted () {
     this.user_load()
     this.apply_user_load()
     this.getInfo()
     this.device_load()
+    this.systemlog_load()
   }
 
   // TODO: html中展示逻辑完善（devices, loan_apply, device_apply），多余或不足的props可以再添加。完成statistics
@@ -216,7 +226,7 @@ export default class Admin extends Vue {
     let res = axios.get('/apis/users/info')
   }
 }
-</script>>
+</script>
 
 <style scoped>
 .admin{

@@ -41,6 +41,8 @@ export default class Log extends Vue {
   readit(){
     this.unread = ''
   }
+
+
 }
 
 
