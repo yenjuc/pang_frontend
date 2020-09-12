@@ -128,6 +128,8 @@ export default class LoanInfo extends Vue {
       const response = await axios.post(
           `/apis/loan/prefinish/${this.appl.id}`);
       if (response.status === 200) {
+        await axios.post('/apis/mails/add', querystring.stringify({receiver:this.appl.equipment.ownername,detail:`您的设备${this.appl.equipment.name}已被用户${this.appl.applicant.username}归还`,
+          type:'LoanReturn',relatedID:this.appl.id}))
         this.returned = true;
         this.$message.success('已成功标记为归还');
       }
