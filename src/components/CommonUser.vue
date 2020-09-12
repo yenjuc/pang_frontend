@@ -170,6 +170,7 @@ export default class CommonUser extends Vue {
       this.checkExaminingStatus()
       if (this.role === 'provider') {
         await this.getProviderDevices()
+        await this.getMyEquipmentsLoanApplications()
       }
     }
     catch (e){
@@ -269,7 +270,6 @@ export default class CommonUser extends Vue {
     this.getAllDevices()
     this.getInfo()
     this.getMyLoanApplications()
-    this.getMyEquipmentsLoanApplications()
   }
 }
 
