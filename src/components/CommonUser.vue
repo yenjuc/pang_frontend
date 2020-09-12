@@ -103,7 +103,7 @@
       </div>
       <div v-if="type === 'mailbox'">
         <a v-for="(item,index) in mailsList" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
-          <mail :sender="item.sender" :detail="item.detail" :send_time="item.time" :status="item.status" :type="item.type" :related-i-d="item.relatedID"></mail>
+          <mail @mails_confirm="getMails" :sender="item.sender" :detail="item.detail" :send_time="item.time" :id="item.id" :status="item.status" :type="item.type" :related-i-d="item.relatedID"></mail>
         </a>
       </div>
     </div>
@@ -166,7 +166,7 @@ export default class CommonUser extends Vue {
   myLoanApplsActive = []
   myEquipmentsLoanApplications = []
   mailsList = []
-  
+
   searchMode = 'DeviceName'
   searchKey = ''
 
@@ -335,7 +335,7 @@ export default class CommonUser extends Vue {
     }
   }
 
-  mounted () {  
+  mounted () {
     this.getInfo()
     this.getAllDevices()
     this.getMyLoanApplications()

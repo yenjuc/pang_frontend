@@ -93,7 +93,6 @@ export default class UserInfo extends Vue {
     else if (pass === 'false' )
     {
       try{
-        // TODO:此处非目前需做，暂时将reason置为空，待在前端实现当管理者拒绝时弹出文本框时，再将reason置为文本框的值
         await axios.post('/apis/admin/users/check/apply', this.querystring.stringify({username: this.username, pass: pass,reason: this.reviewResponse}))
         this.$emit('apply_user_load')
       }catch (e){

@@ -13,14 +13,15 @@
           </p>
         </div>
       </div>
-      
+
+
       <div v-if="!status" >
-        <button type="button" class="btn btn-default">
+        <button type="button" @click="mails_confirm" class="btn btn-default">
           <i class="fas fa-check-circle"></i>
         </button>
       </div>
       <div>
-        <button type="button" class="btn btn-default">
+        <button type="button" v-if="status" @click="mails_delete" class="btn btn-default">
           <i class="fas fa-trash-alt"></i>
         </button>
       </div>
@@ -40,11 +41,25 @@ export default class Mail extends Vue {
   @Prop({type: String}) send_time
   @Prop({type: String}) detail
   @Prop({type: Boolean}) status
-  @Prop({type: String}) type
-  @Prop({type: Number}) relatedID
+  @Prop({type:String})type
+  @Prop({type:Number})relatedID
+  @Prop({type:Number})id
+  async mails_confirm(){
+    await axios.post(`/apis/mails/${this.id}/confirm`)
+    this.$emit('mails_confirm')
+    // TODO:设备上架指定ID
+    if(this.type==='EquipmentOnShelf'){
+      await axios.post('/apis/equipment/confirm/apply')
+    }
+    else if(this.type==='LoanReturn'){
+      await axios.post(`/apis/loan/finish/${this.relatedID}`)
+    }
+  }
 
-  // TODO: 点击确认后改为已读
-  // TODO: 点击删除后删除站内信
+  async mails_delete(){
+    await axios.post(`/apis/mails/${this.id}/delete`)
+    this.$emit('mails_confirm')
+  }
 }
 
 
