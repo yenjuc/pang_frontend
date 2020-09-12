@@ -6,7 +6,7 @@
         <div class="detailedinfo">
           <p>
             <i class="far fa-clock"></i>
-            <span class="list-group-item-text">{{send_time}}</span>
+            <span class="list-group-item-text">{{formatTime(send_time)}}</span>
           </p>
           <p>
             <span class="list-group-item-text">{{detail}}</span>
@@ -38,7 +38,7 @@ Vue.use(VueAxios, axios)
 @Component
 export default class Mail extends Vue {
   @Prop({type: String}) sender
-  @Prop({type: String}) send_time
+  @Prop({type: Number}) send_time
   @Prop({type: String}) detail
   @Prop({type: Boolean}) status
   @Prop({type:String})type
@@ -60,6 +60,12 @@ export default class Mail extends Vue {
     await axios.post(`/apis/mails/${this.id}/delete`)
     this.$emit('mails_confirm')
   }
+
+
+  formatTime (timestamp) {
+    return (new Date(timestamp * 1000)).toLocaleString('zh-CN');
+  }
+
 }
 
 
