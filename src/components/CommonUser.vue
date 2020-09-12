@@ -9,7 +9,7 @@
       <li v-if="role === 'provider'" role="presentation" :class="type === 'manage_loan_apply'? 'active' : '' "><a href="/manage_loan_apply">审核租借申请</a></li>
       <li v-if="role === 'provider'" role="presentation" :class="type === 'loaned_history'? 'active' : '' "><a href="/loaned_history">已借出设备历史</a></li>
       <li v-if="role === 'provider'" role="presentation" :class="type === 'add_device'? 'active' : '' "><a href="/add_device">增加设备</a></li>
-      <li role="presentation" :class="type === 'mailbox'? 'active' : '' "><a href="/mailbox">站内信 <span class="badge">{{unreadMessage}}</span></a></li>
+      <li role="presentation" :class="type === 'mailbox'? 'active' : '' "><a href="/mailbox">站内信 <span class="badge">{{unreadMessage ? unreadMessage : ''}}</span></a></li>
     </ul>
 
     <div class="list-group">

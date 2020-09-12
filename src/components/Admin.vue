@@ -3,9 +3,12 @@
     <ul class="nav nav-pills">
       <li role="presentation" :class="type === 'users'? 'active' : '' "><a href="/admin/users">管理用户</a></li>
       <li role="presentation" :class="type === 'devices'? 'active' : '' "><a href="/admin/devices">管理设备</a></li>
-      <li role="presentation" :class="type === 'loan_apply'? 'active' : '' "><a href="/admin/loan_apply">管理租借申请</a></li>
-      <li role="presentation" :class="type === 'provider_apply'? 'active' : '' "><a href="/admin/provider_apply">管理提供者申请</a></li>
-      <li role="presentation" :class="type === 'device_apply'? 'active' : '' "><a href="/admin/device_apply">管理设备上架</a></li>
+      <li role="presentation" :class="type === 'loan_apply'? 'active' : '' "><a href="/admin/loan_apply">
+        管理租借申请 <span class="badge">{{loan_appls_list.length ? loan_appls_list.length : ''}}</span></a></li>
+      <li role="presentation" :class="type === 'provider_apply'? 'active' : '' "><a href="/admin/provider_apply">
+        管理提供者申请 <span class="badge">{{provider_apply_list.length ? device_apply_list.length : ''}}</span></a></li>
+      <li role="presentation" :class="type === 'device_apply'? 'active' : '' "><a href="/admin/device_apply">
+        管理设备上架 <span class="badge">{{device_apply_list.length ? device_apply_list.length : ''}}</span></a></li>
       <li role="presentation" :class="type === 'statistics'? 'active' : '' "><a href="/admin/statistics">平台数据一览</a></li>
       <li role="presentation" :class="type === 'system_log'? 'active' : '' "><a href="/admin/system_log">系统日志</a></li>
     </ul>
