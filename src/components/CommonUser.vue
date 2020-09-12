@@ -12,7 +12,6 @@
       <li role="presentation" :class="type === 'mailbox'? 'active' : '' "><a href="/mailbox">站内信</a></li>
     </ul>
 
-    <!--v-for item in list...-->
     <div class="list-group">
       <div v-if="type === 'all_devices'">
         <div class="searchBar">
@@ -183,7 +182,6 @@ export default class CommonUser extends Vue {
       })
     } else {
       return this.devices_list.filter((device) => {
-        console.log(device)
         return device.contact[0].match(this.searchKey)
       })
     }

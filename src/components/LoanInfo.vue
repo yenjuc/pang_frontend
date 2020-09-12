@@ -35,11 +35,11 @@
           <i class="fas fa-trash-alt"></i>
         </button>
       </div>
-    <div v-if="need_return">
-      <button type="button" class="btn btn-default" v-on:click="return_device()">
-        <i class="fas fa-pencil-alt"></i>
-      </button>
-    </div>
+      <div v-if="need_return">
+        <button type="button" class="btn btn-default" v-on:click="return_device()">
+          <i class="fas fa-pencil-alt"></i>
+        </button>
+      </div>
     </div>
   <div v-if='showExamine' style='display: contents; width: 100%'>
     <label><input type='radio' name='approve' v-model='reviewApprove' :value='true'> Approve</label>

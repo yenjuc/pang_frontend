@@ -45,6 +45,7 @@ export default class UserInfo extends Vue {
   async user_delete () {
     try {
       await axios.post(`/apis/admin/users/${this.username}/delete`, this.querystring.stringify({'username': this.username}))
+      this.$message.success('成功删除用户！')
       this.$emit('user_load')
     } catch (e) {
       this.$message.error(JSON.stringify(e.response.data.error))
@@ -74,9 +75,6 @@ export default class UserInfo extends Vue {
   }
 
 }
-
-
-
 
 </script>
 

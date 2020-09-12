@@ -1,5 +1,5 @@
 <template>
-  <div class="user" style="display: flex" @click="readit">
+  <div class="log" style="display: flex" @click="readit">
       <div class="info_block">
         <h4 class="list-group-item-heading">{{detail}}</h4>
         <div class="detailedinfo">
@@ -41,8 +41,6 @@ export default class Log extends Vue {
   readit(){
     this.unread = ''
   }
-
-
 }
 
 

@@ -264,9 +264,6 @@ export default class DeviceInfo extends Vue {
       window.location = '/apply_history';
     }
   }
-
-  // TODO: 点击申请按钮发送租借申请（内容：this.loanReason, this.loanEndTime）
-
 }
 </script>
 

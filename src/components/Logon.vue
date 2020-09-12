@@ -9,7 +9,7 @@
 
     <div class="input-group">
       <span class="input-group-addon"><i class="fas fa-envelope"></i></span>
-      <input type="text" class="form-control" placeholder="Email Address" v-model="email">
+      <input type="email" class="form-control" placeholder="Email Address" v-model="email">
     </div>
 
     <div class="input-group">
@@ -55,6 +55,7 @@ export default class Logon extends Vue {
         } catch (e) {
           this.$message.error(JSON.stringify(e.response.data.error))
         }
+        // 在此处弹出提示 注册成功
       }
     } catch (e) {
         this.$message.error(JSON.stringify(e.response.data.error))
