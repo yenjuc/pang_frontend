@@ -1,10 +1,6 @@
 <template>
   <div class="login-panel">
     <i class="fas fa-dolly-flatbed" style="font-size: 100px; margin: 40px"></i>
-
-    <div class="alert alert-danger" role="alert" v-if="errorMessage">
-      {{ errorMessage }}
-    </div>
     <div class="alert alert-success" role="alert" v-if="$route.query.verified">
       用户 <strong>{{ $route.query.verified }}</strong> 的邮箱验证完成！请在下方登录平台。
     </div>
@@ -39,8 +35,6 @@ export default class Login extends Vue {
   username = ''
   password = ''
 
-  errorMessage = ''
-
   querystring = require('querystring')
 
   async login () {
@@ -57,7 +51,7 @@ export default class Login extends Vue {
         }
       }
     } catch (e) {
-      this.errorMessage = e.response.data.error
+      this.$message.error(JSON.stringify(e.response.data.error))
     }
   }
 

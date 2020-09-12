@@ -128,7 +128,7 @@ export default class Admin extends Vue {
       })
       this.user_list = this.res.data
     } catch (e) {
-      console.log(e.response.data)
+      this.$message.error(JSON.stringify(e.response.data.error))
     }
   }
 
@@ -137,7 +137,7 @@ export default class Admin extends Vue {
       let response = await axios.get('/apis/equipment/search/admin')
       this.device_list = response.data.equipments
     } catch (e) {
-      console.log(e.response) // 弹框提醒
+      this.$message.error(JSON.stringify(e.response.data.error)) // 弹框提醒
     }
   }
 
@@ -156,7 +156,7 @@ export default class Admin extends Vue {
       this.getExaminingDevices()
     }
     catch (e){
-      console.log('getInfo:error')
+      this.$message.error(JSON.stringify(e.response.data.error))
     }
   }
 
@@ -171,7 +171,7 @@ export default class Admin extends Vue {
       })
       this.provider_apply_list = this.res.data
     } catch (e) {
-      console.log(e.response.data)
+      this.$message.error(JSON.stringify(e.response.data.error))
     }
   }
 
@@ -187,7 +187,7 @@ export default class Admin extends Vue {
         }
       }
     } catch (e) {
-      console.log(e.response) // 在此处弹出提示框
+      this.$message.error(JSON.stringify(e.response.data.error)) // 在此处弹出提示框
     }
   }
 

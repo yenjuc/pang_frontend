@@ -100,7 +100,7 @@ export default class LoanInfo extends Vue {
         this.appl.response = this.reviewResponse;
       }
     } catch (e) {
-      alert(JSON.stringify(e.response.data));
+      alert(JSON.stringify(JSON.stringify(e.response.data.error)));
     }
   }
 }

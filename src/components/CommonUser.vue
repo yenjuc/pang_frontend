@@ -148,10 +148,9 @@ export default class CommonUser extends Vue {
       let response = await axios.get('/apis/equipment/search/student')
       if (response.status === 200) {
         this.devices_list = response.data.equipments
-        // console.log(this.devices_list)
       }
     } catch (e) {
-      console.log(e.response) // 在此处弹出提示框
+      this.$message.error(JSON.stringify(e.response.data.error)) // 在此处弹出提示框
     }
   }
 
@@ -174,7 +173,7 @@ export default class CommonUser extends Vue {
       }
     }
     catch (e){
-      console.log('getInfo:error')
+      this.$message.error('getInfo:error')
     }
   }
 
@@ -192,7 +191,7 @@ export default class CommonUser extends Vue {
       await axios.post('/apis/users/confirm/apply')
     }
     catch (e){
-      console.log('confirm:error')
+      this.$message.error('confirm:error')
     }
   }
 
@@ -208,7 +207,7 @@ export default class CommonUser extends Vue {
       this.$message.success('申请成功！等待管理员审核中')
     }
     catch (e){
-      console.log('applyProvider:error')
+      this.$message.error('applyProvider:error')
     }
   }
 
@@ -219,7 +218,7 @@ export default class CommonUser extends Vue {
         this.provider_devices_list = response.data.equipments
       }
     } catch (e) {
-      console.log(e.response) // 在此处弹出提示框
+      this.$message.error(JSON.stringify(e.response.data.error)) // 在此处弹出提示框
     }
   }
 
@@ -235,7 +234,7 @@ export default class CommonUser extends Vue {
         )
       }
     } catch (e) {
-      console.log(e.response)
+      this.$message.error(JSON.stringify(e.response.data.error))
     }
   }
 
@@ -246,7 +245,7 @@ export default class CommonUser extends Vue {
         this.myEquipmentsLoanApplications = response.data
       }
     } catch (e) {
-      console.log(e.response)
+      this.$message.error(JSON.stringify(e.response.data.error))
     }
   }
 
@@ -262,7 +261,7 @@ export default class CommonUser extends Vue {
         this.deviceInfo = ''
       }
     } catch (e) {
-      console.log(e.response) // 在此处弹出提示框
+      this.$message.error(JSON.stringify(e.response.data.error)) // 在此处弹出提示框
     }
   }
 

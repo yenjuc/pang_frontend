@@ -47,7 +47,7 @@ export default class UserInfo extends Vue {
       await axios.post(`/apis/admin/users/${this.username}/delete`, this.querystring.stringify({'username': this.username}))
       this.$emit('user_load')
     } catch (e) {
-      console.log(e.response.data)
+      this.$message.error(JSON.stringify(e.response.data.error))
     }
   }
 
@@ -58,7 +58,7 @@ export default class UserInfo extends Vue {
         await axios.post('/apis/admin/users/check/apply', this.querystring.stringify({username: this.username, pass: pass}))
         this.$emit('apply_user_load')
       } catch (e) {
-        console.log('apply_check_pass:error')
+        this.$message.error(JSON.stringify(e.response.data.error))
       }
     }
     else if (pass === 'false' )
@@ -68,7 +68,7 @@ export default class UserInfo extends Vue {
         await axios.post('/apis/admin/users/check/apply', this.querystring.stringify({username: this.username, pass: pass,reason:'no reason'}))
         this.$emit('apply_user_load')
       }catch (e){
-        console.log('apply_check_pass:error')
+        this.$message.error(JSON.stringify(e.response.data.error))
       }
     }
   }

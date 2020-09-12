@@ -163,7 +163,7 @@ export default class DeviceInfo extends Vue {
         window.location = window.location
       }
     } catch (e) {
-      console.log(e.response) // 在此处弹出提示框
+      this.$message.error(JSON.stringify(e.response.data.error)) // 在此处弹出提示框
     }
   }
 
@@ -176,7 +176,7 @@ export default class DeviceInfo extends Vue {
         this.$emit('apply_equipment_load')
         window.location = window.location
       } catch (e) {
-        console.log('device_check_pass:error')
+        this.$message.error(JSON.stringify(e.response.data.error))
       }
     }
     else if (pass === 'false' )
@@ -186,7 +186,7 @@ export default class DeviceInfo extends Vue {
         this.$emit('apply_equipment_load')
         window.location = window.location
       }catch (e){
-        console.log('device_check_pass:error')
+        this.$message.error(JSON.stringify(e.response.data.error))
       }
     }
   }
@@ -199,7 +199,7 @@ export default class DeviceInfo extends Vue {
         window.location = window.location
       }
     } catch (e) {
-      console.log(e.response) // 在此处弹出提示框
+      this.$message.error(JSON.stringify(e.response.data.error)) // 在此处弹出提示框
     }
   }
 
@@ -212,7 +212,7 @@ export default class DeviceInfo extends Vue {
         window.location = window.location
       }
     } catch (e) {
-      console.log(e.response) // 在此处弹出提示框
+      this.$message.error(JSON.stringify(e.response.data.error)) // 在此处弹出提示框
     }
   }
 
@@ -229,7 +229,7 @@ export default class DeviceInfo extends Vue {
         window.location = window.location
       }
     } catch (e) {
-      console.log(e.response) // 在此处弹出提示框
+      this.$message.error(JSON.stringify(e.response.data.error)) // 在此处弹出提示框
     }
   }
 

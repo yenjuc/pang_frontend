@@ -2,10 +2,6 @@
   <div class="logon-panel">
     <i class="fas fa-dolly-flatbed" style="font-size: 100px; margin: 40px"></i>
 
-    <div class="alert alert-danger" role="alert" v-if="errorMessage">
-      {{ errorMessage }}
-    </div>
-
     <div class="input-group">
       <span class="input-group-addon"><i class="fas fa-user-circle"></i></span>
       <input type="text" class="form-control" placeholder="Username" v-model="username">
@@ -38,7 +34,6 @@ export default class Logon extends Vue {
   email = 'diana_pwf@163.com'
 
   loading = false
-  errorMessage = ''
 
   querystring = require('querystring')
 
@@ -55,7 +50,7 @@ export default class Logon extends Vue {
         // 在此处弹出提示 注册成功
       }
     } catch (e) {
-      this.errorMessage = e.response.data.error;
+        this.$message.error(JSON.stringify(e.response.data.error))
     }
     this.loading = false
   }
