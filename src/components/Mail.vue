@@ -49,7 +49,7 @@ export default class Mail extends Vue {
     this.$emit('mails_confirm')
     // TODO:设备上架指定ID
     if(this.type==='EquipmentOnShelf'){
-      await axios.post('/apis/equipment/confirm/apply')
+      await axios.post(`/apis/equipment/confirm/apply/${this.relatedID}`)
     }
     else if(this.type==='LoanReturn'){
       await axios.post(`/apis/loan/finish/${this.relatedID}`)
