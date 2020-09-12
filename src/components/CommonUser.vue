@@ -9,12 +9,22 @@
       <li v-if="role === 'provider'" role="presentation" :class="type === 'manage_loan_apply'? 'active' : '' "><a href="/manage_loan_apply">审核租借申请</a></li>
       <li v-if="role === 'provider'" role="presentation" :class="type === 'loaned_history'? 'active' : '' "><a href="/loaned_history">已借出设备历史</a></li>
       <li v-if="role === 'provider'" role="presentation" :class="type === 'add_device'? 'active' : '' "><a href="/add_device">增加设备</a></li>
+      <li role="presentation" :class="type === 'mailbox'? 'active' : '' "><a href="/mailbox">站内信</a></li>
     </ul>
 
     <!--v-for item in list...-->
     <div class="list-group">
       <div v-if="type === 'all_devices'">
-        <a v-for="(item,index) in devices_list" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
+        <div class="searchBar">
+         <form>
+          <select name="searchMode" style="height: 100%; margin: 0 10px" v-model="searchMode">
+            <option value="DeviceName">Device Name</option>
+            <option value="DeviceInfo">Device Info</option>
+          </select>
+          <input type="text" placeholder="Search..." v-model="searchKey"/>
+        </form>
+        </div>
+        <a v-for="(item,index) in searchResult" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
           <device-info :device_id=item.id :device_name=item.name :device_info=item.info :device_contact=item.contact :device_occs=item.occupancies
           :open_apply="true"></device-info>
         </a>
@@ -140,8 +150,24 @@ export default class CommonUser extends Vue {
   myLoanAppls = []
   myLoanApplsActive = []
   myEquipmentsLoanApplications = []
+  
+  searchMode = 'DeviceName'
+  searchKey = ''
 
   querystring = require('querystring')
+
+  get searchResult(){
+    if (this.searchMode === 'DeviceName'){
+      return this.devices_list.filter((device) => {
+        return device.name.match(this.searchKey)
+      })
+    } else{
+      return this.devices_list.filter((device) => {
+        return device.info.match(this.searchKey)
+      })
+    }
+  }
+
 
   async getAllDevices () {
     try {
@@ -153,8 +179,6 @@ export default class CommonUser extends Vue {
       this.$message.error(JSON.stringify(e.response.data.error)) // 在此处弹出提示框
     }
   }
-
-
   async getInfo(){
     try{
       let response = await axios.get('/apis/users/info')
@@ -265,15 +289,14 @@ export default class CommonUser extends Vue {
     }
   }
 
-  mounted () {
-    this.getAllDevices()
+  mounted () {  
     this.getInfo()
+    this.getAllDevices()
     this.getMyLoanApplications()
     this.getMyEquipmentsLoanApplications()
   }
 }
-
-  // TODO: html部分：查询框（使用filter，参考the net ninja vue #36）
+  // TODO: redirect
 
 </script>
 
@@ -285,6 +308,10 @@ export default class CommonUser extends Vue {
   border-radius: 10px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
   width: 75%;
+}
+
+.search_bar input{
+  width: 80%
 }
 
 .status_tag{
