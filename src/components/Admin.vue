@@ -7,6 +7,7 @@
       <li role="presentation" :class="type === 'provider_apply'? 'active' : '' "><a href="/admin/provider_apply">管理提供者申请</a></li>
       <li role="presentation" :class="type === 'device_apply'? 'active' : '' "><a href="/admin/device_apply">管理设备上架</a></li>
       <li role="presentation" :class="type === 'statistics'? 'active' : '' "><a href="/admin/statistics">平台数据一览</a></li>
+      <li role="presentation" :class="type === 'system_log'? 'active' : '' "><a href="/admin/system_log">系统日志</a></li>
     </ul>
 
     <div class="list-group">
@@ -69,6 +70,12 @@
           ...
           -->
       </div>
+      <div v-if="type === 'system_log'">
+        <a v-for="index of 30" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
+          <!--log :detail=" " to bind-->
+          <log detail="test detail" type="testtype" operator="testoperator" operate_time="qjiqji"></log>
+        </a>
+      </div>
     </div>
 
     <nav aria-label="Page navigation" v-if="type !== 'statistics'">
@@ -102,9 +109,10 @@ import VueAxios from 'vue-axios'
 import UserInfo from './UserInfo'
 import DeviceInfo from './DeviceInfo'
 import LoanInfo from './LoanInfo'
+import Log from './Log'
 
 Vue.use(VueAxios, axios)
-@Component({components: {UserInfo, DeviceInfo, LoanInfo}})
+@Component({components: {UserInfo, DeviceInfo, LoanInfo, Log}})
 
 export default class Admin extends Vue {
   type = this.$route.params.type || 'users'
