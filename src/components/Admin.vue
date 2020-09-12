@@ -44,10 +44,8 @@
         </a>
       </div>
       <div v-if="type === 'loan_apply'">
-        <!-- v-for="(item,index) in lists" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item"-->
-         <a v-for="index of 30" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
-          <!--loan-info :equipment=item.equipment...></loan-info-->
-          <loan-info equipment="123" start_time="0908" end_time="0910" :statement=test :need_examine="true" :deletable="true"></loan-info>
+        <a v-for="(item,index) in loan_appls_list" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
+          <loan-info :appl='item' :need_examine='item.status === "pending"'></loan-info>
         </a>
       </div>
       <div v-if="type === 'provider_apply'">
@@ -119,6 +117,7 @@ export default class Admin extends Vue {
   page = 1
   user_list=[]
   device_list=[]
+  loan_appls_list = []
   provider_apply_list=[]
   device_apply_list=[]
   system_log_list=[]
@@ -177,6 +176,15 @@ export default class Admin extends Vue {
     try {
       let response = await axios.get('/apis/equipment/search/admin')
       this.device_list = response.data.equipments.reverse()
+    } catch (e) {
+      this.$message.error(JSON.stringify(e.response.data.error)) // 弹框提醒
+    }
+  }
+
+  async loan_appls_load() {
+    try {
+      let response = await axios.get('/apis/loan/my_equipments')
+      this.loan_appls_list = response.data
     } catch (e) {
       this.$message.error(JSON.stringify(e.response.data.error)) // 弹框提醒
     }
@@ -244,6 +252,7 @@ export default class Admin extends Vue {
     this.apply_user_load()
     this.getInfo()
     this.device_load()
+    this.loan_appls_load()
     this.systemlog_load()
   }
 
