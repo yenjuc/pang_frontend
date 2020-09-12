@@ -5,15 +5,15 @@
         <div class="detailedinfo">
           <p>
             <i class="fas fa-user-circle"></i>
-            <span class="list-group-item-text">{{type}}</span>
+            <span class="list-group-item-text">操作类型：{{type}}</span>
           </p>
           <p>
             <i class="fas fa-user-circle"></i>
-            <span class="list-group-item-text">{{operator}}</span>
+            <span class="list-group-item-text">操作者：{{operator}}</span>
           </p>
           <p>
             <i class="fas fa-user-circle"></i>
-            <span class="list-group-item-text">{{operate_time}}</span>
+            <span class="list-group-item-text">操作时间：{{ formatTime(operate_time) }}</span>
           </p>
         </div>
       </div>
@@ -35,7 +35,7 @@ export default class Log extends Vue {
 
   @Prop({type: String}) type
   @Prop({type: String}) operator
-  @Prop({type: String}) operate_time
+  @Prop({type: Number}) operate_time
   @Prop({type: String}) detail
 
   readit(){
@@ -43,6 +43,9 @@ export default class Log extends Vue {
   }
 }
 
+  formatTime (timestamp) {
+    return (new Date(timestamp * 1000)).toLocaleString('zh-CN');
+  }
 
 
 

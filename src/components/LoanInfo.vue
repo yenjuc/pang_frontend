@@ -66,16 +66,17 @@ Vue.use(VueAxios, axios);
 @Component
 export default class LoanInfo extends Vue {
   @Prop({type: Object}) appl
+  @Prop({type: String}) username
   @Prop({type: Boolean}) timer
 
   // TODO: check whether the buttons are shown properly (have not tested)
   @Prop({type: Boolean, default: false}) deletable
   @Prop({type: Boolean, default: false}) need_examine
-  @Prop({type: Boolean, default: true}) need_return
 
   showExamine = false
   reviewApprove = true
   reviewResponse = ''
+  // need_return = (this.appl.applicant.username === this.username)
 
   formatTime (timestamp) {
     return (new Date(timestamp * 1000)).toLocaleString('zh-CN');
