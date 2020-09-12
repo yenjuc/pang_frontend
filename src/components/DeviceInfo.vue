@@ -30,7 +30,6 @@
         <p>{{ device_info }}</p>
       </div>
 
-      <!-- v-if open_apply && can_apply -->
       <div v-if="open_apply">
         <button type="button" class="btn btn-default" v-on:click="showApply = !showApply">
           <i class="fas fa-paper-plane"></i>
@@ -46,7 +45,6 @@
           <i class="fas fa-times-circle"></i>
         </button>
       </div>
-      <!-- v-if="shelf_op && device_status === '...'" 判断是否可以上架（未上架）或下架（正在架上）属性值不是很清楚，明天询问-->
       <div v-if="shelf_op && device_status === 'exist'">
         <button v-on:click="on_shelf()" type="button" class="btn btn-default">
           <i class="fas fa-arrow-circle-up"></i>

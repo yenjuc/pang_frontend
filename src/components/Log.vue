@@ -1,5 +1,5 @@
 <template>
-  <div class="log" style="display: flex" @click="readit">
+  <div class="log" style="display: flex">
       <div class="info_block">
         <h4 class="list-group-item-heading">{{detail}}</h4>
         <div class="detailedinfo">
@@ -12,12 +12,11 @@
             <span class="list-group-item-text">操作者：{{operator}}</span>
           </p>
           <p>
-            <i class="fas fa-user-circle"></i>
+            <i class="far fa-clock"></i>
             <span class="list-group-item-text">操作时间：{{ formatTime(operate_time) }}</span>
           </p>
         </div>
       </div>
-      <span class="badge" style="height: 18px; background-color: red">{{unread}}</span>
   </div>
 </template>
 
@@ -31,21 +30,14 @@ Vue.use(VueAxios, axios)
 @Component
 export default class Log extends Vue {
 
-  unread = '!'
-
   @Prop({type: String}) type
   @Prop({type: String}) operator
   @Prop({type: Number}) operate_time
   @Prop({type: String}) detail
 
-  readit() {
-    this.unread = ''
-  }
-
-  formatTime(timestamp) {
+  formatTime (timestamp) {
     return (new Date(timestamp * 1000)).toLocaleString('zh-CN');
   }
-
 }
 
 </script>
