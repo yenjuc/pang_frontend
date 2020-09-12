@@ -75,7 +75,16 @@
         </a>
       </div>
       <div v-if="type === 'manage_loan_apply' && role === 'provider'">
-        <a v-for="(item,index) in myEquipmentsLoanApplications" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
+        <div class="searchBar">
+         <form>
+          <select name="filterLoanApplState" style="margin: 0 10px" v-model="filterLoanApplState">
+            <option v-for='s in ["all", "pending", "rejected", "approved", "prefinish", "finish"]'
+              :value='s' :key='s'>{{ s }}</option>
+          </select>
+          <input type="text" placeholder="Search by device name or username..." v-model="filterLoanApplDevice"/>
+        </form>
+        </div>
+        <a v-for="(item,index) in filteredMyEquipmentsLoanApplications" :key='index' v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
           <loan-info :appl='item' :need_examine='item.status === "pending"'></loan-info>
         </a>
       </div>
@@ -169,6 +178,9 @@ export default class CommonUser extends Vue {
 
   searchMode = 'DeviceName'
   searchKey = ''
+
+  filterLoanApplState = 'all'
+  filterLoanApplDevice = ''
 
   querystring = require('querystring')
 
@@ -317,6 +329,19 @@ export default class CommonUser extends Vue {
     } catch (e) {
       this.$message.error(JSON.stringify(e.response.data.error))
     }
+  }
+
+  get filteredMyEquipmentsLoanApplications () {
+    // XXX: DRY, from Admin.vue
+    return this.myEquipmentsLoanApplications.filter((a) => {
+      const typesMatch = (this.filterLoanApplState === 'all' ||
+        this.filterLoanApplState === a.status);
+      const namesMatch = (!this.filterLoanApplDevice ||
+        a.equipment.name.toLowerCase().indexOf(this.filterLoanApplDevice.toLowerCase()) !== -1 ||
+        a.owner.username.toLowerCase().indexOf(this.filterLoanApplDevice.toLowerCase()) !== -1 ||
+        a.applicant.username.toLowerCase().indexOf(this.filterLoanApplDevice.toLowerCase()) !== -1);
+      return typesMatch && namesMatch;
+    });
   }
 
   async addEquipment () {

@@ -44,7 +44,16 @@
         </a>
       </div>
       <div v-if="type === 'loan_apply'">
-        <a v-for="(item,index) in loan_appls_list" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
+        <div class="searchBar">
+         <form>
+          <select name="filterLoanApplState" style="margin: 0 10px" v-model="filterLoanApplState">
+            <option v-for='s in ["all", "pending", "rejected", "approved", "prefinish", "finish"]'
+              :value='s' :key='s'>{{ s }}</option>
+          </select>
+          <input type="text" placeholder="Search by device name or username..." v-model="filterLoanApplDevice"/>
+        </form>
+        </div>
+        <a v-for="(item,index) in search_loan_appls_list" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
           <loan-info :appl='item' :need_examine='item.status === "pending"'></loan-info>
         </a>
       </div>
@@ -130,6 +139,9 @@ export default class Admin extends Vue {
   searchDeviceMode = 'DeviceName'
   searchKey = ''
 
+  filterLoanApplState = 'all'
+  filterLoanApplDevice = ''
+
   get searchUsers(){
     if (this.searchUserMode === 'All'){
       return this.user_list.filter((user) => {
@@ -184,10 +196,23 @@ export default class Admin extends Vue {
   async loan_appls_load() {
     try {
       let response = await axios.get('/apis/loan/my_equipments')
-      this.loan_appls_list = response.data
+      this.loan_appls_list = response.data.reverse()
+      // this.loan_appls_list.sort((a, b) => a.id > b.id)
     } catch (e) {
       this.$message.error(JSON.stringify(e.response.data.error)) // 弹框提醒
     }
+  }
+
+  get search_loan_appls_list() {
+    return this.loan_appls_list.filter((a) => {
+      const typesMatch = (this.filterLoanApplState === 'all' ||
+        this.filterLoanApplState === a.status);
+      const namesMatch = (!this.filterLoanApplDevice ||
+        a.equipment.name.toLowerCase().indexOf(this.filterLoanApplDevice.toLowerCase()) !== -1 ||
+        a.owner.username.toLowerCase().indexOf(this.filterLoanApplDevice.toLowerCase()) !== -1 ||
+        a.applicant.username.toLowerCase().indexOf(this.filterLoanApplDevice.toLowerCase()) !== -1);
+      return typesMatch && namesMatch;
+    });
   }
 
   async getInfo () {

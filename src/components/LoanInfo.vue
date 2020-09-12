@@ -15,6 +15,14 @@
         </h4>
         <div style="display: inline-block">
           <div class="detailedinfo">
+            <i class="fas fa-user-circle"></i>
+            <span class="list-group-item-text">拥有者：{{ appl.owner.username }}</span>
+          </div>
+          <div class="detailedinfo">
+            <i class="fas fa-user-circle"></i>
+            <span class="list-group-item-text">申请者：{{ appl.applicant.username }}</span>
+          </div>
+          <div class="detailedinfo">
             <i class="fas fa-clock"></i>
             <span class="list-group-item-text">{{formatTime(appl.start_time)}} – {{formatTime(appl.end_time)}}</span>
           </div>
