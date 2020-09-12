@@ -9,7 +9,7 @@
       <li v-if="role === 'provider'" role="presentation" :class="type === 'manage_loan_apply'? 'active' : '' "><a href="/manage_loan_apply">审核租借申请</a></li>
       <li v-if="role === 'provider'" role="presentation" :class="type === 'loaned_history'? 'active' : '' "><a href="/loaned_history">已借出设备历史</a></li>
       <li v-if="role === 'provider'" role="presentation" :class="type === 'add_device'? 'active' : '' "><a href="/add_device">增加设备</a></li>
-      <li role="presentation" :class="type === 'mailbox'? 'active' : '' "><a href="/mailbox">站内信</a></li>
+      <li role="presentation" :class="type === 'mailbox'? 'active' : '' "><a href="/mailbox">站内信 <span class="badge">{{unreadMessage}}</span></a></li>
     </ul>
 
     <div class="list-group">
@@ -119,18 +119,18 @@
 
     <nav aria-label="Page navigation" v-if="type !== 'add_device' && type !== 'apply_provider'">
       <ul class="pagination">
-        <li :class="page - 1 > 0 ? '':'disabled'">
-          <a href="#" aria-label="Previous">
+        <li :class="page > 1 ? '':'disabled'">
+          <a href="#" aria-label="Previous" v-on:click="page -= (page > 1) ? 1:0">
             <span aria-hidden="true">&laquo;</span>
           </a>
         </li>
-        <li><a href="#" v-show="page-2 > 0" v-on:click="page -= 2">{{page - 2}}</a></li>
-        <li><a href="#" v-show="page-1 > 0" v-on:click="page -= 1">{{page - 1}}</a></li>
+        <li><a href="#" v-show="page > 2" v-on:click="page -= 2">{{page - 2}}</a></li>
+        <li><a href="#" v-show="page > 1" v-on:click="page -= 1">{{page - 1}}</a></li>
         <li class="active"><span>{{page}}</span></li>
-        <li><a href="#" v-on:click="page += 1">{{page + 1}}</a></li>
-        <li><a href="#" v-on:click="page += 2">{{page + 2}}</a></li>
-        <li>
-          <a href="#" aria-label="Next">
+        <li><a href="#" v-show="page < totalPage" v-on:click="page += 1">{{page + 1}}</a></li>
+        <li><a href="#" v-show="page + 1 < totalPage" v-on:click="page += 2">{{page + 2}}</a></li>
+        <li :class="page < totalPage ? '':'disabled'">
+          <a href="#" aria-label="Next" v-on:click="page += (page < totalPage) ? 1:0">
             <span aria-hidden="true">&raquo;</span>
           </a>
         </li>
@@ -176,6 +176,8 @@ export default class CommonUser extends Vue {
   myEquipmentsLoanApplications = []
   mailsList = []
 
+  urreadMessage = 0
+
   searchMode = 'DeviceName'
   searchKey = ''
 
@@ -212,7 +214,35 @@ export default class CommonUser extends Vue {
     }
   }
 
-
+  get totalPage(){
+    let total_page = 1
+    switch(this.type){
+      case 'all_devices':
+        total_page = Math.floor(this.searchAllDevicesResult.length/10) + 1
+        break
+      case 'apply_history':
+        total_page = Math.floor(this.myLoanAppls.length/10) + 1
+        break
+      case 'loaned_devices':
+        total_page = Math.floor(this.myLoanApplsActive.length/10) + 1
+        break
+      case 'manage_devices':
+        total_page = Math.floor(this.searchMyDevicesResult.length/10) + 1
+        break
+      case 'manage_loan_apply':
+        total_page = Math.floor(this.filteredMyEquipmentsLoanApplications.length/10) + 1
+        break
+      case 'loaned_history':
+        total_page = Math.floor(30/10) + 1
+        break
+      case 'mailbox':
+        total_page = Math.floor(this.mailsList.length/10) + 1
+        break
+      default:
+        break
+    }
+    return total_page
+  }
 
   async getAllDevices () {
     try {
@@ -271,6 +301,9 @@ export default class CommonUser extends Vue {
     try{
       let response=await axios.get('/apis/mails/search')
       this.mailsList = response.data.reverse()
+      this.unreadMessage = this.mailsList.filter((mail) =>{
+          return mail.status === false
+      }).length
     }
     catch (e){
       this.$message.error(JSON.stringify(e.response.data))
@@ -361,13 +394,13 @@ export default class CommonUser extends Vue {
   }
 
   mounted () {
+    // 因为增加了未读站内信数量显示才会将getMails提前，如果有问题可以再更改顺序，但可能会出现查看某些页签时未读数量不显示的问题
+    this.getMails()
     this.getInfo()
     this.getAllDevices()
     this.getMyLoanApplications()
-    this.getMails()
   }
 }
-  // TODO: redirect
 
 </script>
 

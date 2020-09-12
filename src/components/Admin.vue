@@ -87,18 +87,18 @@
 
     <nav aria-label="Page navigation" v-if="type !== 'statistics'">
       <ul class="pagination">
-        <li :class="page - 1 > 0 ? '':'disabled'">
-          <a href="#" aria-label="Previous">
+        <li :class="page > 1 ? '':'disabled'">
+          <a href="#" aria-label="Previous" v-on:click="page -= (page > 1) ? 1:0">
             <span aria-hidden="true">&laquo;</span>
           </a>
         </li>
-        <li><a href="#" v-show="page-2 > 0" v-on:click="page -= 2">{{page - 2}}</a></li>
-        <li><a href="#" v-show="page-1 > 0" v-on:click="page -= 1">{{page - 1}}</a></li>
+        <li><a href="#" v-show="page > 2" v-on:click="page -= 2">{{page - 2}}</a></li>
+        <li><a href="#" v-show="page > 1" v-on:click="page -= 1">{{page - 1}}</a></li>
         <li class="active"><span>{{page}}</span></li>
-        <li><a href="#" v-on:click="page += 1">{{page + 1}}</a></li>
-        <li><a href="#" v-on:click="page += 2">{{page + 2}}</a></li>
-        <li>
-          <a href="#" aria-label="Next">
+        <li><a href="#" v-show="page < totalPage" v-on:click="page += 1">{{page + 1}}</a></li>
+        <li><a href="#" v-show="page + 1 < totalPage" v-on:click="page += 2">{{page + 2}}</a></li>
+        <li :class="page < totalPage ? '':'disabled'">
+          <a href="#" aria-label="Next" v-on:click="page += (page < totalPage) ? 1:0">
             <span aria-hidden="true">&raquo;</span>
           </a>
         </li>
@@ -168,6 +168,33 @@ export default class Admin extends Vue {
         return device.contact[0].match(this.searchKey)
       })
     }
+  }
+
+  get totalPage(){
+    let total_page = 1
+    switch(this.type){
+      case 'users':
+        total_page = Math.floor(this.searchUsers.length/10) + 1
+        break
+      case 'devices':
+        total_page = Math.floor(this.searchAllDevicesResult.length/10) + 1
+        break
+      case 'loan_apply':
+        total_page = Math.floor(this.search_loan_appls_list.length/10) + 1
+        break
+      case 'provider_apply':
+        total_page = Math.floor(this.provider_apply_list.length/10) + 1
+        break
+      case 'device_apply':
+        total_page = Math.floor(this.device_apply_list.length/10) + 1
+        break
+      case 'system_log':
+        total_page = Math.floor(this.system_log_list.length/10) + 1
+        break
+      default:
+        break
+    }
+    return total_page
   }
 
   async user_load () {
