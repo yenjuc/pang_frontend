@@ -75,7 +75,7 @@
         </a>
       </div>
       <div v-if="type === 'manage_loan_apply' && role === 'provider'">
-        <a v-for="(item,index) in myEquipmentsLoanApplications" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
+        <a v-for="(item,index) in myEquipmentsLoanApplications" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
           <loan-info :appl='item' :need_examine='item.status === "pending"'></loan-info>
         </a>
       </div>
@@ -206,7 +206,7 @@ export default class CommonUser extends Vue {
     try {
       let response = await axios.get('/apis/equipment/search/student')
       if (response.status === 200) {
-        this.devices_list = response.data.equipments
+        this.devices_list = response.data.equipments.reverse()
       }
     } catch (e) {
       this.$message.error(JSON.stringify(e.response.data.error)) // 在此处弹出提示框
@@ -258,7 +258,7 @@ export default class CommonUser extends Vue {
   async getMails(){
     try{
       let response=await axios.get('/apis/mails/search')
-      this.mailsList = response.data
+      this.mailsList = response.data.reverse()
     }
     catch (e){
       this.$message.error(JSON.stringify(e.response.data))
@@ -285,7 +285,7 @@ export default class CommonUser extends Vue {
     try {
       let response = await axios.get('/apis/equipment/search/provider')
       if (response.status === 200) {
-        this.provider_devices_list = response.data.equipments
+        this.provider_devices_list = response.data.equipments.reverse()
       }
     } catch (e) {
       this.$message.error(JSON.stringify(e.response.data.error)) // 在此处弹出提示框
@@ -312,7 +312,7 @@ export default class CommonUser extends Vue {
     try {
       let response = await axios.get('/apis/loan/my_equipments')
       if (response.status === 200) {
-        this.myEquipmentsLoanApplications = response.data
+        this.myEquipmentsLoanApplications = response.data.reverse()
       }
     } catch (e) {
       this.$message.error(JSON.stringify(e.response.data.error))

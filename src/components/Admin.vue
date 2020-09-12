@@ -58,9 +58,7 @@
         </a>
       </div>
       <div v-if="type === 'device_apply'">
-        <!-- v-for="(item,index) in lists" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item"-->
         <a v-for="(item,index) in device_apply_list"  :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
-          <!--device-info :device_name=item.equipment...></device-info-->
           <device-info @apply_equipment_load="getExaminingDevices" :device_name=item.name :device_contact=item.contact :device_id="item.id" :device_info="item.info"
           :need_examine="true" :deletable="false"></device-info>
         </a>
@@ -119,7 +117,6 @@ Vue.use(VueAxios, axios)
 export default class Admin extends Vue {
   type = this.$route.params.type || 'users'
   page = 1
-  list = []
   user_list=[]
   device_list=[]
   provider_apply_list=[]
@@ -179,7 +176,7 @@ export default class Admin extends Vue {
   async device_load() {
     try {
       let response = await axios.get('/apis/equipment/search/admin')
-      this.device_list = response.data.equipments
+      this.device_list = response.data.equipments.reverse()
     } catch (e) {
       this.$message.error(JSON.stringify(e.response.data.error)) // 弹框提醒
     }
@@ -213,7 +210,7 @@ export default class Admin extends Vue {
           examining: 'true'
         }
       })
-      this.provider_apply_list = this.res.data
+      this.provider_apply_list = this.res.data.reverse()
     } catch (e) {
       this.$message.error(JSON.stringify(e.response.data.error))
     }
@@ -223,12 +220,10 @@ export default class Admin extends Vue {
     try {
       let response = await axios.get(`/apis/equipment/search/${this.role}`)
       if (response.status === 200) {
-        let device_list=response.data.equipments
-        for(let device of device_list){
-          if(device.status === 'wait_on_shelf' && device.examining_status === 'Examining'){
-            this.device_apply_list.push(device)
-          }
-        }
+        let device_list=response.data.equipments.reverse()
+        this.device_apply_list = device_list.filter((device) => {
+          return device.status === 'wait_on_shelf' && device.examining_status === 'Examining'
+        })
       }
     } catch (e) {
       this.$message.error(JSON.stringify(e.response.data.error)) // 在此处弹出提示框
@@ -238,7 +233,7 @@ export default class Admin extends Vue {
   async systemlog_load () {
     try {
       this.res = await axios.get('/apis/logs/search')
-      this.system_log_list = this.res.data
+      this.system_log_list = this.res.data.reverse()
     } catch (e) {
       this.$message.error(JSON.stringify(e.response.data.error))
     }
