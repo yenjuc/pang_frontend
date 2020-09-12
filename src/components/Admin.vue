@@ -52,15 +52,9 @@
       </div>
       <div v-if="type === 'provider_apply'">
         <a v-for="(item,index) in provider_apply_list" :key="item.user_name" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
-          <user-info @apply_user_load="apply_user_load" :deletable="false" :username="item.user_name" :role="item.user_type" :need_examine="true"></user-info>
-          <div>
-            <ol>
-              <li>实验室信息：{{item.user_info_lab}}</li>
-              <li>联系电话：{{item.user_info_tel}}</li>
-              <li>地址：{{item.user_info_address}}</li>
-              <li>申请理由：{{item.user_info_description}}</li>
-            </ol>
-          </div>
+          <user-info @apply_user_load="apply_user_load" :username="item.user_name" :role="item.user_type" 
+          :userlab="item.user_info_lab" :usertel="item.user_info_tel" :useraddress="item.user_info_address" :userdescription="item.user_info_description"
+          :need_examine="true" :deletable="false" :show_detail="true"></user-info>
         </a>
       </div>
       <div v-if="type === 'device_apply'">
@@ -273,10 +267,6 @@ export default class Admin extends Vue {
   border-radius: 10px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
   width: 75%;
-}
-
-li{
-  list-style-type: none;
 }
 
 .searchBar{

@@ -241,7 +241,7 @@ export default class CommonUser extends Vue {
       Modal.success({content:'您的申请已通过','onOk':()=>this.confirm()})
     }
     if(this.userInfo['examining']==='Reject'){
-      Modal.error({content:`您的申请被拒绝${this.userInfo['reject']}`,'onOk':()=>this.confirm()})
+      Modal.error({content:`您的申请被拒绝：原因为“${this.userInfo['reject']}”`,'onOk':()=>this.confirm()})
     }
   }
 
