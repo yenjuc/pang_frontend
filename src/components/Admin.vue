@@ -79,6 +79,58 @@
           用户租借申请量
           ...
           -->
+        <div class='row' style='margin-top: 5ex'>
+          <div class='col-md-2' />
+          <div class='col-md-4'>
+            <h1><i class="fas fa-user"></i> 543</h1>
+            <h3>用户数量</h3>
+          </div>
+          <div class='col-md-4'>
+            <h1 class='text-primary'><i class="fas fa-user"></i> 21</h1>
+            <h3 class='text-primary'>设备提供者</h3>
+          </div>
+          <div class='col-md-2' />
+        </div>
+        <div class='row' style='margin-top: 5ex'>
+          <div class='col-md-4'>
+            <h1><i class="fas fa-box"></i> 987</h1>
+            <h3>设备总数</h3>
+          </div>
+          <div class='col-md-4'>
+            <h1 class='text-success'><i class="fas fa-box"></i> 654</h1>
+            <h3 class='text-success'>已上架设备数</h3>
+          </div>
+          <div class='col-md-4'>
+            <h1 class='text-warning'><i class="fas fa-box"></i> 321</h1>
+            <h3 class='text-warning'>待审核上架设备数</h3>
+          </div>
+        </div>
+        <div class='row' style='margin-top: 5ex'>
+          <div class='col-md-4'>
+            <h1><i class="far fa-sticky-note"></i> 1234</h1>
+            <h3>租借申请总数</h3>
+          </div>
+          <div class='col-md-4'>
+            <h1 class='text-success'><i class="far fa-sticky-note"></i> 567</h1>
+            <h3 class='text-success'>已通过租借申请数</h3>
+          </div>
+          <div class='col-md-4'>
+            <h1 class='text-warning'><i class="far fa-sticky-note"></i> 89</h1>
+            <h3 class='text-warning'>待审核租借申请数</h3>
+          </div>
+        </div>
+        <div class='row' style='margin-top: 5ex'>
+          <div class='col-md-2' />
+          <div class='col-md-4'>
+            <h1 class='text-muted'><i class="fas fa-history"></i> 123</h1>
+            <h3 class='text-muted'>过去一周租借完成数</h3>
+          </div>
+          <div class='col-md-4'>
+            <h1 class='text-muted'><i class="far fa-clock"></i> 45</h1>
+            <h3 class='text-muted'>未来一周租借预约数</h3>
+          </div>
+          <div class='col-md-2' />
+        </div>
       </div>
       <div v-if="type === 'system_log'">
         <a v-for="(item, index) in system_log_list" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
