@@ -47,14 +47,6 @@ export default class Logon extends Vue {
       }))
       if (response.status === 200) {
         await this.$router.push({path: '/login', query: {require_verif: this.email}})
-        try {
-          let response = await axios.post('/apis/logs/add', this.querystring.stringify({
-            type: 'Add',
-            detail: `用户${this.username}注册`
-          }))
-        } catch (e) {
-          this.$message.error(JSON.stringify(e.response.data.error))
-        }
         // 在此处弹出提示 注册成功
       }
     } catch (e) {
