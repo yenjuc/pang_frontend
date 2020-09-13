@@ -122,7 +122,7 @@ export default class LoanInfo extends Vue {
         the reason is ${this.appl.response}`, type:'LoanReturn',relatedID:this.appl.id}))
       }
     } catch (e) {
-      this.$message.error(e.response.data.error);
+      this.$message.error(JSON.stringify(e.response.data.error));
     }
   }
 
@@ -137,7 +137,7 @@ export default class LoanInfo extends Vue {
         this.$message.success('已成功标记为归还');
       }
     } catch (e) {
-      this.$message.error(e.response.data.error);
+      this.$message.error(JSON.stringify(e.response.data.error));
     }
   }
 

@@ -143,7 +143,7 @@
       </ul>
     </nav>
 
-    <a href='/login'><div class="logout">
+    <a @click="logout" href='/login'><div class="logout">
       <i class="fas fa-sign-out-alt" title="登出"></i>
     </div></a>
   </div>
@@ -308,7 +308,7 @@ export default class CommonUser extends Vue {
       await axios.post('/apis/users/confirm/apply')
     }
     catch (e){
-      this.$message.error(JSON.stringify(e.response.data))
+      this.$message.error(JSON.stringify(e.response.data.error))
     }
   }
 
@@ -321,7 +321,7 @@ export default class CommonUser extends Vue {
       }).length
     }
     catch (e){
-      this.$message.error(JSON.stringify(e.response.data))
+      this.$message.error(JSON.stringify(e.response.data.error))
     }
   }
 
@@ -336,7 +336,7 @@ export default class CommonUser extends Vue {
       this.showMailPanel=!this.showMailPanel
     }
     catch (e) {
-      this.$message.error(JSON.stringify(e.response.data))
+      this.$message.error(JSON.stringify(e.response.data.error))
     }
   }
 
@@ -352,7 +352,7 @@ export default class CommonUser extends Vue {
       this.$message.success('申请成功！等待管理员审核中')
     }
     catch (e){
-      this.$message.error(JSON.stringify(e.response.data))
+      this.$message.error(JSON.stringify(e.response.data.error))
     }
   }
 
@@ -421,6 +421,15 @@ export default class CommonUser extends Vue {
       }
     } catch (e) {
       this.$message.error(JSON.stringify(e.response.data.error)) // 在此处弹出提示框
+    }
+  }
+
+  async logout(){
+    try{
+      await axios.post('/apis/users/logout')
+    }
+    catch (e) {
+      this.$message.error(JSON.stringify(e.response.data.error))
     }
   }
 

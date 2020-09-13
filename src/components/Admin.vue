@@ -61,7 +61,7 @@
       </div>
       <div v-if="type === 'provider_apply'">
         <a v-for="(item,index) in provider_apply_list" :key="item.user_name" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
-          <user-info @apply_user_load="apply_user_load" :username="item.user_name" :role="item.user_type" 
+          <user-info @apply_user_load="apply_user_load" :username="item.user_name" :role="item.user_type"
           :userlab="item.user_info_lab" :usertel="item.user_info_tel" :useraddress="item.user_info_address" :userdescription="item.user_info_description"
           :need_examine="true" :deletable="false" :show_detail="true"></user-info>
         </a>
@@ -153,7 +153,7 @@
       </ul>
     </nav>
 
-    <a href='/login'><div class="logout">
+    <a  @click="logout" href='/login'><div class="logout">
       <i class="fas fa-sign-out-alt" title="登出"></i>
     </div></a>
   </div>
@@ -349,7 +349,16 @@ export default class Admin extends Vue {
       let response = await axios.get('/apis/admin/statistics')
       if (response.status === 200) this.stats = response.data
     } catch (e) {
-      this.$message.error(e.response.data.error)
+      this.$message.error(JSON.stringify(e.response.data.error))
+    }
+  }
+
+  async logout(){
+    try{
+      await axios.post('/apis/users/logout')
+    }
+    catch (e) {
+      this.$message.error(JSON.stringify(e.response.data.error))
     }
   }
 

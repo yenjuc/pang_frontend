@@ -313,7 +313,7 @@ export default class DeviceInfo extends Vue {
     }
     }
     catch (e){
-      this.$message.error(JSON.stringify(e.response.data))
+      this.$message.error(JSON.stringify(e.response.data.error))
     }
   }
 }
