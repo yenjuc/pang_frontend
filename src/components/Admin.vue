@@ -5,7 +5,7 @@
       <li role="presentation" :class="type === 'devices'? 'active' : '' "><a href="/admin/devices">管理设备</a></li>
       <li role="presentation" :class="type === 'loan_apply'? 'active' : '' "><a href="/admin/loan_apply">管理租借申请</a></li>
       <li role="presentation" :class="type === 'provider_apply'? 'active' : '' "><a href="/admin/provider_apply">
-        管理提供者申请 <span class="badge">{{provider_apply_list.length ? device_apply_list.length : ''}}</span></a></li>
+        管理提供者申请 <span class="badge">{{provider_apply_list.length ? provider_apply_list.length : ''}}</span></a></li>
       <li role="presentation" :class="type === 'device_apply'? 'active' : '' "><a href="/admin/device_apply">
         管理设备上架 <span class="badge">{{device_apply_list.length ? device_apply_list.length : ''}}</span></a></li>
       <li role="presentation" :class="type === 'statistics'? 'active' : '' "><a href="/admin/statistics">平台数据一览</a></li>
@@ -73,12 +73,6 @@
         </a>
       </div>
       <div v-if="type === 'statistics'">
-        <!--
-          设备提供商/用户数
-          可用设备/上架设备/所有设备
-          用户租借申请量
-          ...
-          -->
         <div class='row' style='margin-top: 5ex'>
           <div class='col-md-2' />
           <div class='col-md-4'>

@@ -100,6 +100,23 @@
         <button class="add_button" v-on:click="addEquipment()">Add Device</button>
       </div>
       <div v-if="type === 'mailbox'">
+        <div style=" background-color: rgba(0,0,0,0.05); border-radius: 4px">
+          <div class="foldBar" v-on:click="showMailPanel = !showMailPanel">{{showMailPanel ? '收起发信面板↑':'打开发信面板↓'}}</div>
+          <div v-if="showMailPanel" style='display: contents; width: 100%'>
+            <h5>收件人：</h5>
+            <textarea rows='1' class='form-control' placeholder='收件用户…'
+              style='margin-bottom: 6px; width: 90%; margin: 10px 5%; resize: none'
+              v-model='reviewResponse'></textarea>
+            <h5>信件内容：</h5>
+            <textarea rows='7' class='form-control' placeholder='信件内容…'
+              style='margin-bottom: 6px; width: 90%; margin: 10px 5%'
+              v-model='reviewResponse'></textarea>
+            <br>
+            <button type="button" class="btn btn-primary" style="margin: 0 auto 25px">
+              <i class="fas fa-paper-plane"></i> 提交
+            </button>
+          </div>
+        </div>
         <a v-for="(item,index) in mailsList" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
           <mail @mails_confirm="getMails" :sender="item.sender" :detail="item.detail" :send_time="item.time" :id="item.id" :status="item.status" :type="item.type" :related-i-d="item.relatedID"></mail>
         </a>
@@ -167,6 +184,8 @@ export default class CommonUser extends Vue {
 
   pendingLoanApplications = 0
   unreadMessage = 0
+
+  showMailPanel = false
 
   searchMode = 'DeviceName'
   searchKey = ''
@@ -263,6 +282,7 @@ export default class CommonUser extends Vue {
     }
     catch (e){
       this.$message.error('getInfo:error')
+      await this.$router.push('/login')
     }
   }
 
@@ -383,8 +403,8 @@ export default class CommonUser extends Vue {
 
   mounted () {
     // 因为增加了未读站内信数量显示才会将getMails提前，如果有问题可以再更改顺序，但可能会出现查看某些页签时未读数量不显示的问题
-    this.getMails()
     this.getInfo()
+    this.getMails()
     this.getAllDevices()
     this.getMyLoanApplications()
   }
@@ -457,4 +477,17 @@ export default class CommonUser extends Vue {
   background: #0091FF;
   cursor: pointer;
 }
+
+.foldBar{
+  cursor: pointer;
+  padding: 10px 20px;
+  margin: 5px 0 15px;
+  text-align: right;
+  background-color: rgba(0,0,0,0.05);
+}
+
+.foldBar:hover{
+  background-color: rgba(0,0,0,0.2);
+}
+
 </style>
