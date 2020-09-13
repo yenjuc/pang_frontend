@@ -102,7 +102,7 @@
       <div v-if="type === 'mailbox'">
         <div style=" background-color: rgba(0,0,0,0.05); border-radius: 4px">
           <div class="foldBar" v-on:click="showMailPanel = !showMailPanel">{{showMailPanel ? '收起发信面板↑':'打开发信面板↓'}}</div>
-          <div v-if="showMailPanel" style='display: contents; width: 100%'>
+          <div v-show="showMailPanel" style='display: contents; width: 100%'>
             <h5>收件人：</h5>
             <textarea rows='1' class='form-control' placeholder='收件用户…'
               style='margin-bottom: 6px; width: 90%; margin: 10px 5%; resize: none'
@@ -144,7 +144,7 @@
     </nav>
 
     <a href='/login'><div class="logout">
-      <i class="fas fa-sign-out-alt" title="登出" v-on:click="logout"></i>
+      <i class="fas fa-sign-out-alt" title="登出"></i>
     </div></a>
   </div>
 </template>
