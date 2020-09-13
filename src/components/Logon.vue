@@ -29,9 +29,9 @@ import {Component, Vue} from 'vue-property-decorator'
 
 @Component
 export default class Logon extends Vue {
-  username = 'pwf18'
-  password = '123456'
-  email = 'diana_pwf@163.com'
+  username = ''
+  password = ''
+  email = ''
 
   loading = false
 
