@@ -100,6 +100,9 @@
         <button class="add_button" v-on:click="addEquipment()">Add Device</button>
       </div>
       <div v-if="type === 'mailbox'">
+        <div class="searchBar">
+          <input type="text" placeholder="Search by sender of content..." v-model="searchKey"/>
+        </div>
         <div style=" background-color: rgba(0,0,0,0.05); border-radius: 4px">
           <div class="foldBar" v-on:click="showMailPanel = !showMailPanel">{{showMailPanel ? '收起发信面板↑':'打开发信面板↓'}}</div>
           <div v-show="showMailPanel" style='display: contents; width: 100%'>
@@ -117,7 +120,7 @@
             </button>
           </div>
         </div>
-        <a v-for="(item,index) in mailsList" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
+        <a v-for="(item,index) in searchMail" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
           <mail @mails_confirm="getMails" :sender="item.sender" :detail="item.detail" :send_time="item.time" :id="item.id" :status="item.status" :type="item.type" :related-i-d="item.relatedID"></mail>
         </a>
       </div>
@@ -193,7 +196,6 @@ export default class CommonUser extends Vue {
   showMailPanel = false
   mailReceiver = ''
   mailContent = ''
-  // TODO: 发送站内信
 
   searchMode = 'DeviceName'
   searchKey = ''
@@ -231,28 +233,32 @@ export default class CommonUser extends Vue {
     }
   }
 
-
+  get searchMail(){
+    return this.mailsList.filter((mail) => {
+      return mail.sender.match(this.searchKey) || mail.detail.match(this.searchKey)
+    })
+  }
 
   get totalPage(){
     let total_page = 1
     switch(this.type){
       case 'all_devices':
-        total_page = Math.floor(this.searchAllDevicesResult.length/10) + 1
+        total_page = Math.floor(this.searchAllDevicesResult.length/10) + (this.searchAllDevicesResult.length % 10 === 0 ? 0 : 1)
         break
       case 'apply_history':
-        total_page = Math.floor(this.myLoanAppls.length/10) + 1
+        total_page = Math.floor(this.myLoanAppls.length/10) + (this.myLoanAppls.length % 10 === 0 ? 0 : 1)
         break
       case 'loaned_devices':
-        total_page = Math.floor(this.myLoanApplsActive.length/10) + 1
+        total_page = Math.floor(this.myLoanApplsActive.length/10) + (this.myLoanApplsActive.length % 10 === 0 ? 0 : 1)
         break
       case 'manage_devices':
-        total_page = Math.floor(this.searchMyDevicesResult.length/10) + 1
+        total_page = Math.floor(this.searchMyDevicesResult.length/10) + (this.searchMyDevicesResult.length % 10 === 0 ? 0 : 1)
         break
       case 'manage_loan_apply':
-        total_page = Math.floor(this.filteredMyEquipmentsLoanApplications.length/10) + 1
+        total_page = Math.floor(this.filteredMyEquipmentsLoanApplications.length/10) + (this.filteredMyEquipmentsLoanApplications.length % 10 === 0 ? 0 : 1)
         break
       case 'mailbox':
-        total_page = Math.floor(this.mailsList.length/10) + 1
+        total_page = Math.floor(this.searchMail.length/10) + (this.searchMail.length % 10 === 0 ? 0 : 1)
         break
       default:
         break

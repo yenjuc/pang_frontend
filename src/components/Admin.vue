@@ -252,22 +252,22 @@ export default class Admin extends Vue {
     let total_page = 1
     switch(this.type){
       case 'users':
-        total_page = Math.floor(this.searchUsers.length/10) + 1
+        total_page = Math.floor(this.searchUsers.length/10) + (this.searchUsers.length % 10 === 0 ? 0 : 1)
         break
       case 'devices':
-        total_page = Math.floor(this.searchAllDevicesResult.length/10) + 1
+        total_page = Math.floor(this.searchAllDevicesResult.length/10) + (this.searchAllDevicesResult.length % 10 === 0 ? 0 : 1)
         break
       case 'loan_apply':
-        total_page = Math.floor(this.search_loan_appls_list.length/10) + 1
+        total_page = Math.floor(this.search_loan_appls_list.length/10) + (this.search_loan_appls_list.length % 10 === 0 ? 0 : 1)
         break
       case 'provider_apply':
-        total_page = Math.floor(this.provider_apply_list.length/10) + 1
+        total_page = Math.floor(this.provider_apply_list.length/10) + (this.provider_apply_list.length % 10 === 0 ? 0 : 1)
         break
       case 'device_apply':
-        total_page = Math.floor(this.device_apply_list.length/10) + 1
+        total_page = Math.floor(this.device_apply_list.length/10) + (this.device_apply_list.length % 10 === 0 ? 0 : 1)
         break
       case 'system_log':
-        total_page = Math.floor(this.searchLog/10) + 1
+        total_page = Math.floor(this.searchLog.length/10) + (this.searchLog.length % 10 === 0 ? 0 : 1)
         break
       default:
         break
