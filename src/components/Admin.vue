@@ -42,7 +42,7 @@
         </div>
         <a v-for="(item,index) in searchAllDevicesResult" :key="item.id" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
           <device-info :device_id=item.id :device_name=item.name :device_info=item.info :device_contact=item.contact :device_occs=item.occupancies
-           :device_status=item.status :editable="true" :deletable="true"></device-info>
+           :device_status=item.status :admin="true" :shelf_op="true" :editable="true" :deletable="true"></device-info>
         </a>
       </div>
       <div v-if="type === 'loan_apply'">

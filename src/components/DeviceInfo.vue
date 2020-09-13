@@ -62,7 +62,7 @@
         </button>
       </div>
 
-      <div v-if="editable && device_status_updated === 'exist'">
+      <div v-if="editable && (admin || device_status_updated === 'exist')">
         <button type="button" class="btn btn-default" v-on:click="showEdit = !showEdit; editName = device_name_updated; editInfo = device_info_updated">
           <i class="fas fa-edit"></i>
         </button>
@@ -74,7 +74,7 @@
       </div>
     </div>
 
-    <div class="pop_panel" id="edit_panel" v-if="showEdit && device_status_updated === 'exist'">
+    <div class="pop_panel" id="edit_panel" v-if="showEdit && (admin || device_status_updated === 'exist')">
       <div class="input-group">
         <span class="input-group-addon"><i class="fas fa-tablet-alt"></i></span>
         <input type="text" class="form-control" placeholder="Edit Device Name" v-model="editName">
@@ -153,6 +153,8 @@ export default class DeviceInfo extends Vue {
   loanEndDate = ''
   loanEndTime = '00:00:00'
   loanStatement = ''
+
+  @Prop({type: Boolean}) admin
 
   @Prop({type: Number}) device_id
   @Prop({type: String}) device_name
