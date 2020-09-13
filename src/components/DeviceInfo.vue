@@ -298,6 +298,7 @@ export default class DeviceInfo extends Vue {
       this.$message.error('起始日期需要早于结束日期');
       return;
     }
+    try{
     const response = await axios.post(
       '/apis/loan/create', querystring.stringify({
         equipment: this.device_id,
@@ -309,6 +310,10 @@ export default class DeviceInfo extends Vue {
     if (response.status === 200) {
       // await this.$router.push('/apply_history');
       window.location = '/apply_history';
+    }
+    }
+    catch (e){
+      this.$message.error(JSON.stringify(e.response.data))
     }
   }
 }

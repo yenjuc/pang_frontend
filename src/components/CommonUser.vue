@@ -112,7 +112,7 @@
               style='margin-bottom: 6px; width: 90%; margin: 10px 5%'
               v-model='mailContent'></textarea>
             <br>
-            <button type="button" class="btn btn-primary" style="margin: 0 auto 25px">
+            <button type="button" @click="sendMails" class="btn btn-primary" style="margin: 0 auto 25px">
               <i class="fas fa-paper-plane"></i> 提交
             </button>
           </div>
@@ -229,6 +229,8 @@ export default class CommonUser extends Vue {
     }
   }
 
+
+
   get totalPage(){
     let total_page = 1
     switch(this.type){
@@ -306,7 +308,7 @@ export default class CommonUser extends Vue {
       await axios.post('/apis/users/confirm/apply')
     }
     catch (e){
-      this.$message.error('confirm:error')
+      this.$message.error(JSON.stringify(e.response.data))
     }
   }
 
@@ -323,6 +325,21 @@ export default class CommonUser extends Vue {
     }
   }
 
+  async sendMails(){
+    try {
+      await axios.post('/apis/mails/add', this.querystring.stringify({
+        receiver: this.mailReceiver, detail: this.mailContent,
+        type: 'Hint'
+      }))
+      this.$message.success('消息发送成功')
+      this.getMails()
+      this.showMailPanel=!this.showMailPanel
+    }
+    catch (e) {
+      this.$message.error(JSON.stringify(e.response.data))
+    }
+  }
+
   async applyProvider(){
     try{
       let querystring=require('querystring')
@@ -335,7 +352,7 @@ export default class CommonUser extends Vue {
       this.$message.success('申请成功！等待管理员审核中')
     }
     catch (e){
-      this.$message.error('applyProvider:error')
+      this.$message.error(JSON.stringify(e.response.data))
     }
   }
 

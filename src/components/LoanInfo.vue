@@ -118,7 +118,7 @@ export default class LoanInfo extends Vue {
         this.appl.status = (this.reviewApprove ? 'approved' : 'rejected');
         this.appl.response = this.reviewResponse;
         // 发送站内信
-        await axios.post('/apis/mails/add',querystring.stringify({receiver:this.appl.applicant.username,detail:`your application for equipment${this.appl.equipment.name} is ${this.appl.status}，
+        await axios.post('/apis/mails/add',querystring.stringify({receiver:this.appl.applicant.username,detail:`your application for equipment ${this.appl.equipment.name} is ${this.appl.status}，
         the reason is ${this.appl.response}`, type:'LoanReturn',relatedID:this.appl.id}))
       }
     } catch (e) {
