@@ -153,7 +153,7 @@
       </ul>
     </nav>
 
-    <a @click='logout' href='/login'><div class="logout">
+    <a @click='logout'><div class="logout">
       <span style='margin-right: 0.5em; margin-top: -1ex;
         position: relative; top: 0.5ex'>{{ userInfo['name'] }}</span>
       <i class="fas fa-sign-out-alt" title="登出"></i>
@@ -358,6 +358,7 @@ export default class Admin extends Vue {
   async logout(){
     try{
       await axios.post('/apis/users/logout')
+      this.$router.push('/login')
     }
     catch (e) {
       this.$message.error(JSON.stringify(e.response.data.error))
