@@ -76,51 +76,51 @@
         <div class='row' style='margin-top: 5ex'>
           <div class='col-md-2' />
           <div class='col-md-4'>
-            <h1><i class="fas fa-user"></i> 543</h1>
+            <h1><i class="fas fa-user"></i> {{ stats.user_count }}</h1>
             <h3>用户数量</h3>
           </div>
           <div class='col-md-4'>
-            <h1 class='text-primary'><i class="fas fa-user"></i> 21</h1>
+            <h1 class='text-primary'><i class="fas fa-user"></i> {{ stats.provider_count }}</h1>
             <h3 class='text-primary'>设备提供者</h3>
           </div>
           <div class='col-md-2' />
         </div>
         <div class='row' style='margin-top: 5ex'>
           <div class='col-md-4'>
-            <h1><i class="fas fa-box"></i> 987</h1>
+            <h1><i class="fas fa-box"></i> {{ stats.devices_count }}</h1>
             <h3>设备总数</h3>
           </div>
           <div class='col-md-4'>
-            <h1 class='text-success'><i class="fas fa-box"></i> 654</h1>
+            <h1 class='text-success'><i class="fas fa-box"></i> {{ stats.on_shelf_count }}</h1>
             <h3 class='text-success'>已上架设备数</h3>
           </div>
           <div class='col-md-4'>
-            <h1 class='text-warning'><i class="fas fa-box"></i> 321</h1>
+            <h1 class='text-warning'><i class="fas fa-box"></i> {{ stats.wait_on_shelf_count }}</h1>
             <h3 class='text-warning'>待审核上架设备数</h3>
           </div>
         </div>
         <div class='row' style='margin-top: 5ex'>
           <div class='col-md-4'>
-            <h1><i class="far fa-sticky-note"></i> 1234</h1>
+            <h1><i class="far fa-sticky-note"></i> {{ stats.appls_count }}</h1>
             <h3>租借申请总数</h3>
           </div>
           <div class='col-md-4'>
-            <h1 class='text-success'><i class="far fa-sticky-note"></i> 567</h1>
+            <h1 class='text-success'><i class="far fa-sticky-note"></i> {{ stats.appls_approved_count }}</h1>
             <h3 class='text-success'>已通过租借申请数</h3>
           </div>
           <div class='col-md-4'>
-            <h1 class='text-warning'><i class="far fa-sticky-note"></i> 89</h1>
+            <h1 class='text-warning'><i class="far fa-sticky-note"></i> {{ stats.appls_pending_count }}</h1>
             <h3 class='text-warning'>待审核租借申请数</h3>
           </div>
         </div>
         <div class='row' style='margin-top: 5ex'>
           <div class='col-md-2' />
           <div class='col-md-4'>
-            <h1 class='text-muted'><i class="fas fa-history"></i> 123</h1>
+            <h1 class='text-muted'><i class="fas fa-history"></i> {{ stats.last_week_appls_count }}</h1>
             <h3 class='text-muted'>过去一周租借完成数</h3>
           </div>
           <div class='col-md-4'>
-            <h1 class='text-muted'><i class="far fa-clock"></i> 45</h1>
+            <h1 class='text-muted'><i class="far fa-clock"></i> {{ stats.next_week_appls_count }}</h1>
             <h3 class='text-muted'>未来一周租借预约数</h3>
           </div>
           <div class='col-md-2' />
@@ -193,6 +193,8 @@ export default class Admin extends Vue {
 
   filterLoanApplState = 'all'
   filterLoanApplDevice = ''
+
+  stats = {}
 
   get searchUsers(){
     if (this.searchUserMode === 'All'){
@@ -342,6 +344,15 @@ export default class Admin extends Vue {
     }
   }
 
+  async stats_load () {
+    try {
+      let response = await axios.get('/apis/admin/statistics')
+      if (response.status === 200) this.stats = response.data
+    } catch (e) {
+      this.$message.error(e.response.data.error)
+    }
+  }
+
   async systemlog_load () {
     try {
       this.res = await axios.get('/apis/logs/search')
@@ -357,6 +368,7 @@ export default class Admin extends Vue {
     this.getInfo()
     this.device_load()
     this.loan_appls_load()
+    this.stats_load()
     this.systemlog_load()
   }
 
