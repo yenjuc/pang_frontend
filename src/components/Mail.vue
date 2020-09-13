@@ -1,6 +1,7 @@
 <template>
+<div>
+  <span class="badge" style="height: 18px; background-color: red" v-if="!status">!</span>
   <div class="mail" style="display: flex">
-    <span class="badge" style="height: 18px; background-color: red" v-if="!status">!</span>
       <div class="info_block">
         <h4 class="list-group-item-heading">{{sender}}</h4>
         <div class="detailedinfo">
@@ -26,6 +27,7 @@
         </button>
       </div>
   </div>
+</div>
 </template>
 
 <script>
