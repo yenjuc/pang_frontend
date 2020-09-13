@@ -6,8 +6,7 @@
       <li role="presentation" :class="type === 'loaned_devices'? 'active' : '' "><a href="/loaned_devices">查看已借设备</a></li>
       <li v-if="role !== 'provider'" role="presentation" :class="type === 'apply_provider'? 'active' : '' "><a href="/apply_provider">申请成为设备提供者</a></li>
       <li v-if="role === 'provider'" role="presentation" :class="type === 'manage_devices'? 'active' : '' "><a href="/manage_devices">管理自己的设备</a></li>
-      <li v-if="role === 'provider'" role="presentation" :class="type === 'manage_loan_apply'? 'active' : '' "><a href="/manage_loan_apply">审核租借申请 <span class="badge">{{pendingLoanApplications ? pendingLoanApplications : ''}}</span></a></li>
-      <li v-if="role === 'provider'" role="presentation" :class="type === 'loaned_history'? 'active' : '' "><a href="/loaned_history">已借出设备历史</a></li>
+      <li v-if="role === 'provider'" role="presentation" :class="type === 'manage_loan_apply'? 'active' : '' "><a href="/manage_loan_apply">租借申请与借出历史 <span class="badge">{{pendingLoanApplications ? pendingLoanApplications : ''}}</span></a></li>
       <li v-if="role === 'provider'" role="presentation" :class="type === 'add_device'? 'active' : '' "><a href="/add_device">增加设备</a></li>
       <li role="presentation" :class="type === 'mailbox'? 'active' : '' "><a href="/mailbox">站内信 <span class="badge">{{unreadMessage ? unreadMessage : ''}}</span></a></li>
     </ul>
@@ -78,24 +77,14 @@
         <div class="searchBar">
          <form>
           <select name="filterLoanApplState" style="margin: 0 10px" v-model="filterLoanApplState">
-            <option v-for='s in ["all", "pending", "rejected", "approved", "prefinish", "finish"]'
-              :value='s' :key='s'>{{ s }}</option>
+            <option v-for='s in ["all", "pending", "rejected", "approved", "prefinish", "finished"]'
+              :value='s' :key='s'>{{ s === 'prefinish' ? 'returned' : s }}</option>
           </select>
           <input type="text" placeholder="Search by device name or username..." v-model="filterLoanApplDevice"/>
         </form>
         </div>
         <a v-for="(item,index) in filteredMyEquipmentsLoanApplications" :key='index' v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
           <loan-info :appl='item' :need_examine='item.status === "pending"'></loan-info>
-        </a>
-      </div>
-      <div v-if="type === 'loaned_history' && role === 'provider'">
-        <!-- v-for="(item,index) in lists" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item"-->
-        <a v-for="index of 30" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
-          <!--device-info :device_name...></device-info-->
-          <device-info device_name="test device name" device_address="test device address" device_timeout="test timeout" :device_contact=test></device-info>
-          <div class="status_tag">
-            <span class="label label-primary">Status</span>
-          </div>
         </a>
       </div>
       <div class="apply_panel" v-if="type === 'add_device' && role === 'provider'">
@@ -233,9 +222,6 @@ export default class CommonUser extends Vue {
       case 'manage_loan_apply':
         total_page = Math.floor(this.filteredMyEquipmentsLoanApplications.length/10) + 1
         break
-      case 'loaned_history':
-        total_page = Math.floor(30/10) + 1
-        break
       case 'mailbox':
         total_page = Math.floor(this.mailsList.length/10) + 1
         break
@@ -345,8 +331,7 @@ export default class CommonUser extends Vue {
       if (response.status === 200) {
         this.myLoanAppls = response.data
         this.myLoanApplsActive = this.myLoanAppls.filter(
-          (appl) => appl.status === 'approved' &&
-            appl.end_time * 1000 >= Date.now()
+          (appl) => (appl.status === 'approved' || appl.status === 'prefinish')
         )
       }
     } catch (e) {

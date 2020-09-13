@@ -5,10 +5,10 @@
         <h4 class="list-group-item-heading">
           <span>(#{{appl.id}}) {{appl.equipment.name}}</span>
           <span v-if='timer'
-            :class="'label label-' + (countdown() < 0 ? 'warning' : 'success')">
+            :class="'label label-' + (countdown() < 0 ? 'warning' : countdown() === 0 ? 'danger' : 'success')">
               距{{ countdown() < 0 ? '开始' : '归还' }} {{ Math.ceil(Math.abs(countdown()) / 86400000) }} 天
           </span>
-          <span v-else
+          <span v-if='!timer || appl.status === "prefinish"'
             :class="'label label-' + (appl.status === 'pending' ? 'default' :
             (appl.status === 'approved' ? 'success' :
              appl.status === 'prefinish' ? 'warning' :

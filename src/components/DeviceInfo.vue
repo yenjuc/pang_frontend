@@ -289,11 +289,11 @@ export default class DeviceInfo extends Vue {
     const startDate = new Date(this.loanStartDate + ' ' + this.loanStartTime)
     const endDate = new Date(this.loanEndDate + ' ' + this.loanEndTime)
     if (!isFinite(startDate) || !isFinite(endDate)) {
-      alert('无效日期');
+      this.$message.error('无效日期');
       return;
     }
     if (startDate >= endDate) {
-      alert('起始日期需要早于结束日期');
+      this.$message.error('起始日期需要早于结束日期');
       return;
     }
     const response = await axios.post(
