@@ -11,7 +11,10 @@
           <span v-else
             :class="'label label-' + (appl.status === 'pending' ? 'default' :
             (appl.status === 'approved' ? 'success' :
-             appl.status === 'prefinish' ? 'warning' : 'danger'))">{{ appl.status }}</span>
+             appl.status === 'prefinish' ? 'warning' :
+             appl.status === 'finished' ? 'primary' : 'danger'))">{{
+              appl.status === 'prefinish' ? 'returned' :
+              appl.status }}</span>
         </h4>
         <div style="display: inline-block">
           <div class="detailedinfo">

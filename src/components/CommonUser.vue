@@ -6,7 +6,7 @@
       <li role="presentation" :class="type === 'loaned_devices'? 'active' : '' "><a href="/loaned_devices">查看已借设备</a></li>
       <li v-if="role !== 'provider'" role="presentation" :class="type === 'apply_provider'? 'active' : '' "><a href="/apply_provider">申请成为设备提供者</a></li>
       <li v-if="role === 'provider'" role="presentation" :class="type === 'manage_devices'? 'active' : '' "><a href="/manage_devices">管理自己的设备</a></li>
-      <li v-if="role === 'provider'" role="presentation" :class="type === 'manage_loan_apply'? 'active' : '' "><a href="/manage_loan_apply">审核租借申请</a></li>
+      <li v-if="role === 'provider'" role="presentation" :class="type === 'manage_loan_apply'? 'active' : '' "><a href="/manage_loan_apply">审核租借申请 <span class="badge">{{pendingLoanApplications ? pendingLoanApplications : ''}}</span></a></li>
       <li v-if="role === 'provider'" role="presentation" :class="type === 'loaned_history'? 'active' : '' "><a href="/loaned_history">已借出设备历史</a></li>
       <li v-if="role === 'provider'" role="presentation" :class="type === 'add_device'? 'active' : '' "><a href="/add_device">增加设备</a></li>
       <li role="presentation" :class="type === 'mailbox'? 'active' : '' "><a href="/mailbox">站内信 <span class="badge">{{unreadMessage ? unreadMessage : ''}}</span></a></li>
@@ -176,7 +176,8 @@ export default class CommonUser extends Vue {
   myEquipmentsLoanApplications = []
   mailsList = []
 
-  urreadMessage = 0
+  pendingLoanApplications = 0
+  unreadMessage = 0
 
   searchMode = 'DeviceName'
   searchKey = ''
@@ -342,7 +343,7 @@ export default class CommonUser extends Vue {
     try {
       let response = await axios.get('/apis/loan/my')
       if (response.status === 200) {
-        this.myLoanAppls = response.data.reverse()
+        this.myLoanAppls = response.data
         this.myLoanApplsActive = this.myLoanAppls.filter(
           (appl) => appl.status === 'approved' &&
             appl.end_time * 1000 >= Date.now()
@@ -357,7 +358,9 @@ export default class CommonUser extends Vue {
     try {
       let response = await axios.get('/apis/loan/my_equipments')
       if (response.status === 200) {
-        this.myEquipmentsLoanApplications = response.data.reverse()
+        this.myEquipmentsLoanApplications = response.data
+        this.pendingLoanApplications =
+          this.myEquipmentsLoanApplications.filter((a) => a.status === 'pending').length
       }
     } catch (e) {
       this.$message.error(JSON.stringify(e.response.data.error))
