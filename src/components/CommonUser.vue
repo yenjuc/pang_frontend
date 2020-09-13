@@ -106,11 +106,11 @@
             <h5>收件人：</h5>
             <textarea rows='1' class='form-control' placeholder='收件用户…'
               style='margin-bottom: 6px; width: 90%; margin: 10px 5%; resize: none'
-              v-model='reviewResponse'></textarea>
+              v-model='mailReceiver'></textarea>
             <h5>信件内容：</h5>
             <textarea rows='7' class='form-control' placeholder='信件内容…'
               style='margin-bottom: 6px; width: 90%; margin: 10px 5%'
-              v-model='reviewResponse'></textarea>
+              v-model='mailContent'></textarea>
             <br>
             <button type="button" class="btn btn-primary" style="margin: 0 auto 25px">
               <i class="fas fa-paper-plane"></i> 提交
@@ -186,6 +186,9 @@ export default class CommonUser extends Vue {
   unreadMessage = 0
 
   showMailPanel = false
+  mailReceiver = ''
+  mailContent = ''
+  // TODO: 发送站内信
 
   searchMode = 'DeviceName'
   searchKey = ''
