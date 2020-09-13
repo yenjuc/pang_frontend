@@ -127,7 +127,16 @@
         </div>
       </div>
       <div v-if="type === 'system_log'">
-        <a v-for="(item, index) in system_log_list" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
+        <div class="searchBar">
+         <form>
+          <select name="searchLogMode" style="margin: 0 10px" v-model="searchLogMode">
+            <option v-for='s in ["All", "Add", "Delete", "Change"]'
+              :value='s' :key='s'>{{ s }}</option>
+          </select>
+          <input type="text" placeholder="Search System Log by Operator Name..." v-model="searchKey"/>
+        </form>
+        </div>
+        <a v-for="(item, index) in searchLog" :key="index" v-show="index >= (page-1)*10 && index < page*10" class="list-group-item">
           <log :detail=item.detail :type=item.type :operator=item.operator :operate_time=item.time></log>
         </a>
       </div>
@@ -191,6 +200,7 @@ export default class Admin extends Vue {
 
   searchUserMode = 'All'
   searchDeviceMode = 'DeviceName'
+  searchLogMode = 'All'
   searchKey = ''
 
   filterLoanApplState = 'all'
@@ -226,6 +236,18 @@ export default class Admin extends Vue {
     }
   }
 
+  get searchLog(){
+    if(this.searchLogMode === 'All'){
+      return this.system_log_list.filter((log) => {
+        return log.operator.match(this.searchKey)
+      })
+    } else {
+      return this.system_log_list.filter((log) => {
+        return log.type.match(this.searchLogMode) && log.operator.match(this.searchKey)
+      })
+    }
+  }
+
   get totalPage(){
     let total_page = 1
     switch(this.type){
@@ -245,7 +267,7 @@ export default class Admin extends Vue {
         total_page = Math.floor(this.device_apply_list.length/10) + 1
         break
       case 'system_log':
-        total_page = Math.floor(this.system_log_list.length/10) + 1
+        total_page = Math.floor(this.searchLog/10) + 1
         break
       default:
         break
