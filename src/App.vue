@@ -42,4 +42,15 @@ body{
   display: inline-block;
   padding: 10px;
 }
+
+.logout{
+  position: fixed;
+  top: 5px;
+  right: 5px;
+  background-color:rgba(255, 255, 255, 0.7); 
+  padding: 24px 18px;
+  border-radius: 16px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+}
 </style>

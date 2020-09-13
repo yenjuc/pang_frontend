@@ -152,6 +152,10 @@
         </li>
       </ul>
     </nav>
+
+    <a href='/login'><div class="logout">
+      <i class="fas fa-sign-out-alt" title="登出" v-on:click="logout"></i>
+    </div></a>
   </div>
 </template>
 
