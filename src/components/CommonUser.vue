@@ -243,22 +243,22 @@ export default class CommonUser extends Vue {
     let total_page = 1
     switch(this.type){
       case 'all_devices':
-        total_page = Math.floor(this.searchAllDevicesResult.length/10) + (this.searchAllDevicesResult.length % 10 === 0 ? 0 : 1)
+        total_page = Math.floor(this.searchAllDevicesResult.length/10 -0.1) + 1
         break
       case 'apply_history':
-        total_page = Math.floor(this.myLoanAppls.length/10) + (this.myLoanAppls.length % 10 === 0 ? 0 : 1)
+        total_page = Math.floor(this.myLoanAppls.length/10 - 0.1) + 1
         break
       case 'loaned_devices':
-        total_page = Math.floor(this.myLoanApplsActive.length/10) + (this.myLoanApplsActive.length % 10 === 0 ? 0 : 1)
+        total_page = Math.floor(this.myLoanApplsActive.length/10 - 0.1) + 1
         break
       case 'manage_devices':
-        total_page = Math.floor(this.searchMyDevicesResult.length/10) + (this.searchMyDevicesResult.length % 10 === 0 ? 0 : 1)
+        total_page = Math.floor(this.searchMyDevicesResult.length/10 - 0.1) + 1
         break
       case 'manage_loan_apply':
-        total_page = Math.floor(this.filteredMyEquipmentsLoanApplications.length/10) + (this.filteredMyEquipmentsLoanApplications.length % 10 === 0 ? 0 : 1)
+        total_page = Math.floor(this.filteredMyEquipmentsLoanApplications.length/10 - 0.1) + 1
         break
       case 'mailbox':
-        total_page = Math.floor(this.searchMail.length/10) + (this.searchMail.length % 10 === 0 ? 0 : 1)
+        total_page = Math.floor(this.searchMail.length/10 - 0.1) + 1
         break
       default:
         break
