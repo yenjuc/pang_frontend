@@ -2,7 +2,13 @@
 <div>
   <div class="device" style="display: flex">
       <div class="info_block">
-        <h4 class="list-group-item-heading">{{device_name}}</h4>
+        <h4 class="list-group-item-heading">{{device_name_updated}}
+          <span v-if='device_status_updated'
+            :class="'label label-' +
+              (device_status_updated === 'exist' ? 'default' :
+               device_status_updated === 'on_shelf' ? 'success' : 'warning')"
+            >{{ device_status_updated === 'exist' ? 'off_shelf' : device_status_updated }}</span>
+        </h4>
         <div style="display: inline-block">
           <template v-if="device_contact != undefined">
           <div class="detailedinfo">
@@ -27,7 +33,7 @@
           </span>
         </div>
         <h5>详细信息</h5>
-        <p>{{ device_info }}</p>
+        <p>{{ device_info_updated }}</p>
       </div>
 
       <div v-if="open_apply">
@@ -45,30 +51,30 @@
           <i class="fas fa-times-circle"></i>
         </button>
       </div>
-      <div v-if="shelf_op && device_status === 'exist'">
+      <div v-if="shelf_op && device_status_updated === 'exist'">
         <button v-on:click="on_shelf()" type="button" class="btn btn-default">
           <i class="fas fa-arrow-circle-up"></i>
         </button>
       </div>
-      <div v-if="shelf_op && device_status === 'on_shelf'">
+      <div v-if="shelf_op && device_status_updated === 'on_shelf'">
         <button v-on:click="down_shelf()" type="button" class="btn btn-default">
           <i class="fas fa-arrow-circle-down"></i>
         </button>
       </div>
 
-      <div v-if="editable">
-        <button type="button" class="btn btn-default" v-on:click="showEdit = !showEdit">
+      <div v-if="editable && device_status_updated === 'exist'">
+        <button type="button" class="btn btn-default" v-on:click="showEdit = !showEdit; editName = device_name_updated; editInfo = device_info_updated">
           <i class="fas fa-edit"></i>
         </button>
       </div>
-      <div v-if="deletable">
+      <div v-if="deletable && device_status_updated === 'exist'">
         <button v-on:click="delete_device()" type="button" class="btn btn-default">
           <i class="fas fa-trash-alt"></i>
         </button>
       </div>
     </div>
 
-    <div class="pop_panel" id="edit_panel" v-if="showEdit">
+    <div class="pop_panel" id="edit_panel" v-if="showEdit && device_status_updated === 'exist'">
       <div class="input-group">
         <span class="input-group-addon"><i class="fas fa-tablet-alt"></i></span>
         <input type="text" class="form-control" placeholder="Edit Device Name" v-model="editName">
@@ -155,6 +161,13 @@ export default class DeviceInfo extends Vue {
   @Prop({type: String}) device_info
   @Prop({type: String}) device_status
 
+  device_status_override = ''
+  device_name_override = ''
+  device_info_override = ''
+  get device_status_updated () { return this.device_status_override || this.device_status; }
+  get device_name_updated () { return this.device_name_override || this.device_name; }
+  get device_info_updated () { return this.device_info_override || this.device_info; }
+
   @Prop({type: Boolean, default: false}) deletable
   @Prop({type: Boolean, default: false}) editable
   @Prop({type: Boolean, default: false}) need_examine
@@ -171,7 +184,14 @@ export default class DeviceInfo extends Vue {
       let response = await axios.post(`/apis/provider/on-shelf-apply/${this.device_id}`)
       if (response.status === 200) {
         // 弹框 表示发送上架审核申请成功 然后刷新
-        window.location = window.location
+        this.$message.success(h => {
+          return h('span', [
+            h('span', '设备 '),
+            h('strong', this.device_name),
+            h('span', ' 已申请上架'),
+          ]);
+        });
+        this.device_status_override = 'wait_on_shelf';
       }
     } catch (e) {
       this.$message.error(JSON.stringify(e.response.data.error)) // 在此处弹出提示框
@@ -211,7 +231,14 @@ export default class DeviceInfo extends Vue {
       let response = await axios.post(`/apis/provider/undercarriage/${this.device_id}`)
       if (response.status === 200) {
         // 弹框 表示下架成功 然后刷新
-        window.location = window.location
+        this.$message.success(h => {
+          return h('span', [
+            h('span', '设备 '),
+            h('strong', this.device_name),
+            h('span', ' 已下架'),
+          ]);
+        });
+        this.device_status_override = 'exist';
       }
     } catch (e) {
       this.$message.error(JSON.stringify(e.response.data.error)) // 在此处弹出提示框
@@ -241,7 +268,10 @@ export default class DeviceInfo extends Vue {
       }))
       if (response.status === 200) {
         // 在此处弹出提示 修改成功
-        window.location = window.location
+        this.device_name_override = this.editName
+        this.device_info_override = this.editInfo
+        this.showEdit = false
+        this.$message.success('设备信息修改成功')
       }
     } catch (e) {
       this.$message.error(JSON.stringify(e.response.data.error)) // 在此处弹出提示框
